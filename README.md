@@ -1,118 +1,158 @@
-# ITDA 3rd 학술제 - 소비기한 추출 제출 템플릿 📌
+# ITDA 소비기한 OCR
 
-본 저장소는 **제3회 ITDA 연합학술제** 참가자를 위한 공식 제출 템플릿 및 환경 검증용 저장소입니다.
+상품 이미지에서 소비기한을 찾아 `submission.csv`로 저장하는 CPU 전용 오프라인 추론 파이프라인입니다. 비공개 평가 입력 500장과 제한시간 2,400초를 기준으로 설계했으며, 외부 API·GPU·추론 중 다운로드를 사용하지 않습니다.
 
----
+## 최종 구성
 
-## 1. 대회 개요 및 과제 정의
+| 역할 | 모델 또는 방법 |
+| --- | --- |
+| 기본 텍스트 검출 | `PP-OCRv5_mobile_det` |
+| 조건부 복구 검출 | `PP-OCRv6_small_det` |
+| 한국어·영문·숫자 인식 | `korean_PP-OCRv5_mobile_rec` |
+| 소비기한 선택 | 달력 검증 + 키워드·좌표·신뢰도 규칙 |
 
-- **주제**: OCR 기반 상품 소비기한 정보 추출 아키텍처 설계 및 도메인 활용 기획
-- **주최**: 수도권 데이터사이언스 연합학회 ITDA (경희대 CODE, 서강대 INSIGHT, 성균관대 DScover, 인하대 IBAS, 한국외대 DAT)
-- **입력 (Input)**: 상품 뒷면 이미지 (`ITDA_INPUT_DIR` 환경변수로 경로 주입)
-- **출력 (Output)**: `submission.csv` (`ITDA_OUTPUT_PATH` 환경변수 경로에 저장)
+모든 이미지에는 빠른 mobile 검출기만 먼저 실행합니다. 유효 날짜가 없거나 제조일·소비기한 문맥이 충돌할 때만 ROI 확대, CLAHE, PP-OCRv6 복구 검출을 순서대로 실행합니다. 모든 전체 이미지 패스에서도 날짜가 없고 원본 OCR 라인이 32개 이하이면서 날짜 조각이 보이거나 OCR 라인이 5개 이하인 경우에만 네 개의 겹치는 타일을 확대 판독합니다.
 
-### submission.csv 표준 스키마
+회전 90/180/270도, EasyOCR, RapidOCR, YOLOv8, LayoutLM은 기본 실행 경로에 포함하지 않습니다. 공개 검증에서 회전은 정답을 추가하지 않고 연도 없는 날짜 오탐과 지연만 만들었고, EasyOCR는 어려운 표본 8건에서 추가 정답 0건·약 10–14초/장이었습니다. RapidOCR/ONNX도 이 모델 조합에서 Paddle static보다 빠르지 않았습니다. YOLOv8은 날짜 박스 라벨이, LayoutLM은 토큰·박스 분류 라벨과 별도 OCR가 필요해 현재 병목인 점자형 숫자 인식에 비해 비용이 큽니다.
 
-| image_id | year | month | day | final_date |
-| --- | --- | --- | --- | --- |
-| 1 | 2026 | 05 | 29 | 2026-05-29 |
-| 2 | NONE | NONE | NONE | NONE |
+상세 근거와 실험표는 [파이프라인 설계 문서](docs/pipeline-spec.md)에 있습니다.
 
-- `image_id` : 확장자를 제외한 이미지 파일명 (예: 1)
-- `year` : 4자리 연도 문자열 (예: 2026, 미인식 시 NONE)
-- `month` : 2자리 월 문자열 (예: 05, 미인식 시 NONE)
-- `day` : 2자리 일 문자열 (예: 29, 미인식 시 NONE)
-- `final_date` : 하이픈(-)으로 연결된 정규화 날짜 (예: 2026-05-29, 미인식 시 NONE)
+## 평가 목표와 로컬 검증
 
----
+- 공식 한도: 500장 / 2,400초 = 평균 4.8초/장
+- 내부 목표: 500장 1,800초 이하, 오류로 인한 전체 중단 0건, 외부 비용 0원
+- 정확도 기준: 사람이 확정한 라벨만 사용한 `final_date` 완전일치율
 
-## 2. 파일 및 저장소 구조
+공개 이미지 첫 352장 중 `manual` 341건만 평가하고 `needs_review` 11건은 제외했습니다.
 
-````
-itda3-[학회영문]-[영문팀명]/
-├── predict.ipynb            # 메인 추론 노트북 (운영진 채점용 필수)
-├── requirements.txt         # 실행 환경 패키지 목록 (필수)
-├── README.md                # 가중치 다운로드 및 실행 가이드 (필수)
-├── .gitignore               # 가중치·데이터 커밋 방지 (수정 시 주의)
-├── download_weights.sh      # [선택] 외부 가중치 다운로드 스크립트
-├── notebooks/               # [선택] 실험·분석 노트북 (채점 대상 아님)
-└── weights/                 # [선택] 모델 가중치 저장 폴더
-````
+| 구성 | 완전일치 | 352장 시간 | 비고 |
+| --- | ---: | ---: | --- |
+| PP-OCRv5 mobile 기준선 | 261/341 (76.54%) | 574.2초 | 기본 + 부분 ROI |
+| PP-OCRv5 server 복구 | 281/341 (82.40%) | 1,200.5초 | 정확도 대비 CPU 비용 큼 |
+| PP-OCRv6 small 복구 초기안 | 287/341 (84.16%) | 827.3초 | 규칙 보강 전 |
+| 최종 후보 규칙 | 302/341 (88.56%) | 1,508.9초 | 회전 포함 보수적 전수 측정 |
+| 최종 구성 | 302/341 (88.56%) | 1,084.1초 | 회전 제거·타일 조건 축소, 단일 전수 측정 |
 
----
+최종 구성은 평균 3.08초/장, p50 1.90초, p95 10.24초였고 500장 선형 환산은 약 1,540초입니다. 단일 전수 실행에서 이미지 처리 예외는 0건이었습니다. 이는 Windows 개발 장비 측정치이며 공식 채점 시간이나 공식 정확도 점수가 아닙니다. 기기·운영체제·입력 난이도에 따라 달라질 수 있습니다.
 
-## 3. 시작하기 및 실행 방법
+## 설치
 
-### 1) 가상환경 구축 및 패키지 설치
+Python 3.10 환경을 사용합니다.
 
-````
-git clone <본인 팀 저장소 URL>
-cd <저장소 디렉토리>
-pip install -r requirements.txt
-````
+```bash
+python3.10 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
 
-### 2) 가중치 파일 설정
+Windows PowerShell에서는 활성화 명령만 다음과 같이 바꿉니다.
 
-용량이 큰 모델 가중치 파일(`.pt`, `.pth`, `.safetensors` 등)은 Git에 직접 푸시하지 마시고, Google Drive, HuggingFace 링크 또는 Release Assets를 통해 `download_weights.sh` 스크립트 등으로 내려받도록 설정하세요.
+```powershell
+py -3.10 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
 
-### 3) 채점 재현성 검증 (운영진 채점 표준 명령어)
+## 가중치 준비
 
-운영진은 Standard 4-Core vCPU 환경에서 아래 명령어를 실행하여 순차 실행(Run All) 및 채점을 진행합니다.
+인터넷이 연결된 준비 환경에서 노트북을 실행하기 전에 한 번 수행합니다.
 
-````
+```bash
+bash download_weights.sh
+```
+
+스크립트는 PaddlePaddle의 공식 Hugging Face 저장소에서 고정된 revision의 다음 9개 파일을 받고 SHA-256을 검증합니다.
+
+```text
+weights/paddle/
+├── PP-OCRv5_mobile_det/
+│   ├── inference.json
+│   ├── inference.pdiparams
+│   └── inference.yml
+├── PP-OCRv6_small_det/
+│   ├── inference.json
+│   ├── inference.pdiparams
+│   └── inference.yml
+└── korean_PP-OCRv5_mobile_rec/
+    ├── inference.json
+    ├── inference.pdiparams
+    └── inference.yml
+```
+
+가중치는 `.gitignore`로 제외되며 Git에 커밋하지 않습니다. 파일이 없거나 해시가 다르면 추론 시작 시 명확한 오류로 중단합니다. 모델 경로를 모두 명시하고 Paddle의 모델 소스 확인도 비활성화하므로 `predict.ipynb` 실행 중에는 네트워크를 사용하지 않습니다.
+
+## 실행
+
+운영진과 동일하게 환경변수로 입력 폴더와 출력 파일을 주입합니다. 첫 CONFIG 셀은 수정하지 않습니다.
+
+```bash
 export ITDA_INPUT_DIR=./val_images
 export ITDA_OUTPUT_PATH=./submission.csv
 
 jupyter nbconvert --to notebook --execute predict.ipynb \
-    --ExecutePreprocessor.timeout=2400 \
-    --output /tmp/executed.ipynb
-````
+  --ExecutePreprocessor.timeout=2400 \
+  --output /tmp/executed.ipynb
+```
 
----
+PowerShell 예시:
 
-## 4. ⚠️ 채점 환경 필수 공지 (반드시 읽어주세요)
+```powershell
+$env:ITDA_INPUT_DIR = "C:\path\to\val_images"
+$env:ITDA_OUTPUT_PATH = "C:\path\to\submission.csv"
+jupyter nbconvert --to notebook --execute predict.ipynb `
+  --ExecutePreprocessor.timeout=2400 `
+  --output "$env:TEMP\executed.ipynb"
+```
 
-### 1) 팀 저장소 공개 범위
+지원 확장자는 `.jpg`, `.jpeg`, `.png`이며 대소문자를 구분하지 않습니다. 파일 개수나 이름을 하드코딩하지 않습니다.
 
-- 팀 저장소는 **Public** 으로 생성해 주세요.
-- Private 으로 운영할 경우, 마감 전까지 운영진 계정 **`b9511242000-blip`** 을 Collaborator 로 초대해야 합니다. (Settings → Collaborators → Add people)
-- 마감 시각 기준 운영진이 접근할 수 없는 저장소는 채점 대상에서 제외됩니다.
+## 출력 계약
 
-### 2) 채점 서버는 오프라인입니다
+열 이름과 순서는 정확히 다음과 같습니다.
 
-채점은 **인터넷이 차단된 Standard 4-Core vCPU 환경**에서 진행됩니다.
+```text
+image_id,year,month,day,final_date
+```
 
-- EasyOCR, PaddleOCR 등 상당수 라이브러리는 최초 실행 시 가중치를 인터넷에서 **자동 다운로드** 합니다. 오프라인 환경에서는 이 단계가 실패해 실행 오류(정량 0점)가 발생합니다.
-- 모든 가중치는 **노트북 실행 전에 로컬에 존재**해야 합니다.
-  - `download_weights.sh` 는 채점 실행 **전에** 운영진이 1회 실행합니다.
-  - `predict.ipynb` 의 Run All **도중에** 다운로드하는 코드는 동작하지 않습니다.
+- `image_id`: 확장자를 제거한 파일명 그대로
+- 유효 날짜: `2026,05,29,2026-05-29`
+- 완전한 연도가 없거나 유효 날짜를 찾지 못함: 날짜 네 열 모두 `NONE`
+- 한 이미지 처리 실패: 해당 행을 `NONE`으로 기록하고 다음 이미지 계속 처리
+- 중복 stem 또는 빈 입력 폴더: 잘못된 제출 파일을 만들지 않고 즉시 오류
 
-EasyOCR 사용 예시:
+## 검증
 
-````python
-reader = easyocr.Reader(
-    ['en'], gpu=False,
-    model_storage_directory='./weights',
-    download_enabled=False,   # 오프라인 강제
-)
-````
+빠른 계약 테스트:
 
-네트워크를 끄고 Run All 이 끝까지 돌아가면 통과입니다. 제출 전 반드시 한 번 검증해 보세요.
+```bash
+python -m unittest discover -s tests -v
+```
 
-### 3) 환경 설치 시간은 속도 점수에 포함되지 않습니다
+수동 라벨 CSV가 로컬에 있을 때 검증 구간 실행:
 
-- `pip install -r requirements.txt` 및 `download_weights.sh` 소요 시간은 속도 점수(10점) 산정에서 **제외** 됩니다.
-- 속도 점수는 `predict.ipynb` 의 Run All 실행 시간(최대 2400초)만으로 산정합니다.
+```bash
+python scripts/evaluate_pipeline.py \
+  ./val_images ./labels/validation.csv ./artifacts/validation_submission.csv \
+  --limit 352
+```
 
----
+이 스크립트는 기본적으로 `라벨 상태 == manual`인 행만 점수에 사용합니다. OCR로 자동 생성한 미검수 값은 정답으로 취급하지 않습니다.
 
-## 5. 제출 전 필수 체크리스트
+## 제출 전 체크리스트
 
-1. **CONFIG 셀 수정 금지**: `predict.ipynb` 최상단의 환경변수 주입 코드는 절대 변경하거나 값을 직접 하드코딩 대입하지 마세요.
-2. **대화형 코드 제거**: 실행 중 사용자 입력을 대기하는 코드(`input()`, `getpass()` 등)가 있으면 실행이 중단되어 정량 0점 처리됩니다.
-3. **인덱스 제외 저장**: CSV 저장 시 반드시 인덱스를 제외해야 합니다. (`df.to_csv(OUTPUT_PATH, index=False)`)
-4. **결과 스키마 준수**: 누락된 컬럼이 없도록 `image_id, year, month, day, final_date` 5개 컬럼 스키마를 엄격히 지켜주세요.
-5. **오프라인 실행 검증**: 네트워크 차단 상태에서 Run All 이 완주하는지 확인하세요.
-6. **저장소 접근 권한**: Public 설정 또는 운영진 계정 Collaborator 초대를 완료하세요.
-````
-````
+- `predict.ipynb` 첫 CONFIG 셀과 두 환경변수 이름을 변경하지 않았는지 확인
+- `bash download_weights.sh`를 채점 노트북 실행 전에 수행
+- 네트워크를 끈 새 Python 3.10 환경에서 Run All 완주 확인
+- 입력 이미지 수와 CSV 행 수, 5개 열 순서, 중복 `image_id` 여부 확인
+- 실행 경로에 `input()`·`getpass()`·외부 API 호출이 없는지 확인
+- 저장소를 Public으로 두거나 운영진 계정 `b9511242000-blip`에 접근 권한 부여
+- 가중치·원본 이미지·실행 결과를 Git에 포함하지 않았는지 확인
+
+## 참고 자료
+
+- [ITDA 공식 참가자 안내서](https://orchid-drum-814.notion.site/c74214f064ee837d81a80118ec8bf80a?pvs=143)
+- [PaddleOCR 일반 OCR 파이프라인](https://www.paddleocr.ai/main/en/version3.x/pipeline_usage/OCR.html)
+- [PaddleOCR 텍스트 검출 모델](https://www.paddleocr.ai/main/en/version3.x/module_usage/text_detection.html)
+- [PaddleOCR 텍스트 인식 모델](https://www.paddleocr.ai/main/en/version3.x/module_usage/text_recognition.html)
