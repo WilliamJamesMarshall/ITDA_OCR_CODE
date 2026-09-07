@@ -45,8 +45,7 @@
 
 - GitHub Desktop의 로컬 저장소 경로와 모든 AI·터미널 작업 경로는 `C:\ITDA_OCR_CODE`로 통일한다.
 - 현재 Codex 작업공간이 다른 경로에서 열렸다면 Git 명령과 파일 편집 전에 반드시 `C:\ITDA_OCR_CODE`로 이동한다.
-- 호환 경로 `C:\CODE_ITDA\ITDA_OCR_CODE`는 별도 clone이 아니라 정본을 가리키는 directory junction이다.
-- 이전 clone은 `C:\CODE_ITDA\_migration_backup\ITDA_OCR_CODE_CODE_COPY_20260907`에 복구용으로 보관하며 개발·commit·push 대상으로 사용하지 않는다.
+- 이전 최상위 폴더 `C:\CODE_ITDA`는 중복 clone·junction·임시 백업에 고유 변경이 없음을 확인한 뒤 휴지통으로 이동했으며 작업 경로로 사용하지 않는다.
 - `images.zip`과 `상품사진입니다\`는 정본 경로에만 한 벌 유지하고 `.gitignore`로 제외한다.
 - commit·push 전 `git rev-parse --show-toplevel` 결과가 정본 경로인지, `origin`이 `https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE.git`인지 확인한다.
 - 이 컴퓨터의 반영 절차는 `C:\ITDA_OCR_CODE`의 변경 파일 확인 → `main` commit → `origin` push → 원격 HEAD 확인 순서다.
