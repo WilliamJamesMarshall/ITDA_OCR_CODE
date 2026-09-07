@@ -1,6 +1,6 @@
 # ITDA 소비기한 OCR 협업 개발 하네스
 
-여러 사람과 AI가 각자 clone한 ITDA 저장소에서 함께 작업할 때 **읽을 규칙, 수정할 범위, 작업 격리, 검증 조건, 제출 계약**을 일관되게 관리하기 위한 프로젝트 전용 하네스다. 이 컴퓨터의 정본은 `C:\CODE_ITDA\ITDA_OCR_CODE`다.
+여러 사람과 AI가 각자 clone한 ITDA 저장소에서 함께 작업할 때 **읽을 규칙, 수정할 범위, 작업 격리, 검증 조건, 제출 계약**을 일관되게 관리하기 위한 프로젝트 전용 하네스다. 이 컴퓨터의 정본은 `C:\ITDA_OCR_CODE`다.
 
 목표 상태의 핵심 원칙은 다음과 같다.
 
@@ -16,7 +16,7 @@
 
 ### 프로젝트·대회 기준
 
-- 이 컴퓨터의 프로젝트 정본: `C:\CODE_ITDA\ITDA_OCR_CODE`
+- 이 컴퓨터의 프로젝트 정본: `C:\ITDA_OCR_CODE`
 - 다른 컴퓨터: 각 작업자가 GitHub 저장소를 clone한 로컬 경로가 프로젝트 루트
 - GitHub 저장소: [WilliamJamesMarshall/ITDA_OCR_CODE](https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE) (`origin`, 공개 저장소)
 - 공식 제출 템플릿 README: [README.md](https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/blob/main/README.md)
@@ -43,13 +43,12 @@
 
 ### 이 컴퓨터의 단일 정본 경로
 
-- GitHub Desktop의 로컬 저장소 경로와 모든 AI·터미널 작업 경로는 `C:\CODE_ITDA\ITDA_OCR_CODE`로 통일한다.
-- 현재 Codex 작업공간이 부모인 `C:\CODE_ITDA`에서 열렸다면 Git 명령과 파일 편집 전에 반드시 `C:\CODE_ITDA\ITDA_OCR_CODE`로 이동한다.
-- `C:\ITDA_OCR_CODE`는 별도 저장소로 사용하지 않는다. 통합 완료 후에는 정본을 가리키는 junction으로만 유지하고, junction 생성 전까지는 폐기 예정 경로로 취급한다.
-- 마이그레이션 백업을 유지할 때는 `C:\CODE_ITDA\_migration_backup\ITDA_OCR_CODE_before_unification_20260907`에 두며 개발·commit·push 대상으로 사용하지 않는다.
+- GitHub Desktop의 로컬 저장소 경로와 모든 AI·터미널 작업 경로는 `C:\ITDA_OCR_CODE`로 통일한다.
+- 현재 Codex 작업공간이 다른 경로에서 열렸다면 Git 명령과 파일 편집 전에 반드시 `C:\ITDA_OCR_CODE`로 이동한다.
+- 이전 clone은 `C:\CODE_ITDA\_migration_backup\ITDA_OCR_CODE_CODE_COPY_20260907`에 복구용으로 보관하며 개발·commit·push 대상으로 사용하지 않는다.
 - `images.zip`과 `상품사진입니다\`는 정본 경로에만 한 벌 유지하고 `.gitignore`로 제외한다.
 - commit·push 전 `git rev-parse --show-toplevel` 결과가 정본 경로인지, `origin`이 `https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE.git`인지 확인한다.
-- 이 컴퓨터의 반영 절차는 GitHub Desktop의 `ITDA_OCR_CODE` 저장소에서 변경 파일 확인 → commit to `main` → Push origin 순서다. CLI push를 혼용하지 않는다.
+- 이 컴퓨터의 반영 절차는 `C:\ITDA_OCR_CODE`의 변경 파일 확인 → `main` commit → `origin` push → 원격 HEAD 확인 순서다.
 
 ### 두 가지 적용 모드
 
@@ -144,7 +143,7 @@ claim: 자동화 모드의 등록 경로 / 부트스트랩 모드의 수동 범�
 ### 도입 후 설치될 협업 파일
 
 ```text
-C:\CODE_ITDA\ITDA_OCR_CODE\
+C:\ITDA_OCR_CODE\
 ├── .git-session.json
 ├── scripts\
 │   ├── git-session-manager.mjs
@@ -163,7 +162,7 @@ C:\CODE_ITDA\ITDA_OCR_CODE\
 
 ### 컴퓨터별 지연 생성 worktree 배치
 
-각 컴퓨터의 clone은 `main` 확인·fetch·통합만 수행하는 관제 worktree다. `worktreeRoot`는 clone의 부모 디렉터리를 기준으로 계산하므로 사용자마다 clone 위치가 달라도 동작한다. 이 컴퓨터에서는 `C:\CODE_ITDA\ITDA_OCR_WORKTREES`로 해석된다.
+각 컴퓨터의 clone은 `main` 확인·fetch·통합만 수행하는 관제 worktree다. `worktreeRoot`는 clone의 부모 디렉터리를 기준으로 계산하므로 사용자마다 clone 위치가 달라도 동작한다. 이 컴퓨터에서는 `C:\ITDA_OCR_WORKTREES`로 해석된다.
 
 | 작업자 | 각 컴퓨터에서 생성되는 경로 | 대기 브랜치 | 작업 브랜치 형식 |
 | --- | --- | --- | --- |
@@ -195,7 +194,7 @@ C:\CODE_ITDA\ITDA_OCR_CODE\
 ### 권장 프로젝트 구조
 
 ```text
-C:\CODE_ITDA\ITDA_OCR_CODE\
+C:\ITDA_OCR_CODE\
 ├── Harness_README.md
 ├── AGENTS.md
 ├── predict.ipynb                 # 필수 제출 진입점
@@ -332,7 +331,7 @@ C:\CODE_ITDA\ITDA_OCR_CODE\
 각 작업자는 자신의 컴퓨터에서 clone한 관제 루트로 이동해 본인 이름으로 `start`를 실행한다. 아래 예시는 이호연 컴퓨터에 `lee-hoyeon` worktree 하나만 만든다. 다른 네 작업자의 worktree는 만들지 않는다.
 
 ```powershell
-Set-Location 'C:\CODE_ITDA\ITDA_OCR_CODE' # 이 컴퓨터의 예시; 다른 PC에서는 자신의 clone 경로
+Set-Location 'C:\ITDA_OCR_CODE' # 이 컴퓨터의 예시; 다른 PC에서는 자신의 clone 경로
 node scripts/git-session-manager.mjs start --ai codex --worker 이호연 --task improve-date-parser --path src/postprocess
 git worktree list
 ```
@@ -545,10 +544,10 @@ gh pr list --state open
 node scripts/git-session-manager.mjs start --ai codex --worker 이호연 --task improve-date-parser --path src/postprocess
 ```
 
-이 컴퓨터에서 예시의 결과는 `C:\CODE_ITDA\ITDA_OCR_WORKTREES\lee-hoyeon`에서 `worker/lee-hoyeon/improve-date-parser` 브랜치를 사용하는 것이다. 다른 컴퓨터에서는 그 clone의 부모 경로 아래에 생성된다. 해당 worktree에 미커밋 변경이나 다른 활성 작업이 있으면 `start`는 새 브랜치를 만들지 않고 실패해야 한다. 출력된 경로로 이동한 뒤 현재 브랜치가 `main`이 아님을 확인하고 편집한다.
+이 컴퓨터에서 예시의 결과는 `C:\ITDA_OCR_WORKTREES\lee-hoyeon`에서 `worker/lee-hoyeon/improve-date-parser` 브랜치를 사용하는 것이다. 다른 컴퓨터에서는 그 clone의 부모 경로 아래에 생성된다. 해당 worktree에 미커밋 변경이나 다른 활성 작업이 있으면 `start`는 새 브랜치를 만들지 않고 실패해야 한다. 출력된 경로로 이동한 뒤 현재 브랜치가 `main`이 아님을 확인하고 편집한다.
 
 ```powershell
-Set-Location 'C:\CODE_ITDA\ITDA_OCR_WORKTREES\lee-hoyeon'
+Set-Location 'C:\ITDA_OCR_WORKTREES\lee-hoyeon'
 git status --short --branch
 git branch --show-current
 ```
@@ -610,7 +609,7 @@ git diff --check
 ### 데이터 기준선 — 읽기 전용
 
 ```powershell
-$itdaRoot = 'C:\CODE_ITDA\ITDA_OCR_CODE'
+$itdaRoot = 'C:\ITDA_OCR_CODE'
 $inputDir = Join-Path $itdaRoot '상품사진입니다'
 
 (Get-ChildItem -LiteralPath $inputDir -File |
@@ -653,7 +652,7 @@ $inputDir = Join-Path $itdaRoot '상품사진입니다'
 ### 노트북 스모크
 
 ```powershell
-$itdaRoot = 'C:\CODE_ITDA\ITDA_OCR_CODE'
+$itdaRoot = 'C:\ITDA_OCR_CODE'
 $env:ITDA_INPUT_DIR = Join-Path $itdaRoot '상품사진입니다'
 $env:ITDA_OUTPUT_PATH = Join-Path $itdaRoot 'artifacts\submission-smoke.csv'
 
@@ -829,8 +828,8 @@ if (-not (Test-Path -LiteralPath $env:ITDA_OUTPUT_PATH)) {
 ### 현재 전환 모드
 
 ```text
-C:\CODE_ITDA\ITDA_OCR_CODE\Harness_README.md를 작업 기준으로 읽고,
-C:\CODE_ITDA\ITDA_OCR_CODE에서 [이번 목표]를 수행한다.
+C:\ITDA_OCR_CODE\Harness_README.md를 작업 기준으로 읽고,
+C:\ITDA_OCR_CODE에서 [이번 목표]를 수행한다.
 
 현재는 작업자별 고정 worktree와 로컬 claim/guard를 사용할 수 있는 전환 모드다.
 관제 루트에서 `node scripts/git-session-manager.mjs start --ai [AI] --worker [작업자] --task [작업명] --path [경로]`를 실행한다.
@@ -844,7 +843,7 @@ C:\CODE_ITDA\ITDA_OCR_CODE에서 [이번 목표]를 수행한다.
 ### 협업 자동화 모드 도입 후
 
 ```text
-C:\CODE_ITDA\ITDA_OCR_CODE\Harness_README.md와 적용 가능한 AGENTS.md·SPEC.md를 읽고,
+C:\ITDA_OCR_CODE\Harness_README.md와 적용 가능한 AGENTS.md·SPEC.md를 읽고,
 [이번 목표]를 수행한다.
 
 각자 컴퓨터의 관제 clone에서 상태와 열린 PR을 확인하고 `start --worker [본인 이름]`을 실행한다.
