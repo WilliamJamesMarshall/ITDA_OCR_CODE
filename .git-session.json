@@ -1,0 +1,38 @@
+{
+  "defaultBranch": "main",
+  "defaultWorker": "이호연",
+  "allowedAIs": ["codex", "claude"],
+  "allowedWorkers": ["이호연", "선예서", "고현경", "이서준", "손용운"],
+  "integrationOwner": "이호연",
+  "worktreeMode": "per-worker-lazy",
+  "worktreeRoot": "../ITDA_OCR_WORKTREES",
+  "workerSlugs": {
+    "이호연": "lee-hoyeon",
+    "선예서": "seon-yeseo",
+    "고현경": "ko-hyeongyeong",
+    "이서준": "lee-seojun",
+    "손용운": "son-yongun"
+  },
+  "taskPattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+  "taskPatternFlags": "u",
+  "guardPairs": true,
+  "ownerOnlyPaths": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".git-session.json",
+    "Harness_README.md",
+    "docs/competition-spec.md",
+    "docs/labeling-spec.md"
+  ],
+  "hotspots": [
+    "predict.ipynb",
+    "requirements.txt",
+    "README.md",
+    "docs/pipeline-spec.md",
+    "src/io",
+    "src/ocr",
+    "src/postprocess",
+    "tests",
+    ".github/workflows"
+  ]
+}
