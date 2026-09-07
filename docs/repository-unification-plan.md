@@ -23,9 +23,10 @@
 
 - 현재 Codex 프로젝트가 가리키는 `C:\ITDA_OCR_CODE`를 최종 정본으로 유지했다.
 - 이전 clone의 clean 상태와 동일 HEAD를 확인한 뒤 `C:\CODE_ITDA\_migration_backup\ITDA_OCR_CODE_CODE_COPY_20260907`로 이동했다.
+- 이후 다시 생성된 clean clone도 정본과 동일한 HEAD·Git 트리를 확인한 뒤 `C:\CODE_ITDA\_migration_backup\ITDA_OCR_CODE_RECREATED_CLONE_20260907_161455`로 이동했다.
 - 이전 경로에 있던 원본 ZIP과 이미지 디렉터리는 정본으로 이동했고, 이전 clone에는 데이터 사본을 남기지 않았다.
 - 통합 전 `C:\ITDA_OCR_CODE`의 경로 가드 변경은 `pre-unification legacy path guard 2026-09-07` Git stash에 복구 가능하게 보존했다.
-- junction은 필요하지 않다. 노트북 콘솔과 iPad Remote가 모두 같은 Codex 프로젝트와 실제 경로를 사용한다.
+- `C:\CODE_ITDA\ITDA_OCR_CODE`에는 `C:\ITDA_OCR_CODE`를 대상으로 하는 directory junction을 생성했다. 구 경로를 참조하는 세션도 같은 실제 저장소를 사용하므로 두 경로가 다시 갈라지지 않는다.
 
 ## 컴퓨터별 worktree 수명주기
 
