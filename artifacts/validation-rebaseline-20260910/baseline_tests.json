@@ -1,0 +1,22 @@
+{
+  "variant": {
+    "MIN_YEAR": 1,
+    "MAX_YEAR": 2035
+  },
+  "targeted_checks": {
+    "historical_date_accepted": true,
+    "future_limit_unchanged": true,
+    "invalid_calendar_rejected": true,
+    "yearless_parser_unchanged": true,
+    "year_month_parser_unchanged": true
+  },
+  "tests_run": 15,
+  "failures": [
+    {
+      "test": "test_invalid_or_yearless_values_are_rejected (tests.test_date_extraction.ParseDatesTest) (raw='2020.09.20')",
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\ITDA_OCR_WORKTREES/lee-hoyeon\\tests\\test_date_extraction.py\", line 41, in test_invalid_or_yearless_values_are_rejected\n    self.assertEqual(parse_dates(raw), [])\nAssertionError: Lists differ: [ParsedDate(value=datetime.date(2020, 9, 2[88 chars]lse)] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\nParsedDate(value=datetime.date(2020, 9, 20), raw='2020.09.20', start=0, end=10, year_digits=4, separator='separated', repaired=False)\n\n+ []\n- [ParsedDate(value=datetime.date(2020, 9, 20),\n-             raw='2020.09.20',\n-             start=0,\n-             end=10,\n-             year_digits=4,\n-             separator='separated',\n-             repaired=False)]\n"
+    }
+  ],
+  "errors": [],
+  "interpretation": "Only the old expectation that 2020 dates are rejected fails. No other production test regresses."
+}
