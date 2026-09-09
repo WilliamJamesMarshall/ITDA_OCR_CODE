@@ -1,0 +1,120 @@
+test_calendar_output_fields_are_consistent (test_date_extraction.DateSelectionTest) ... ok
+test_closer_until_role_beats_an_overlapping_merged_window (test_date_extraction.DateSelectionTest) ... ok
+test_consumption_date_beats_manufacturing_date (test_date_extraction.DateSelectionTest) ... ok
+test_different_coordinate_frames_cannot_merge_dates (test_date_extraction.DateSelectionTest) ... ok
+test_distant_or_different_frame_context_does_not_change_selection (test_date_extraction.DateSelectionTest) ... ok
+test_far_future_ocr_outlier_does_not_replace_plausible_interval (test_date_extraction.DateSelectionTest) ... ok
+test_final_selection_keeps_a_low_score_two_date_interval (test_date_extraction.DateSelectionTest) ... ok
+test_historical_local_low_confidence_interval (test_date_extraction.DateSelectionTest) ... ok
+test_indirect_manufacturing_context_does_not_stop_recovery (test_date_extraction.DateSelectionTest) ... ok
+test_interval_comparison_uses_scores_with_agreement_bonus (test_date_extraction.DateSelectionTest) ... ok
+test_later_endpoint_wins_for_equal_score_interval_without_keywords (test_date_extraction.DateSelectionTest) ... ok
+test_later_endpoint_wins_when_interval_keywords_are_split (test_date_extraction.DateSelectionTest) ... ok
+test_manufacturing_only_is_none (test_date_extraction.DateSelectionTest) ... ok
+test_nearby_spatial_context_is_used (test_date_extraction.DateSelectionTest) ... ok
+test_old_ocr_outlier_does_not_hide_the_current_interval (test_date_extraction.DateSelectionTest) ... ok
+test_overlapping_parses_do_not_form_a_date_interval (test_date_extraction.DateSelectionTest) ... ok
+test_partial_dates_and_output_contract (test_date_extraction.DateSelectionTest) ... ok
+test_partial_dates_do_not_salvage_invalid_full_dates_or_measurements (test_date_extraction.DateSelectionTest) ... ok
+test_partial_output_rejects_malformed_values (test_date_extraction.DateSelectionTest) ... ok
+test_single_date_with_mixed_interval_context_requests_recovery (test_date_extraction.DateSelectionTest) ... ok
+test_split_date_boxes_are_merged (test_date_extraction.DateSelectionTest) ... ok
+test_split_interval_roles_survive_overlapping_ocr_boxes (test_date_extraction.DateSelectionTest) ... ok
+test_strong_expiry_date_is_not_delayed_by_distant_manufacturing_text (test_date_extraction.DateSelectionTest) ... ok
+test_unrelated_dates_do_not_form_a_latest_date_interval (test_date_extraction.DateSelectionTest) ... ok
+test_clock_tail_does_not_become_a_two_digit_year_date (test_date_extraction.ParseDatesTest) ... ok
+test_historical_and_explicit_order_formats (test_date_extraction.ParseDatesTest) ... ok
+test_invalid_explicit_order_does_not_fall_back (test_date_extraction.ParseDatesTest) ... ok
+test_invalid_or_yearless_values_are_rejected (test_date_extraction.ParseDatesTest) ... ok
+test_ocr_confusion_is_repaired_only_to_a_valid_date (test_date_extraction.ParseDatesTest) ... ok
+test_order_parser_does_not_borrow_clock_or_date_suffix_digits (test_date_extraction.ParseDatesTest) ... ok
+test_supported_formats (test_date_extraction.ParseDatesTest) ... ok
+test_failure_ids_use_the_same_normalization_as_predictions (test_evaluate_pipeline.EvaluationTest) ... ok
+test_no_labels_and_duplicates_fail_loudly (test_evaluate_pipeline.EvaluationTest) ... ok
+test_none_runtime_failure_is_not_correct (test_evaluate_pipeline.EvaluationTest) ... ok
+test_partial_and_missing_prediction_counts (test_evaluate_pipeline.EvaluationTest) ... ok
+test_corrupt_image_becomes_none_without_aborting (test_pipeline_contract.PipelineContractTest) ... Processed 2/2 images in 0.1s
+{
+  "images": 2,
+  "elapsed_seconds": 0.071,
+  "seconds_per_image": 0.036,
+  "p50_image_seconds": 0.002,
+  "p95_image_seconds": 0.068,
+  "predicted_none": 1,
+  "failures": [
+    {
+      "image_id": "broken",
+      "error": "UnidentifiedImageError: cannot identify image file 'C:\\\\Users\\\\ujkio\\\\AppData\\\\Local\\\\Temp\\\\tmpvcqfqxlx\\\\images\\\\broken.jpg'"
+    }
+  ],
+  "passes": {
+    "mobile:original": 1
+  },
+  "output_path": "C:\\Users\\ujkio\\AppData\\Local\\Temp\\tmpvcqfqxlx\\submission.csv"
+}
+ok
+test_discovery_filters_extensions_and_preserves_stems (test_pipeline_contract.PipelineContractTest) ... ok
+test_duplicate_stems_are_rejected (test_pipeline_contract.PipelineContractTest) ... ok
+test_empty_input_is_rejected (test_pipeline_contract.PipelineContractTest) ... ok
+test_notebook_keeps_environment_contract (test_pipeline_contract.PipelineContractTest) ... ok
+test_partial_detection_does_not_skip_recovery_or_tiles (test_pipeline_contract.PipelineContractTest) ... ok
+test_partial_submission_survives_all_passes (test_pipeline_contract.PipelineContractTest) ... Processed 1/1 images in 0.0s
+{
+  "images": 1,
+  "elapsed_seconds": 0.006,
+  "seconds_per_image": 0.006,
+  "p50_image_seconds": 0.005,
+  "p95_image_seconds": 0.005,
+  "predicted_none": 0,
+  "failures": [],
+  "passes": {
+    "mobile:original": 1,
+    "mobile:roi-1": 1,
+    "mobile:clahe": 1,
+    "recovery:original": 1,
+    "mobile:tile-1": 1,
+    "mobile:tile-2": 1,
+    "mobile:tile-3": 1,
+    "mobile:tile-4": 1
+  },
+  "output_path": "C:\\Users\\ujkio\\AppData\\Local\\Temp\\tmpdh4i8m49\\result.csv"
+}
+ok
+test_pipeline_writes_exact_submission_contract (test_pipeline_contract.PipelineContractTest) ... Processed 1/1 images in 0.0s
+{
+  "images": 1,
+  "elapsed_seconds": 0.002,
+  "seconds_per_image": 0.002,
+  "p50_image_seconds": 0.001,
+  "p95_image_seconds": 0.001,
+  "predicted_none": 0,
+  "failures": [],
+  "passes": {
+    "mobile:original": 1
+  },
+  "output_path": "C:\\Users\\ujkio\\AppData\\Local\\Temp\\tmpktef1d3x\\nested\\submission.csv"
+}
+ok
+test_serialization_error_is_an_image_failure_not_a_batch_abort (test_pipeline_contract.PipelineContractTest) ... Processed 1/1 images in 0.0s
+{
+  "images": 1,
+  "elapsed_seconds": 0.0,
+  "seconds_per_image": 0.0,
+  "p50_image_seconds": 0.0,
+  "p95_image_seconds": 0.0,
+  "predicted_none": 1,
+  "failures": [
+    {
+      "image_id": "sample",
+      "error": "ValueError: day is out of range for month"
+    }
+  ],
+  "passes": {},
+  "output_path": "C:\\Users\\ujkio\\AppData\\Local\\Temp\\tmp_ye5humf\\out.csv"
+}
+ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 0.137s
+
+OK

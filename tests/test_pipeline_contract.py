@@ -2,12 +2,13 @@ import csv
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from PIL import Image
 
-from src.date_extraction import OCRLine
-from src.pipeline import OUTPUT_COLUMNS, PipelineConfig, discover_images, run_pipeline
+from src.date_extraction import OCRLine, DateSelection
+from src.pipeline import OUTPUT_COLUMNS, PipelineConfig, ImagePrediction, discover_images, run_pipeline, predict_image
 
 
 class FakeBackend:
@@ -24,6 +25,53 @@ class FakeBackend:
 
 
 class PipelineContractTest(unittest.TestCase):
+    def test_partial_detection_does_not_skip_recovery_or_tiles(self):
+        class PartialBackend:
+            def __init__(self):
+                self.calls = []
+
+            def recognize(self, image, *, detector, variant):
+                self.calls.append((detector, variant))
+                if variant == "tile-1":
+                    return [OCRLine("EXP 2021.02.14", .99, (0,0,200,40), detector, variant)]
+                return [OCRLine("EXP 02.14", .99, (0,0,200,40), detector, variant)]
+
+        with tempfile.TemporaryDirectory() as directory:
+            image = Path(directory)/'sample.jpg'
+            Image.new('RGB',(400,400),'white').save(image)
+            backend = PartialBackend()
+            result = predict_image(image, backend, PipelineConfig(enable_rotation_fallback=True))
+            self.assertEqual(result.final_date, '2021-02-14')
+            self.assertIn(('recovery','original'), backend.calls)
+            self.assertIn(('mobile','rot180'), backend.calls)
+            self.assertIn(('mobile','tile-1'), backend.calls)
+
+    def test_partial_submission_survives_all_passes(self):
+        class PartialBackend:
+            def recognize(self, image, *, detector, variant):
+                return [OCRLine('EXP 2021.05', .99, (0,0,200,40), detector, variant)]
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            Image.new('RGB',(400,400),'white').save(root/'sample.jpg')
+            output = root/'result.csv'
+            summary = run_pipeline(root, output, backend=PartialBackend(), config=PipelineConfig(progress_every=0))
+            with output.open(encoding='utf-8', newline='') as source:
+                row = next(csv.DictReader(source))
+            self.assertEqual(row, {'image_id':'sample','year':'2021','month':'05','day':'NONE','final_date':'2021-05-NONE'})
+            self.assertEqual(summary['failures'], [])
+
+    def test_serialization_error_is_an_image_failure_not_a_batch_abort(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            Image.new('RGB',(24,24),'white').save(root/'sample.jpg')
+            selection = DateSelection('NONE-02-30', 1., 1., True, 'partial-date', ())
+            prediction = ImagePrediction('sample','NONE-02-30',selection,0.01,())
+            with patch('src.pipeline.predict_image', return_value=prediction):
+                summary = run_pipeline(root,root/'out.csv',backend=FakeBackend(),config=PipelineConfig(progress_every=0))
+            self.assertEqual(len(summary['failures']),1)
+            self.assertEqual(summary['predicted_none'],1)
+
     def test_discovery_filters_extensions_and_preserves_stems(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

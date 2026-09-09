@@ -1,0 +1,22 @@
+// Read-only extraction: never exports or edits a workbook.
+import fs from 'node:fs/promises';
+import crypto from 'node:crypto';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {FileBlob, SpreadsheetFile} from '@oai/artifact-tool';
+const out = path.dirname(fileURLToPath(import.meta.url));
+const source = 'C:/ITDA_OCR_CODE/labels/validation_000001_003352_manual.xlsx';
+const hash = async () => crypto.createHash('sha256').update(await fs.readFile(source)).digest('hex');
+const before = await hash();
+const wb = await SpreadsheetFile.importXlsx(await FileBlob.load(source));
+console.log((await wb.inspect({kind:'workbook,sheet,table',maxChars:1500,tableMaxRows:2,tableMaxCols:5})).ndjson);
+const sheet = wb.worksheets.getItem('검수 정답지');
+const values = sheet.getRange('A1:H3353').values;
+if(values[0][0]!=='image_id' || values[0][2]!=='정답 날짜')throw Error('Unexpected schema');
+const rows = values.slice(1).map((row,i)=>({image_id:String(row[0]).padStart(6,'0'),truth:row[2],status:row[4],source_row:i+2}));
+if(new Set(rows.map(r=>r.image_id)).size!==3352)throw Error('Duplicate or missing IDs');
+if(rows.some(r=>typeof r.truth!=='string' || !r.truth.trim()))throw Error('Missing/non-text ground truth');
+if(await hash()!==before)throw Error('Workbook changed during read');
+await fs.writeFile(path.join(out,'existing_labels.json'),JSON.stringify({source,sha256:before,rows},null,2));
+console.log(JSON.stringify({rows:rows.length,sourceUnchanged:true,statuses:[...new Set(rows.map(r=>r.status))]}));
+process.exit(0);

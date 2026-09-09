@@ -93,7 +93,6 @@ class DateCandidate:
     members: tuple[int, ...] = ()
     explicit_positive: bool = False
     explicit_negative: bool = False
-    span: tuple[int, int] = (0, 0)
 
     @property
     def iso(self) -> str:
@@ -257,7 +256,7 @@ def _iter_numeric_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
             if any(start <= match.start() and match.end() <= end for start, end in ordered_spans):
                 continue
             # A day fragment followed by HH:MM is not YY MM:DD.
-            if re.fullmatch(r"\d{1,2}\s+\d{1,2}:\d{1,2}", match.group(0)):
+            if re.fullmatch(r"\d{1,2}\s+\d{1,2}:\d{2}", match.group(0)):
                 continue
             actual_order = order
             if order == "end_year":
@@ -558,7 +557,6 @@ def _candidate_from_match(
         members=line.members,
         explicit_positive=bool(POSITIVE_CONTEXT.search(local)),
         explicit_negative=bool(NEGATIVE_CONTEXT.search(local)),
-        span=(match.start, match.end),
     )
 
 
@@ -592,7 +590,6 @@ def _nearer_role(candidate: DateCandidate, other: DateCandidate, lines: Sequence
 def _interval_endpoint(candidates: Sequence[DateCandidate], ranked: Sequence[DateCandidate], lines: Sequence[OCRLine]) -> DateCandidate | None:
     """Prefer a local, supported endpoint; unrelated dates never form an interval."""
     endpoints = set()
-    ranked_scores = {item.iso: item.score for item in ranked}
     for first in candidates:
         for last in candidates:
             if (first.source, first.variant) != (last.source, last.variant):
@@ -607,9 +604,6 @@ def _interval_endpoint(candidates: Sequence[DateCandidate], ranked: Sequence[Dat
             # Ignore a window that accidentally joined separate date boxes.
             if set(first.members) & set(last.members) and first.members != last.members:
                 continue
-            # Alternative parses of overlapping digits are not two printed dates.
-            if first.members == last.members and max(first.span[0], last.span[0]) < min(first.span[1], last.span[1]):
-                continue
             paired_roles = (first.explicit_negative or _nearer_role(first, last, lines, FROM_CONTEXT)) and not last.explicit_negative
             explicit_end = (last.explicit_positive or _nearer_role(last, first, lines, UNTIL_CONTEXT)) and not last.explicit_negative
             equal_unlabelled = (
@@ -618,7 +612,7 @@ def _interval_endpoint(candidates: Sequence[DateCandidate], ranked: Sequence[Dat
                 and abs(first.score - last.score) <= 0.15
                 and min(first.ocr_score, last.ocr_score) >= 0.65
             )
-            if (paired_roles or explicit_end or equal_unlabelled) and ranked_scores[last.iso] >= ranked[0].score - (2.60 if paired_roles or explicit_end else 0.15):
+            if (paired_roles or explicit_end or equal_unlabelled) and last.score >= ranked[0].score - (2.60 if paired_roles else 0.15):
                 endpoints.add(last.iso)
     choices = [item for item in ranked if item.iso in endpoints]
     return max(choices, key=lambda item: (item.score, item.value), default=None)
@@ -659,7 +653,7 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False) -> DateS
 
     if best.score < 1.05 and not interval_preferred:
         explicit_manufacturing = (
-            best.explicit_negative and not has_positive and best.ocr_score >= 0.70
+            has_negative and not has_positive and best.ocr_score >= 0.70
         )
         return DateSelection(
             None,
