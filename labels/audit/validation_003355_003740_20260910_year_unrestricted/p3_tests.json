@@ -1,0 +1,98 @@
+[
+  {
+    "name": "historical-full-date",
+    "actual": "2019-04-18",
+    "expected": "2019-04-18",
+    "passed": true
+  },
+  {
+    "name": "year-month-only",
+    "actual": "2022-06-NONE",
+    "expected": "2022-06-NONE",
+    "passed": true
+  },
+  {
+    "name": "month-day-only",
+    "actual": "NONE-02-14",
+    "expected": "NONE-02-14",
+    "passed": true
+  },
+  {
+    "name": "no-date",
+    "actual": "NONE",
+    "expected": "NONE",
+    "passed": true
+  },
+  {
+    "name": "invalid-calendar",
+    "actual": "NONE",
+    "expected": "NONE",
+    "passed": true
+  },
+  {
+    "name": "partial-output-contract",
+    "actual": {
+      "year": "NONE",
+      "month": "02",
+      "day": "14",
+      "final_date": "NONE-02-14"
+    },
+    "expected": {
+      "year": "NONE",
+      "month": "02",
+      "day": "14",
+      "final_date": "NONE-02-14"
+    },
+    "passed": true
+  },
+  {
+    "name": "manufacturing-only",
+    "actual": "NONE",
+    "expected": "NONE",
+    "passed": true
+  },
+  {
+    "name": "two-digit-MDY-unambiguous",
+    "actual": "2021-08-18",
+    "expected": "2021-08-18",
+    "passed": true
+  },
+  {
+    "name": "explicit-Korean-MDY",
+    "actual": "2022-07-12",
+    "expected": "2022-07-12",
+    "passed": true
+  },
+  {
+    "name": "explicit-English-MDY",
+    "actual": "2022-07-12",
+    "expected": "2022-07-12",
+    "passed": true
+  },
+  {
+    "name": "year-month-name-day",
+    "actual": "2022-06-12",
+    "expected": "2022-06-12",
+    "passed": true
+  },
+  {
+    "name": "no-cross-frame-date",
+    "actual": "NONE-05-29",
+    "expected": "NONE-05-29",
+    "passed": true
+  },
+  {
+    "name": "distant-keyword-not-attached",
+    "actual": [
+      [],
+      [],
+      0.0
+    ],
+    "expected": [
+      [],
+      [],
+      0.0
+    ],
+    "passed": true
+  }
+]
