@@ -43,7 +43,7 @@ class ParseDatesTest(unittest.TestCase):
     def test_historical_and_explicit_order_formats(self):
         for raw, expected in {
             "2020.09.20": "2020-09-20",
-            "19.09.03": "2019-09-03",
+            "YY.MM.DD 19.09.03": "2019-09-03",
             "08/18/21": "2021-08-18",
             "MM/DD/YY 07/12/22": "2022-07-12",
             "월/일/년 07/12/22": "2022-07-12",
@@ -94,8 +94,8 @@ class DateSelectionTest(unittest.TestCase):
 
     def test_final_selection_keeps_a_low_score_two_date_interval(self):
         lines = [
-            line("제조 25.09.05", score=0.65, box=(100, 0, 300, 40)),
-            line("26.03.04", score=0.65, box=(100, 55, 300, 95)),
+            line("제조 YY.MM.DD 25.09.05", score=0.65, box=(100, 0, 300, 40)),
+            line("YY.MM.DD 26.03.04", score=0.65, box=(100, 55, 300, 95)),
         ]
         selection = select_date(lines, final=True)
         self.assertEqual(selection.final_date, "2026-03-04")
@@ -206,7 +206,7 @@ class DateSelectionTest(unittest.TestCase):
                 self.assertEqual((selected.final_date, selected.score, selected.confident), (base.final_date, base.score, base.confident))
 
     def test_historical_local_low_confidence_interval(self):
-        selected = select_date([line("제조 20.09.05", .65, (100,0,300,40)), line("21.03.04", .65, (100,55,300,95))], final=True)
+        selected = select_date([line("제조 YY.MM.DD 20.09.05", .65, (100,0,300,40)), line("YY.MM.DD 21.03.04", .65, (100,55,300,95))], final=True)
         self.assertEqual(selected.final_date, "2021-03-04")
 
     def test_unrelated_dates_do_not_form_a_latest_date_interval(self):
@@ -228,15 +228,15 @@ class DateSelectionTest(unittest.TestCase):
     def test_interval_comparison_uses_scores_with_agreement_bonus(self):
         values = []
         for variant in ('original', 'roi-1', 'roi-2', 'clahe'):
-            values.extend([line('25.08.25', .999, (0,0,300,40), variant=variant),
-                           line('26.02.24', .998, (0,55,300,95), variant=variant)])
+            values.extend([line('YY.MM.DD 25.08.25', .999, (0,0,300,40), variant=variant),
+                           line('YY.MM.DD 26.02.24', .998, (0,55,300,95), variant=variant)])
         self.assertEqual(select_date(values, final=True).final_date, '2026-02-24')
 
     def test_closer_until_role_beats_an_overlapping_merged_window(self):
         values = []
         for variant in ('original', 'roi-1', 'roi-2', 'clahe'):
-            values.extend([line('25.09.03', .999, (0,0,670,207), variant=variant),
-                           line('26.03.02', .998, (0,171,670,380), variant=variant),
+            values.extend([line('YY.MM.DD 25.09.03', .999, (0,0,670,207), variant=variant),
+                           line('YY.MM.DD 26.03.02', .998, (0,171,670,380), variant=variant),
                            line('까지', .90, (700,167,940,370), variant=variant)])
         self.assertEqual(select_date(values, final=True).final_date, '2026-03-02')
 

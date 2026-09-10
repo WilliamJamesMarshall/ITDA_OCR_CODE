@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.pipeline import PipelineConfig, run_pipeline
+from src.pipeline import PipelineConfig, discover_images, run_pipeline
 
 
 def read_labels(path: Path) -> dict[str, dict[str, str]]:
@@ -30,7 +30,10 @@ def read_predictions(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(source))
 
 
-def score_predictions(labels, predictions, failures, *, all_label_statuses=False):
+def score_predictions(labels, predictions, failures, *, all_label_statuses=False, expected_ids=None):
+    if expected_ids is not None:
+        scope = {key.zfill(6) if key.isdigit() else key for key in expected_ids}
+        labels = {key: row for key, row in labels.items() if key in scope}
     failed = {item['image_id'].zfill(6) if item['image_id'].isdigit() else item['image_id']
               for item in failures}
     seen = set()
@@ -65,14 +68,25 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
             errors.append({'image_id':image_id,'expected':expected,'actual':actual,
                            'label_status':label['라벨 상태'], 'difficulty':label.get('난이도',''),
                            'error_types':label.get('오류 유형',''), 'failure_type':error_type})
+    eligible = {key for key,row in labels.items() if all_label_statuses or row['라벨 상태']=='manual'}
+    missing = sorted(eligible-seen)
+    for image_id in missing:
+        expected = labels[image_id]['정답 날짜'].strip()
+        if not expected:
+            raise ValueError(f'Empty ground truth: {image_id}')
+        kind = 'none' if expected == 'NONE' else 'partial' if 'NONE' in expected else 'full'
+        categories[kind]['total'] += 1
+        counts['출력 누락'] += 1
+        errors.append({'image_id': image_id, 'expected': expected, 'actual': None,
+                       'failure_type': '출력 누락'})
     total = sum(item['total'] for item in categories.values())
     if not total:
         raise ValueError('No confirmed labels matched predictions; check IDs, label status and input range.')
     exact = sum(item['correct'] for item in categories.values())
-    eligible = {key for key,row in labels.items() if all_label_statuses or row['라벨 상태']=='manual'}
     return {'evaluated_labels':total, 'exact_matches':exact, 'exact_match_rate':exact/total,
+            'accuracy_target':0.95, 'accuracy_target_met':exact/total >= 0.95,
             'categories':categories, 'errors':errors, 'error_type_counts':dict(counts),
-            'skipped':dict(skipped), 'labels_without_predictions':sorted(eligible-seen)}
+            'skipped':dict(skipped), 'labels_without_predictions':missing}
 
 
 def main() -> None:
@@ -96,11 +110,16 @@ def main() -> None:
         enable_tile_fallback=not args.mobile_only,
     )
     labels = read_labels(args.labels_csv)
+    # Freeze evaluation scope before inference, not from whichever rows succeed.
+    expected_images = discover_images(args.input_dir)
+    if args.limit is not None:
+        expected_images = expected_images[:args.limit]
     runtime = run_pipeline(
         args.input_dir, args.output_csv, config=config, max_images=args.limit
     )
     predictions = read_predictions(args.output_csv)
-    report = {'runtime':runtime, **score_predictions(labels, predictions, runtime['failures'], all_label_statuses=args.all_label_statuses)}
+    report = {'runtime':runtime, **score_predictions(labels, predictions, runtime['failures'], all_label_statuses=args.all_label_statuses,
+                                                     expected_ids=[path.stem for path in expected_images])}
     if args.report_json:
         args.report_json.parent.mkdir(parents=True, exist_ok=True)
         args.report_json.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')

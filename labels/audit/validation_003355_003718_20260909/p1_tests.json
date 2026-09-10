@@ -1,0 +1,54 @@
+[
+  {
+    "name": "historical-full-date",
+    "actual": "2019-04-18",
+    "expected": "2019-04-18",
+    "passed": true
+  },
+  {
+    "name": "year-month-only",
+    "actual": "2022-06-NONE",
+    "expected": "2022-06-NONE",
+    "passed": true
+  },
+  {
+    "name": "month-day-only",
+    "actual": "NONE-02-14",
+    "expected": "NONE-02-14",
+    "passed": true
+  },
+  {
+    "name": "no-date",
+    "actual": "NONE",
+    "expected": "NONE",
+    "passed": true
+  },
+  {
+    "name": "invalid-calendar",
+    "actual": "NONE",
+    "expected": "NONE",
+    "passed": true
+  },
+  {
+    "name": "partial-output-contract",
+    "actual": {
+      "year": "NONE",
+      "month": "02",
+      "day": "14",
+      "final_date": "NONE-02-14"
+    },
+    "expected": {
+      "year": "NONE",
+      "month": "02",
+      "day": "14",
+      "final_date": "NONE-02-14"
+    },
+    "passed": true
+  },
+  {
+    "name": "manufacturing-only",
+    "actual": "NONE",
+    "expected": "NONE",
+    "passed": true
+  }
+]
