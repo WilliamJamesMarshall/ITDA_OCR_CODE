@@ -74,6 +74,8 @@ class ParsedDate:
     year_digits: int
     separator: str
     repaired: bool = False
+    order: str = "ymd"
+    order_reason: str = "calendar_unique"
 
 
 @dataclass(frozen=True)
@@ -94,6 +96,8 @@ class DateCandidate:
     explicit_positive: bool = False
     explicit_negative: bool = False
     span: tuple[int, int] = (0, 0)
+    order: str = "ymd"
+    order_reason: str = "calendar_unique"
 
     @property
     def iso(self) -> str:
@@ -108,10 +112,40 @@ class DateSelection:
     confident: bool
     reason: str
     candidates: tuple[DateCandidate, ...]
+    digits_confident: bool = False
+    order_resolved: bool = False
+
+    @property
+    def stop_ocr(self) -> bool:
+        """Execution decision, not a claim that date order is proven.
+
+        `confident` remains the compatible legacy spelling. A clear-digit DMY
+        fallback can stop OCR with order_resolved=False; forced final output
+        can stop with digits_confident=False.
+        """
+        return self.confident
 
     @property
     def is_partial(self) -> bool:
         return self.final_date is not None and "NONE" in self.final_date
+
+
+@dataclass(frozen=True)
+class ProductDateRule:
+    """Locally verified package rule, never an image-ID or country shortcut."""
+
+    name: str
+    required_text: tuple[str, ...]
+    order: str
+    evidence: str
+
+    def __post_init__(self):
+        if self.order not in {"ymd", "dmy", "mdy"}:
+            raise ValueError("Invalid product date order")
+        if not self.name.strip() or not self.evidence.strip() or not self.required_text or any(
+            not token.strip() for token in self.required_text
+        ):
+            raise ValueError("Product rules require package identifiers and verification evidence")
 
 
 def _valid_date(year: int, month: int, day: int) -> date | None:
@@ -132,14 +166,48 @@ def _normalise_text(text: str) -> str:
 
 
 def _date_text(text: str) -> str:
-    text = re.sub(r"월\s*[/.-]\s*일\s*[/.-]\s*년", "MM/DD/YY", text)
-    text = re.sub(r"일\s*[/.-]\s*월\s*[/.-]\s*년", "DD/MM/YY", text)
-    return (
-        _normalise_text(text).replace("년", ".").replace("월", ".").replace("일", " ")
-    )
+    value = _normalise_text(text)
+    # A month-name translation key is not a row of expiry dates. Keep offsets
+    # intact and leave any actual expiry elsewhere in the line untouched.
+    month_key = list(re.finditer(r"\b(?:" + "|".join(MONTHS) + r")\s*-\s*\d{1,2}\s*월", value, re.I))
+    if len(month_key) >= 3:
+        for item in month_key:
+            value = value[:item.start()] + " " * (item.end() - item.start()) + value[item.end():]
+    # Mask format placeholders without moving date offsets (00일00월00년 is
+    # a legend, not a preceding numeric date fragment).
+    for start, end, _ in _format_hints(value):
+        value = value[:start] + " " * (end - start) + value[end:]
+    return value.replace("년", ".").replace("월", ".").replace("일", " ")
+
+
+def _format_hints(text: str) -> list[tuple[int, int, str]]:
+    gap = r"\s*[/.,\-]?\s*"
+    hints = []
+    for order, letters, korean in (
+        ("ymd", ("Y{2,4}", "MM", "DD"), ("[년연]{1,2}", "월{1,2}", "일{1,2}")),
+        ("dmy", ("DD", "MM", "Y{2,4}"), ("일{1,2}", "월{1,2}", "[년연]{1,2}")),
+        ("mdy", ("MM", "DD", "Y{2,4}"), ("월{1,2}", "일{1,2}", "[년연]{1,2}")),
+    ):
+        patterns = (r"(?<![A-Z])" + gap.join(letters) + r"(?![A-Z])",
+                    gap.join(r"(?:00)?" + part for part in korean))
+        for pattern in patterns:
+            hints.extend((m.start(), m.end(), order) for m in re.finditer(pattern, text, re.I))
+    # A wrapped bottle may hide the last field, but doubled year/month
+    # placeholders already exclude DMY and MDY. Never infer from a lone year.
+    hints.extend((m.start(), m.end(), "ymd") for m in re.finditer(
+        r"[년연]{2}\s*[./,\-]?\s*월{2}(?!\s*[./,\-]?\s*일)", text))
+    return hints
+
+
+def _span_gap(first: tuple[int, int], second: tuple[int, int]) -> int:
+    return max(0, first[0] - second[1], second[0] - first[1])
 
 
 def _repaired_text(text: str) -> str:
+    # Limit extra glyph repairs to a four-character year or the final day
+    # field; never substitute digits throughout product/lot identifiers.
+    text = re.sub(r"(?<!\d)2[UD](?=\d{2}\s*[./-])", "20", text, flags=re.I)
+    text = re.sub(r"(?<=\d)\$(?=\s*(?:까지|$))", "5", text)
     return text.translate(
         str.maketrans(
             {
@@ -184,40 +252,58 @@ def _emit_match(
         year_digits,
         separator,
         repaired,
+        order,
     )
 
 
 def _iter_numeric_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
     separator = r"[./,:\-]"
-    delimiter = r"(?:\s*[./,:\-]\s*|\s+)"
-    # A printed order takes precedence over the fallback for ambiguous numbers.
-    explicit = next((order for pattern, order in (
-        (r"MM\s*[/.-]\s*DD\s*[/.-]\s*Y{2,4}", "mdy"),
-        (r"DD\s*[/.-]\s*MM\s*[/.-]\s*Y{2,4}", "dmy"),
-        (r"Y{2,4}\s*[/.-]\s*MM\s*[/.-]\s*DD", "ymd"),
-    ) if re.search(pattern, text, re.IGNORECASE)), None)
-    ordered_spans = []
-    for match in re.finditer(
-        r"(?<![\d./,:\-])(\d{1,2})\s*[./-]\s*(\d{1,2})\s*[./-]\s*(20\d{2}|\d{2})(?!\d|\s*:)", text
-    ):
-        first, second = int(match[1]), int(match[2])
-        order = explicit
-        if order is None and first <= 12 < second:
-            order = "mdy"
-        if order is not None:
-            ordered_spans.append((match.start(), match.end()))
-            year_digits = len(match[1] if order == "ymd" else match[3])
-            parsed = _emit_match(match, order, year_digits, "separated", repaired)
+    delimiter = r"(?:\s*[./,:\-]{1,2}\s*|\s+)"
+    occupied = []
+    numeric = re.compile(rf"(?<!\d)(20\d{{2}}|\d{{1,2}}){delimiter}(\d{{1,2}}){delimiter}((?:19|20)\d{{2}}|\d{{1,2}})")
+    # Overlap lets the real full date survive a preceding lot fragment:
+    # LE01 19/07/2022 must not be consumed as the false date 01 19/07.
+    for start in re.finditer(r"(?=\d)", text):
+        match = numeric.match(text, start.start())
+        if match is None:
+            continue
+        occupied.append((match.start(), match.end()))
+        if max(len(match[1]), len(match[3])) < 4 and re.search(r"[./,:\-]{2}", match[0]):
+            continue
+        # Do not borrow HH:MM from a partial date or split an embedded digit run.
+        if re.fullmatch(r"\d{1,2}\s+\d{1,2}:\d{1,2}", match[0]):
+            continue
+        if re.fullmatch(r"\d{1,2}:\d{1,2}\s+\d{1,2}", match[0]):
+            continue
+        tail = text[match.end():]
+        prefix = text[:match.start()]
+        if (re.fullmatch(r"20\d{2}\s*[./-]\s*\d\s+\d", match[0])
+                and re.match(r"\s*[./-]\s*\d", tail)):
+            continue
+        if len(match[3]) == 1 and tail.startswith("$"):
+            continue
+        # A stray lot digit before MM.DD followed by HH:MM is not DD MM YY.
+        if (re.fullmatch(r"\d\s+\d{1,2}[./-]\d{1,2}", match[0])
+                and re.match(r"\s+\d{1,2}:\d{2}", tail)):
+            continue
+        long_year = len(match[1]) == 4
+        attached_lot_digit = (len(match[1]) == 1 and prefix and prefix[-1].isalpha()
+                              and not re.search(r"(?:EXP|BBE?)$", prefix, re.I))
+        if not long_year and (re.search(r"\d[./,:\-]+\s*$", prefix) or attached_lot_digit):
+            continue
+        if re.match(r"\s*:", tail) or (not long_year and tail[:1].isdigit()
+                and not re.match(r"(?:\d{1,2}[^\W\d_]|\d{2}:\d{2})", tail)):
+            continue
+        for order in ("ymd", "dmy", "mdy"):
+            year_index = 1 if order == "ymd" else 3
+            day_index = 3 if order == "ymd" else 1 if order == "dmy" else 2
+            month_index = 1 if order == "mdy" else 2
+            if len(match[year_index]) not in (2, 4) or len(match[day_index]) > 2 or len(match[month_index]) > 2:
+                continue
+            parsed = _emit_match(match, order, len(match[year_index]), "separated", repaired)
             if parsed:
                 yield parsed
     patterns: list[tuple[str, str, int, str]] = [
-        (
-            rf"(?<!\d)(20\d{{2}}){delimiter}(\d{{1,2}}){delimiter}(\d{{1,2}})",
-            "ymd",
-            4,
-            "separated",
-        ),
-        (r"(?<!\d)(20\d{2})\s+(\d{1,2})\s+(\d{1,2})(?!\d)", "ymd", 4, "space"),
         (
             rf"(?<!\d)(20\d{{2}})\s*{separator}\s*(\d{{2}})(\d{{2}})(?!\d)",
             "ymd",
@@ -231,48 +317,28 @@ def _iter_numeric_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
             "joined",
         ),
         (r"(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)", "ymd", 4, "compact"),
-        (
-            rf"(?<!\d)(1[5-9]|2\d|3[0-5]){delimiter}(\d{{1,2}}){delimiter}(\d{{1,2}})",
-            "ymd",
-            2,
-            "separated",
-        ),
-        (
-            r"(?<!\d)(1[5-9]|2\d|3[0-5])\s+(\d{1,2})\s+(\d{1,2})(?!\d)",
-            "ymd",
-            2,
-            "space",
-        ),
-        (r"(?<!\d)(1[5-9]|2\d|3[0-5])(\d{2})(\d{2})(?!\d)", "ymd", 2, "compact"),
-        (
-            rf"(?<!\d)(\d{{1,2}}){delimiter}(\d{{1,2}}){delimiter}(20\d{{2}})(?!\d)",
-            "end_year",
-            4,
-            "separated",
-        ),
-        (r"(?<!\d)(\d{2})(\d{2})(20\d{2})(?!\d)", "end_year", 4, "compact"),
+        *((r"(?<!\d)(\d{2})(\d{2})(\d{2})(?!\d)", order, 2, "compact") for order in ("ymd", "dmy", "mdy")),
+        *((r"(?<!\d)(\d{2})(\d{2})(20\d{2})(?!\d)", order, 4, "compact") for order in ("dmy", "mdy")),
+        *((r"(?<!\d)(\d{1,2})\s+(\d{2})(20\d{2})(?!\d)", order, 4, "joined") for order in ("dmy", "mdy")),
+        *((r"(?<!\d)(\d{2})(\d{2})\s*[./-]\s*(20\d{2})(?!\d)", order, 4, "joined") for order in ("dmy", "mdy")),
+        # A single slash is distinguishable from YYYY.MM partial dates and
+        # hyphenated street/lot numbers; do not generalize this to dot/dash.
+        *((r"(?<!\d)(\d{2})(\d{2})\s*/\s*(\d{2})(?!\d)", order, 2, "joined") for order in ("ymd", "dmy", "mdy")),
     ]
     for pattern, order, year_digits, sep_name in patterns:
         for match in re.finditer(pattern, text):
-            if any(start <= match.start() and match.end() <= end for start, end in ordered_spans):
+            if any(max(start, match.start()) < min(end, match.end()) for start, end in occupied):
                 continue
-            # A day fragment followed by HH:MM is not YY MM:DD.
-            if re.fullmatch(r"\d{1,2}\s+\d{1,2}:\d{1,2}", match.group(0)):
-                continue
-            actual_order = order
-            if order == "end_year":
-                first, second = int(match.group(1)), int(match.group(2))
-                if first > 12 and second <= 12:
-                    actual_order = "dmy"
-                elif second > 12 and first <= 12:
-                    actual_order = "mdy"
-                elif explicit in {"mdy", "dmy"}:
-                    actual_order = explicit
-                else:
-                    actual_order = "dmy"
-            parsed = _emit_match(match, actual_order, year_digits, sep_name, repaired)
+            parsed = _emit_match(match, order, year_digits, sep_name, repaired)
             if parsed:
                 yield parsed
+
+    # OCR may insert a space within a two-digit month. Two explicit field
+    # separators and a four-digit year distinguish it from three spaced fields.
+    for match in re.finditer(r"(?<!\d)(20\d{2})\s*[./-]\s*(\d\s+\d)\s*[./-]\s*(\d{1,2})(?!\d)", text):
+        parsed = _valid_date(int(match[1]), int(re.sub(r"\s", "", match[2])), int(match[3]))
+        if parsed:
+            yield ParsedDate(parsed, match[0], match.start(), match.end(), 4, "repaired-spacing", True)
 
     # A frequent detector/recognizer error drops the leading 2 from 20YY.
     for match in re.finditer(
@@ -333,6 +399,10 @@ def _iter_numeric_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
 
 def _iter_month_name_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
     month = r"JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC"
+    original = text
+    text = re.sub(r"(?<=\d)([ /.,-]*)0CT(?=[ /.,-]*\d)", r"\1OCT", text, flags=re.I)
+    # Repair digits without translating letters inside SEP/OCT/etc.
+    text = re.sub(r"(?<=EXP)[OQ](?=\d(?:" + month + r"))", "0", text, flags=re.I)
     for match in re.finditer(
         rf"(?<!\d)(20\d{{2}})\s*[./-]?\s*({month})\s*[./-]?\s*(\d{{1,2}})(?!\d)",
         text, re.IGNORECASE,
@@ -341,7 +411,7 @@ def _iter_month_name_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
         if parsed:
             yield ParsedDate(parsed, match[0], match.start(), match.end(), 4, "month-name", repaired)
     for match in re.finditer(
-        rf"(?<!\w)(\d{{1,2}})\s*[./,\-]?\s*({month})\s*[./,\-]?\s*(\d{{2}}|20\d{{2}})(?!\d)",
+        rf"(?:(?<!\w)|(?<=EXP))(\d{{1,2}})\s*[./,\-]?\s*({month})\s*[./,\-]?\s*(\d{{2}}|20\d{{2}})(?!\d)",
         text,
         re.IGNORECASE,
     ):
@@ -356,7 +426,8 @@ def _iter_month_name_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
                 match.end(),
                 len(match.group(3)),
                 "month-name",
-                repaired,
+                repaired or match[0] != original[match.start():match.end()],
+                "dmy",
             )
     for match in re.finditer(
         rf"(?<!\w)({month})\s*[./,\-]?\s*(\d{{1,2}})(?:\s*[./,\-]\s*|\s+)(\d{{2}}|20\d{{2}})(?!\d)",
@@ -375,26 +446,53 @@ def _iter_month_name_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
                 len(match.group(3)),
                 "month-name",
                 repaired,
+                "mdy",
             )
 
 
 def parse_dates(text: str) -> list[ParsedDate]:
+    text = _normalise_text(text)
     original = _date_text(text)
     variants = [(original, False)]
     repaired = _repaired_text(original)
     if repaired != original:
         variants.append((repaired, True))
 
-    best: dict[tuple[date, int, int], ParsedDate] = {}
+    best: dict[tuple[date, int, int, str], ParsedDate] = {}
     for value, was_repaired in variants:
         matches = list(_iter_numeric_dates(value, was_repaired))
         matches.extend(_iter_month_name_dates(value, was_repaired))
         for item in matches:
-            key = (item.value, item.start, item.end)
+            key = (item.value, item.start, item.end, item.order)
             current = best.get(key)
             if current is None or (current.repaired and not item.repaired):
                 best[key] = item
-    return sorted(best.values(), key=lambda item: (item.start, item.end, item.value))
+    groups: dict[tuple[int, int], list[ParsedDate]] = {}
+    for item in best.values():
+        groups.setdefault((item.start, item.end), []).append(item)
+    groups = {span: values for span, values in groups.items()
+              if not any(other != span and other[0] <= span[0] and span[1] <= other[1] for other in groups)}
+    # A complete four-digit-year token takes precedence over an overlapping
+    # two-digit parse assembled from its neighbouring lot number.
+    complete = [span for span, values in groups.items() if any(v.year_digits == 4 for v in values)]
+    groups = {span: values for span, values in groups.items()
+              if span in complete or not any(max(span[0], full[0]) < min(span[1], full[1]) for full in complete)}
+    hints = _format_hints(text)
+    # Literal units name the fields, independently of the numeric fallback.
+    hints.extend((m.start(), m.end(), "ymd") for m in re.finditer(
+        r"\d{2,4}\s*년\s*\d{1,2}\s*월\s*\d{1,2}\s*일", text))
+    selected = []
+    for span, values in groups.items():
+        linked = {order for start, end, order in hints
+                  if _span_gap(span, (start, end)) <= 64
+                  and _span_gap(span, (start, end)) == min(_span_gap(s, (start, end)) for s in groups)}
+        if len(linked) > 1:
+            continue
+        if linked:
+            selected.extend(replace(v, order_reason="explicit_order") for v in values if v.order in linked)
+        else:
+            selected.extend(values)
+    return sorted(selected, key=lambda item: (item.start, item.end, item.value, item.order))
 
 
 def _union_box(lines: Sequence[OCRLine]) -> tuple[float, float, float, float]:
@@ -503,11 +601,16 @@ def _nearby_context(
 
 
 def _candidate_from_match(
-    match: ParsedDate, line: OCRLine, originals: Sequence[OCRLine]
+    match: ParsedDate, line: OCRLine, originals: Sequence[OCRLine], role: str | None = None,
 ) -> DateCandidate:
     before = line.text[max(0, match.start - 24) : match.start]
     after = line.text[match.end : match.end + 24]
     local = f"{before} {match.raw} {after}"
+    if role is not None:
+        # A one-to-one block match is stronger than a slanted box's nearest
+        # keyword. Use the same role scoring as an inline printed role.
+        local = f"{match.raw} {'까지' if role == 'end' else '부터'}"
+        before, after = "", "까지" if role == "end" else "부터"
     positive_hits = [item.group(0) for item in POSITIVE_CONTEXT.finditer(local)]
     negative_hits = [item.group(0) for item in NEGATIVE_CONTEXT.finditer(local)]
 
@@ -529,8 +632,8 @@ def _candidate_from_match(
     if FROM_CONTEXT.search(after[:12]) or FROM_CONTEXT.search(before[-12:]):
         score -= 1.20
 
-    nearby_positive, nearby_negative, nearby_adjustment = _nearby_context(
-        line, originals
+    nearby_positive, nearby_negative, nearby_adjustment = (
+        _nearby_context(line, originals) if role is None else ([], [], 0.0)
     )
     positive_hits.extend(nearby_positive)
     negative_hits.extend(nearby_negative)
@@ -559,19 +662,204 @@ def _candidate_from_match(
         explicit_positive=bool(POSITIVE_CONTEXT.search(local)),
         explicit_negative=bool(NEGATIVE_CONTEXT.search(local)),
         span=(match.start, match.end),
+        order=match.order,
+        order_reason=match.order_reason,
     )
 
 
-def extract_candidates(lines: Sequence[OCRLine]) -> list[DateCandidate]:
+def _printed_pair_roles(originals: Sequence[OCRLine], parsed: Sequence[list[ParsedDate]]) -> dict[int, str]:
+    """Align two standalone role labels to two date rows as a block.
+
+    Matching vertical order tolerates perspective skew without assigning both
+    labels to the same nearest date. Competing dates/labels invalidate the block.
+    """
+    date_rows = [(i, line) for i, (line, dates) in enumerate(zip(originals, parsed))
+                 if dates and len({(d.start, d.end) for d in dates}) == 1]
+    proposals: dict[int, set[str]] = {}
+    for pos, (i, first) in enumerate(date_rows):
+        for j, second in date_rows[pos + 1:]:
+            if (first.source, first.variant) != (second.source, second.variant):
+                continue
+            scale = max(first.height, second.height)
+            dx, dy = _box_gap(first, second)
+            if dx > scale or dy > 2 * scale or abs(first.center[1] - second.center[1]) < .3 * scale:
+                continue
+            block = OCRLine("", 1., _union_box((first, second)), first.source, first.variant)
+            if any(k not in (i, j) and (other.source, other.variant) == (first.source, first.variant)
+                   and _box_gap(block, other)[0] <= scale and _box_gap(block, other)[1] < scale
+                   for k, other in date_rows):
+                continue
+            labels = []
+            for label in originals:
+                if ((label.source, label.variant) != (first.source, first.variant) or label.score < .85
+                        or math.hypot(*_box_gap(block, label)) > 9 * scale):
+                    continue
+                if re.fullmatch(r"부터|제조(?:일자|일)?|생산(?:일자|일)?|MFG|MFD", label.text, re.I):
+                    labels.append(("start", label))
+                elif re.fullmatch(r"까지|EXP(?:IRY|IRES|DATE)?|USE\s*BY|BEST\s*(?:BEFORE|BY)", label.text, re.I):
+                    labels.append(("end", label))
+            if len(labels) != 2 or {kind for kind, _ in labels} != {"start", "end"}:
+                continue
+            rows = sorted(((i, first), (j, second)), key=lambda item: item[1].center[1])
+            labels.sort(key=lambda item: item[1].center[1])
+            row_step = rows[1][1].center[1] - rows[0][1].center[1]
+            label_step = labels[1][1].center[1] - labels[0][1].center[1]
+            if not .35 * row_step <= label_step <= 3 * row_step:
+                continue
+            if any(abs(row.center[1] - label.center[1]) > 2 * scale
+                   for (_, row), (_, label) in zip(rows, labels)):
+                continue
+            # Inline roles contradicting the proposed block mean two different
+            # labels/products; do not overwrite their explicit text.
+            if any((kind == "start" and UNTIL_CONTEXT.search(row.text))
+                   or (kind == "end" and FROM_CONTEXT.search(row.text))
+                   for (_, row), (kind, _) in zip(rows, labels)):
+                continue
+            for (index, _), (kind, _) in zip(rows, labels):
+                proposals.setdefault(index, set()).add(kind)
+    return {i: next(iter(kinds)) for i, kinds in proposals.items() if len(kinds) == 1}
+
+
+def _paired_orders(originals: Sequence[OCRLine], parsed: Sequence[list[ParsedDate]],
+                   roles: dict[int, str]) -> dict[int, str]:
+    """Use chronology only for a close, explicitly labelled, same-format pair.
+
+    Identical field widths/separators on one printed block are the bounded
+    same-order assumption. Unlabelled pairs, repaired digits, other frames,
+    conflicting pairs and multiple possible orders supply no order evidence.
+    """
+    groups = []
+    for index, (line, dates) in enumerate(zip(originals, parsed)):
+        if line.score < .85 or not dates or any(d.repaired for d in dates):
+            continue
+        if len({(d.start, d.end) for d in dates}) != 1:
+            continue
+        raw = dates[0].raw
+        if not re.fullmatch(r"\d{2,4}([./-])\d{2}\1\d{2,4}", raw):
+            continue
+        signature = re.sub(r"\d", "#", raw)
+        candidate = _candidate_from_match(dates[0], line, originals, roles.get(index))
+        groups.append((index, line, dates, signature, candidate))
+    proposed: dict[int, set[str]] = {}
+    for index, line, dates, signature, candidate in groups:
+        for other_index, other, other_dates, other_signature, other_candidate in groups:
+            if index >= other_index or signature != other_signature:
+                continue
+            if (line.source, line.variant) != (other.source, other.variant):
+                continue
+            horizontal, vertical = _box_gap(line, other)
+            scale = max(line.height, other.height)
+            if horizontal > scale or vertical > 3 * scale:
+                continue
+            start = candidate.explicit_negative
+            end = other_candidate.explicit_positive
+            reverse_start = other_candidate.explicit_negative
+            reverse_end = candidate.explicit_positive
+            if start and end and not reverse_start and not reverse_end:
+                first, last = dates, other_dates
+            elif reverse_start and reverse_end and not start and not end:
+                first, last = other_dates, dates
+            else:
+                continue
+            orders = {a.order for a in first for b in last if a.order == b.order and a.value < b.value}
+            if len(orders) == 1:
+                proposed.setdefault(index, set()).update(orders)
+                proposed.setdefault(other_index, set()).update(orders)
+    return {index: next(iter(orders)) for index, orders in proposed.items() if len(orders) == 1}
+
+
+def _resolve_orders(
+    line: OCRLine, matches: list[ParsedDate], originals: Sequence[OCRLine],
+    parsed_originals: Sequence[list[ParsedDate]], product_rules: Sequence[ProductDateRule],
+    paired_orders: dict[int, str],
+) -> list[ParsedDate]:
+    """Resolve a printed token before OCR scores rank different printed dates."""
+    if not matches:
+        return []
+    groups: dict[tuple[int, int], list[ParsedDate]] = {}
+    for match in matches:
+        groups.setdefault((match.start, match.end), []).append(match)
+    nearby = set()
+    for hint_line, hint_dates in zip(originals, parsed_originals):
+        if hint_dates or (hint_line.source, hint_line.variant) != (line.source, line.variant):
+            continue
+        hints = _format_hints(hint_line.text)
+        if not hints or hint_line.score < 0.65:
+            continue
+        gap = math.hypot(*_box_gap(line, hint_line))
+        # A separate legend belongs only to the nearest date line, not every date.
+        rivals = [other for other, dates in zip(originals, parsed_originals)
+                  if dates and (other.source, other.variant) == (line.source, line.variant)
+                  and not set(other.members) & set(line.members)]
+        explicit_reference = (not rivals and len(groups) == 1
+                              and POSITIVE_CONTEXT.search(hint_line.text)
+                              and re.search(r"별도\s*표기|후면\s*표기|상단\s*표기", hint_line.text))
+        if gap > 3 * max(line.height, hint_line.height) and not explicit_reference:
+            continue
+        if any(math.hypot(*_box_gap(other, hint_line)) <= gap for other in rivals):
+            continue
+        nearby.update(order for _, _, order in hints)
+    frame_text = " ".join(other.text.casefold() for other in originals
+                          if (other.source, other.variant) == (line.source, line.variant)
+                          and math.hypot(*_box_gap(line, other)) <= 8 * max(line.height, other.height))
+    matching_rules = [rule for rule in product_rules
+                      if all(token.casefold() in frame_text for token in rule.required_text)]
+    result = []
+    for values in groups.values():
+        explicit = {v.order for v in values if v.order_reason == "explicit_order"}
+        if explicit:
+            result.extend(values)
+            continue
+        if nearby:
+            if len(nearby) == 1:
+                result.extend(replace(v, order_reason="explicit_order") for v in values if v.order in nearby)
+            continue
+        if len({v.value for v in values}) == 1:
+            result.append(values[0])
+            continue
+        # A nearby fully written expiry can disambiguate the SAME date value.
+        counterparts = {v.value for other, dates in zip(originals, parsed_originals)
+                        if (other.source, other.variant) == (line.source, line.variant)
+                        and not set(other.members) & set(line.members)
+                        and math.hypot(*_box_gap(line, other)) <= 5 * max(line.height, other.height)
+                        and POSITIVE_CONTEXT.search(other.text) and not NEGATIVE_CONTEXT.search(other.text)
+                        for v in dates if v.order_reason == "explicit_order" or v.separator == "month-name"}
+        corresponding = [v for v in values if v.value in counterparts]
+        if len({v.value for v in corresponding}) == 1:
+            result.append(replace(corresponding[0], order_reason="corresponding_date"))
+            continue
+        pair = {paired_orders[index] for index in line.members if index in paired_orders}
+        if len(pair) == 1:
+            result.extend(replace(v, order_reason="labelled_date_pair") for v in values if v.order in pair)
+            continue
+        orders = {rule.order for rule in matching_rules}
+        if orders:
+            if len(orders) == 1:
+                result.extend(replace(v, order_reason="product_rule:" + matching_rules[0].name)
+                              for v in values if v.order in orders)
+            continue
+        dmy = next((v for v in values if v.order == "dmy"), None)
+        if dmy:
+            result.append(replace(dmy, order_reason="fallback_dmy"))
+    return result
+
+
+def extract_candidates(lines: Sequence[OCRLine], *, product_rules: Sequence[ProductDateRule] = ()) -> list[DateCandidate]:
     originals = [
         replace(line, text=_normalise_text(line.text), members=line.members or (index,))
         for index, line in enumerate(lines)
     ]
     search_lines = originals + merge_horizontal_lines(originals)
+    parsed_originals = [parse_dates(line.text) for line in originals]
+    roles = _printed_pair_roles(originals, parsed_originals)
+    paired_orders = _paired_orders(originals, parsed_originals, roles)
     candidates: list[DateCandidate] = []
-    for line in search_lines:
-        for match in parse_dates(line.text):
-            candidates.append(_candidate_from_match(match, line, originals))
+    for index, line in enumerate(search_lines):
+        matches = parsed_originals[index] if index < len(originals) else parse_dates(line.text)
+        member_roles = {roles[member] for member in line.members if member in roles}
+        role = next(iter(member_roles)) if len(member_roles) == 1 else None
+        for match in _resolve_orders(line, matches, originals, parsed_originals, product_rules, paired_orders):
+            candidates.append(_candidate_from_match(match, line, originals, role))
     return candidates
 
 
@@ -624,8 +912,8 @@ def _interval_endpoint(candidates: Sequence[DateCandidate], ranked: Sequence[Dat
     return max(choices, key=lambda item: (item.score, item.value), default=None)
 
 
-def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False) -> DateSelection:
-    candidates = extract_candidates(lines)
+def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules: Sequence[ProductDateRule] = ()) -> DateSelection:
+    candidates = extract_candidates(lines, product_rules=product_rules)
     if not candidates:
         return DateSelection(
             None, float("-inf"), float("inf"), False, "no-valid-date", ()
@@ -668,6 +956,8 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False) -> DateS
             explicit_manufacturing,
             "negative-context" if explicit_manufacturing else "score-below-threshold",
             tuple(ranked),
+            digits_confident=best.ocr_score >= .85 and not best.repaired,
+            order_resolved=best.order_reason != "fallback_dmy",
         )
 
     confident = (
@@ -700,8 +990,20 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False) -> DateS
     )
     if final:
         confident = True
+    if (len(ranked) == 1 and best.ocr_score >= 0.85 and not best.repaired and not has_negative
+            and (best.order_reason in {"explicit_order", "corresponding_date", "calendar_unique"}
+                 or best.order_reason.startswith("product_rule:"))):
+        confident = True
     reason = "accepted" if confident else "ambiguous"
-    return DateSelection(best.iso, best.score, margin, confident, reason, tuple(ranked))
+    if best.order_reason == "fallback_dmy":
+        # Clear digits with only order uncertainty must not trigger more OCR.
+        if not final:
+            confident = ((confident or len(ranked) == 1) and best.ocr_score >= 0.85
+                         and not best.repaired and not has_negative)
+        reason = "fallback_dmy" if confident else "low-confidence-digits"
+    return DateSelection(best.iso, best.score, margin, confident, reason, tuple(ranked),
+                         digits_confident=best.ocr_score >= .85 and not best.repaired,
+                         order_resolved=best.order_reason != "fallback_dmy")
 
 
 def _partial_dates(text: str) -> Iterable[str]:
@@ -717,6 +1019,12 @@ def _partial_dates(text: str) -> Iterable[str]:
     for match in re.finditer(rf"(?<!\w)({months})\s*[./-]?\s*(20\d{{2}})(?!\d)", text, re.IGNORECASE):
         if MIN_YEAR <= int(match[2]) <= MAX_YEAR:
             yield f"{int(match[2]):04d}-{MONTHS[match[1].upper()]:02d}-NONE"
+    for match in re.finditer(r"(?<![\d./-])(\d{1,2})\s*[./-]\s*(20\d{2})(?!\d|\s*[./-]\s*\d)", text):
+        # Do not take MM/YYYY out of DD/MM/YYYY or a split full date.
+        if re.search(r"\d\s*[./-]\s*$", text[:match.start()]):
+            continue
+        if 1 <= int(match[1]) <= 12 and MIN_YEAR <= int(match[2]) <= MAX_YEAR:
+            yield f"{int(match[2]):04d}-{int(match[1]):02d}-NONE"
     for match in re.finditer(
         r"(?<![\d./-])(\d{1,2})\s*[월./-]\s*(\d{1,2})(?:일)?(?!\d|\s*[./-]\s*\d)", text
     ):
@@ -730,11 +1038,12 @@ def _partial_dates(text: str) -> Iterable[str]:
         yield f"NONE-{int(match[1]):02d}-{int(match[2]):02d}"
 
 
-def select_date(lines: Sequence[OCRLine], *, final: bool = False) -> DateSelection:
-    full = _select_full_date(lines, final=final)
+def select_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules: Sequence[ProductDateRule] = ()) -> DateSelection:
+    full = _select_full_date(lines, final=final, product_rules=product_rules)
     if full.final_date is not None:
         return full
     partials: dict[str, float] = {}
+    clear_month_year_lines: dict[str, list[OCRLine]] = {}
     for index, line in enumerate(lines):
         text = _normalise_text(line.text)
         if parse_dates(text) or line.score < 0.65:
@@ -750,13 +1059,32 @@ def select_date(lines: Sequence[OCRLine], *, final: bool = False) -> DateSelecti
             score = 1.45 * line.score + (0.15 if value.startswith("NONE") else 0.30) + (1.45 if positive else 0) + adjustment
             if score >= 1.35:
                 partials[value] = max(score, partials.get(value, -math.inf))
+                if value.endswith("-NONE") and line.score >= .90:
+                    clear_month_year_lines.setdefault(value, []).append(line)
     if not partials:
         return full
     ordered = sorted(partials.items(), key=lambda item: item[1], reverse=True)
     value, score = ordered[0]
     margin = score - ordered[1][1] if len(ordered) > 1 else math.inf
-    # Discovery is not confirmation: allow all existing recovery stages to finish.
-    return DateSelection(value, score, margin, final, "partial-date", full.candidates)
+    # Explicitly month/year-only packaging does not need repeated attempts to
+    # invent an absent day. Unlabelled/cropped partials still need recovery.
+    explicit_partial = False
+    partial_legend = re.compile(r"월\s*[.,/\-]?\s*년\s*순|(?<!Y)MM\s*[/.-]\s*YYYY|BEST\s*BEFORE\s*END", re.I)
+    if len(partials) == 1 and not full.candidates:
+        for target in clear_month_year_lines.get(value, []):
+            for hint in lines:
+                if ((target.source, target.variant) != (hint.source, hint.variant)
+                        or hint.score < .75 or not partial_legend.search(hint.text)
+                        or _format_hints(hint.text)
+                        or NEGATIVE_CONTEXT.search(hint.text)):
+                    continue
+                close = math.hypot(*_box_gap(target, hint)) <= 8 * max(target.height, hint.height)
+                reference = re.search(r"표시|표기|SEE", hint.text, re.I)
+                if close or reference:
+                    explicit_partial = True
+    return DateSelection(value, score, margin, final or explicit_partial,
+                         "explicit-partial-date" if explicit_partial else "partial-date", full.candidates,
+                         digits_confident=value in clear_month_year_lines, order_resolved=explicit_partial)
 
 
 def submission_fields(final_date: str | None) -> dict[str, str]:

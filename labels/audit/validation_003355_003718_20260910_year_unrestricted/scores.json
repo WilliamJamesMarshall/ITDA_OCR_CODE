@@ -1,0 +1,351 @@
+{
+  "baseline": {
+    "total": 364,
+    "correct": 261,
+    "incorrect": 103,
+    "accuracy": 0.717032967032967,
+    "categories": {
+      "full": {
+        "total": 334,
+        "correct": 258
+      },
+      "partial": {
+        "total": 24,
+        "correct": 0
+      },
+      "none": {
+        "total": 6,
+        "correct": 3
+      }
+    },
+    "error_types": {
+      "미검출": 55,
+      "날짜 불일치": 37,
+      "부분 날짜 불일치": 8,
+      "오검출": 3
+    },
+    "sum_image_seconds": 1751.9913477005903,
+    "median_image_seconds": 3.269532799953595,
+    "p95_image_seconds": 12.183078499976546,
+    "runtime": {
+      "stage": "baseline",
+      "python": "3.10.20 (main, Jun 11 2026, 04:02:17) [MSC v.1944 64 bit (AMD64)]",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "config": {
+        "weights_dir": "C:\\ITDA_OCR_WORKTREES\\lee-hoyeon\\weights\\paddle",
+        "mobile_side_limit": 1600,
+        "recovery_detector_name": "PP-OCRv6_small_det",
+        "recovery_side_limit": 1600,
+        "cpu_threads": 4,
+        "enable_clahe": true,
+        "enable_recovery_fallback": true,
+        "enable_rotation_fallback": false,
+        "enable_tile_fallback": true,
+        "tile_fraction": 0.62,
+        "tile_max_original_lines": 32,
+        "tile_sparse_line_limit": 5,
+        "progress_every": 25
+      },
+      "packages": {
+        "numpy": "2.2.6",
+        "opencv-contrib-python": "4.10.0.84",
+        "paddleocr": "3.7.0",
+        "paddlepaddle": "3.2.2",
+        "paddlex": "3.7.2"
+      },
+      "code_sha256": {
+        "C:\\ITDA_OCR_WORKTREES\\lee-hoyeon\\src\\pipeline.py": "1d5b036753c0aa1249e61916b51f9b8aa294f2ddf3b12d448c20fd24306b56c1",
+        "C:\\ITDA_OCR_WORKTREES\\lee-hoyeon\\src\\date_extraction.py": "17c92b5b5ce7afee6d8ff03c44885bc3a6abfd5e4df5dcc132d44b46abf00990"
+      },
+      "variant": {
+        "only_change": "date_extraction.MIN_YEAR: 2024 -> 1",
+        "MIN_YEAR": 1,
+        "MAX_YEAR": 2035
+      },
+      "runner_sha256": "66f6c79bd3d3f03109a9e3a2522bafc1f4c3b9035e6536a991c7c79d31eca93a",
+      "model_init_seconds": 6.875870800111443,
+      "import_and_init_seconds": 7.403019099961966,
+      "loop_wall_seconds": 1904.306192500051,
+      "total_wall_seconds": 1911.729581499938
+    },
+    "pass_counts": {
+      "mobile:original": 364,
+      "mobile:clahe": 203,
+      "recovery:original": 189,
+      "mobile:tile-1": 36,
+      "mobile:tile-2": 36,
+      "mobile:tile-3": 35,
+      "mobile:tile-4": 35,
+      "mobile:roi-1": 200,
+      "mobile:roi-2": 141
+    },
+    "ocr_call_and_input_hash_seconds": 1736.1481146011502,
+    "other_image_work_seconds": 15.843233099440113
+  },
+  "baseline_replay": {
+    "total": 364,
+    "correct": 261,
+    "incorrect": 103,
+    "accuracy": 0.717032967032967,
+    "categories": {
+      "full": {
+        "total": 334,
+        "correct": 258
+      },
+      "partial": {
+        "total": 24,
+        "correct": 0
+      },
+      "none": {
+        "total": 6,
+        "correct": 3
+      }
+    },
+    "error_types": {
+      "미검출": 55,
+      "날짜 불일치": 37,
+      "부분 날짜 불일치": 8,
+      "오검출": 3
+    },
+    "sum_image_seconds": 1.766577499685809,
+    "median_image_seconds": 0.0019001500913873315,
+    "p95_image_seconds": 0.01813929993659258,
+    "runtime": {
+      "stage": "baseline_replay",
+      "parser_only_seconds": 2.057075200136751,
+      "experiment_sha256": null,
+      "production_parser_sha256": "17c92b5b5ce7afee6d8ff03c44885bc3a6abfd5e4df5dcc132d44b46abf00990",
+      "warning": "Not end-to-end runtime. Uses all OCR passes collected by the baseline."
+    },
+    "pass_counts": {
+      "mobile:original": 364,
+      "mobile:clahe": 203,
+      "recovery:original": 189,
+      "mobile:tile-1": 36,
+      "mobile:tile-2": 36,
+      "mobile:tile-3": 35,
+      "mobile:tile-4": 35,
+      "mobile:roi-1": 200,
+      "mobile:roi-2": 141
+    }
+  },
+  "p1_replay": {
+    "total": 364,
+    "correct": 264,
+    "incorrect": 100,
+    "accuracy": 0.7252747252747253,
+    "categories": {
+      "full": {
+        "total": 334,
+        "correct": 258
+      },
+      "partial": {
+        "total": 24,
+        "correct": 3
+      },
+      "none": {
+        "total": 6,
+        "correct": 3
+      }
+    },
+    "error_types": {
+      "미검출": 43,
+      "날짜 불일치": 41,
+      "부분 날짜 불일치": 13,
+      "오검출": 3
+    },
+    "sum_image_seconds": 1.885576599277556,
+    "median_image_seconds": 0.0018069999059662223,
+    "p95_image_seconds": 0.0199220001231879,
+    "runtime": {
+      "stage": "p1_replay",
+      "parser_only_seconds": 2.190259499941021,
+      "experiment_sha256": "f690db709845e2e890067fe2f749337753a841e8aec27f822fb968f56e14025b",
+      "production_parser_sha256": "17c92b5b5ce7afee6d8ff03c44885bc3a6abfd5e4df5dcc132d44b46abf00990",
+      "warning": "Not end-to-end runtime. Uses all OCR passes collected by the baseline."
+    },
+    "pass_counts": {
+      "mobile:original": 364,
+      "mobile:clahe": 203,
+      "recovery:original": 189,
+      "mobile:tile-1": 36,
+      "mobile:tile-2": 36,
+      "mobile:tile-3": 35,
+      "mobile:tile-4": 35,
+      "mobile:roi-1": 200,
+      "mobile:roi-2": 141
+    }
+  },
+  "p2_replay": {
+    "total": 364,
+    "correct": 265,
+    "incorrect": 99,
+    "accuracy": 0.728021978021978,
+    "categories": {
+      "full": {
+        "total": 334,
+        "correct": 260
+      },
+      "partial": {
+        "total": 24,
+        "correct": 2
+      },
+      "none": {
+        "total": 6,
+        "correct": 3
+      }
+    },
+    "error_types": {
+      "미검출": 43,
+      "날짜 불일치": 39,
+      "부분 날짜 불일치": 14,
+      "오검출": 3
+    },
+    "sum_image_seconds": 2.1222930010408163,
+    "median_image_seconds": 0.0022475000005215406,
+    "p95_image_seconds": 0.01977779995650053,
+    "runtime": {
+      "stage": "p2_replay",
+      "parser_only_seconds": 2.486229700036347,
+      "experiment_sha256": "f690db709845e2e890067fe2f749337753a841e8aec27f822fb968f56e14025b",
+      "production_parser_sha256": "17c92b5b5ce7afee6d8ff03c44885bc3a6abfd5e4df5dcc132d44b46abf00990",
+      "warning": "Not end-to-end runtime. Uses all OCR passes collected by the baseline."
+    },
+    "pass_counts": {
+      "mobile:original": 364,
+      "mobile:clahe": 203,
+      "recovery:original": 189,
+      "mobile:tile-1": 36,
+      "mobile:tile-2": 36,
+      "mobile:tile-3": 35,
+      "mobile:tile-4": 35,
+      "mobile:roi-1": 200,
+      "mobile:roi-2": 141
+    }
+  },
+  "p3_replay": {
+    "total": 364,
+    "correct": 269,
+    "incorrect": 95,
+    "accuracy": 0.739010989010989,
+    "categories": {
+      "full": {
+        "total": 334,
+        "correct": 261
+      },
+      "partial": {
+        "total": 24,
+        "correct": 5
+      },
+      "none": {
+        "total": 6,
+        "correct": 3
+      }
+    },
+    "error_types": {
+      "미검출": 43,
+      "날짜 불일치": 38,
+      "부분 날짜 불일치": 11,
+      "오검출": 3
+    },
+    "sum_image_seconds": 1.565349597018212,
+    "median_image_seconds": 0.0019736000103875995,
+    "p95_image_seconds": 0.01466810004785657,
+    "runtime": {
+      "stage": "p3_replay",
+      "parser_only_seconds": 1.7550842000637203,
+      "experiment_sha256": "f690db709845e2e890067fe2f749337753a841e8aec27f822fb968f56e14025b",
+      "production_parser_sha256": "17c92b5b5ce7afee6d8ff03c44885bc3a6abfd5e4df5dcc132d44b46abf00990",
+      "warning": "Not end-to-end runtime. Uses all OCR passes collected by the baseline."
+    },
+    "pass_counts": {
+      "mobile:original": 364,
+      "mobile:clahe": 203,
+      "recovery:original": 189,
+      "mobile:tile-1": 36,
+      "mobile:tile-2": 36,
+      "mobile:tile-3": 35,
+      "mobile:tile-4": 35,
+      "mobile:roi-1": 200,
+      "mobile:roi-2": 141
+    }
+  },
+  "p3": {
+    "total": 364,
+    "correct": 270,
+    "incorrect": 94,
+    "accuracy": 0.7417582417582418,
+    "categories": {
+      "full": {
+        "total": 334,
+        "correct": 261
+      },
+      "partial": {
+        "total": 24,
+        "correct": 6
+      },
+      "none": {
+        "total": 6,
+        "correct": 3
+      }
+    },
+    "error_types": {
+      "미검출": 43,
+      "날짜 불일치": 38,
+      "부분 날짜 불일치": 10,
+      "오검출": 3
+    },
+    "sum_image_seconds": 1586.0856836014427,
+    "median_image_seconds": 2.781467950087972,
+    "p95_image_seconds": 12.664195200195536,
+    "runtime": {
+      "stage": "p3",
+      "python": "3.10.20 (main, Jun 11 2026, 04:02:17) [MSC v.1944 64 bit (AMD64)]",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "config": {
+        "weights_dir": "C:\\ITDA_OCR_WORKTREES\\lee-hoyeon\\weights\\paddle",
+        "mobile_side_limit": 1600,
+        "recovery_detector_name": "PP-OCRv6_small_det",
+        "recovery_side_limit": 1600,
+        "cpu_threads": 4,
+        "enable_clahe": true,
+        "enable_recovery_fallback": true,
+        "enable_rotation_fallback": false,
+        "enable_tile_fallback": true,
+        "tile_fraction": 0.62,
+        "tile_max_original_lines": 32,
+        "tile_sparse_line_limit": 5,
+        "progress_every": 25
+      },
+      "packages": {
+        "numpy": "2.2.6",
+        "opencv-contrib-python": "4.10.0.84",
+        "paddleocr": "3.7.0",
+        "paddlepaddle": "3.2.2",
+        "paddlex": "3.7.2"
+      },
+      "code_sha256": {
+        "C:\\ITDA_OCR_WORKTREES\\lee-hoyeon\\src\\pipeline.py": "1d5b036753c0aa1249e61916b51f9b8aa294f2ddf3b12d448c20fd24306b56c1",
+        "C:\\ITDA_OCR_WORKTREES\\lee-hoyeon\\src\\date_extraction.py": "17c92b5b5ce7afee6d8ff03c44885bc3a6abfd5e4df5dcc132d44b46abf00990"
+      },
+      "experiment_sha256": "f690db709845e2e890067fe2f749337753a841e8aec27f822fb968f56e14025b",
+      "model_init_seconds": 14.931280700024217,
+      "import_and_init_seconds": 16.570076500065625,
+      "loop_wall_seconds": 1736.4482952000108,
+      "total_wall_seconds": 1753.0379244999494
+    },
+    "pass_counts": {
+      "mobile:original": 364,
+      "mobile:clahe": 171,
+      "recovery:original": 156,
+      "mobile:tile-1": 25,
+      "mobile:tile-2": 25,
+      "mobile:tile-3": 25,
+      "mobile:tile-4": 25,
+      "mobile:roi-1": 172,
+      "mobile:roi-2": 114
+    },
+    "ocr_call_and_input_hash_seconds": 1571.1176814960781,
+    "other_image_work_seconds": 14.968002105364576
+  }
+}
