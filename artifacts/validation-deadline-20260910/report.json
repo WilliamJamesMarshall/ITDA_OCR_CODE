@@ -1,0 +1,135 @@
+{
+  "runtime": {
+    "images": 14,
+    "elapsed_seconds": 46.848,
+    "total_elapsed_seconds": 51.34236070000043,
+    "backend_init_seconds": 3.544,
+    "timing_scope": "Worker startup/imports, model initialization, image discovery/loading, OCR, selection and CSV output; parent setup/label loading and final evaluation report excluded. Timeout rate uses completed images and includes time spent on the interrupted image.",
+    "seconds_per_image": 3.667311478571459,
+    "p50_image_seconds": 2.941,
+    "p95_image_seconds": 7.437,
+    "predicted_none": 3,
+    "failures": [],
+    "passes": {
+      "mobile:original": 14,
+      "mobile:roi-1": 6,
+      "mobile:roi-2": 5,
+      "mobile:clahe": 6,
+      "recovery:original": 6,
+      "mobile:tile-1": 1,
+      "mobile:tile-2": 1,
+      "mobile:tile-3": 1,
+      "mobile:tile-4": 1
+    },
+    "selection_reasons": {
+      "accepted": 5,
+      "fallback_dmy": 3,
+      "explicit-partial-date": 3,
+      "negative-context": 2,
+      "no-valid-date": 1
+    },
+    "ocr_calls": 41,
+    "output_path": "C:\\ITDA_OCR_CODE\\artifacts\\validation-deadline-20260910\\predictions.csv",
+    "pipeline_total_elapsed_seconds": 50.393,
+    "pipeline_seconds_per_image": 3.346,
+    "completed_images": 14,
+    "unprocessed_images": 0,
+    "status": "completed",
+    "hard_timeout_seconds": 2400.0,
+    "worker_exit_code": 0,
+    "worker_errors": [],
+    "completed_prediction_seconds": 46.790043299999525,
+    "completed_prediction_seconds_per_image": 3.342145949999966
+  },
+  "evaluated_labels": 14,
+  "exact_matches": 10,
+  "exact_match_rate": 0.7142857142857143,
+  "accuracy_target": 0.95,
+  "accuracy_target_met": false,
+  "categories": {
+    "full": {
+      "total": 9,
+      "correct": 5
+    },
+    "partial": {
+      "total": 3,
+      "correct": 3
+    },
+    "none": {
+      "total": 2,
+      "correct": 2
+    }
+  },
+  "errors": [
+    {
+      "image_id": "000276",
+      "expected": "2026-03-25",
+      "actual": "2023-09-25",
+      "label_status": "manual",
+      "difficulty": "",
+      "error_types": "",
+      "failure_type": "날짜 불일치"
+    },
+    {
+      "image_id": "003645",
+      "expected": "2021-09-02",
+      "actual": "NONE",
+      "label_status": "manual",
+      "difficulty": "",
+      "error_types": "",
+      "failure_type": "미검출"
+    },
+    {
+      "image_id": "003666",
+      "expected": "2021-06-25",
+      "actual": "2021-06-26",
+      "label_status": "manual",
+      "difficulty": "",
+      "error_types": "",
+      "failure_type": "날짜 불일치"
+    },
+    {
+      "image_id": "003714",
+      "expected": "2023-07-01",
+      "actual": "2020-07-01",
+      "label_status": "manual",
+      "difficulty": "",
+      "error_types": "",
+      "failure_type": "날짜 불일치"
+    }
+  ],
+  "error_type_counts": {
+    "날짜 불일치": 3,
+    "미검출": 1
+  },
+  "skipped": {},
+  "labels_without_predictions": [],
+  "targets": {
+    "reference_images": 500,
+    "accuracy_target": 0.95,
+    "internal_seconds_500": 1500.0,
+    "timeout_seconds_500": 2400.0,
+    "target_seconds_per_image": 3.0,
+    "timeout_reference_seconds_per_image": 4.8,
+    "run_status": "completed",
+    "run_complete": true,
+    "completed_images": 14,
+    "unprocessed_images": 0,
+    "total_seconds_per_input_image": 3.667311478571459,
+    "actual_seconds_per_completed_image": 3.667311478571459,
+    "seconds_per_image_over_target": 0.6673114785714591,
+    "actual_to_target_time_ratio": 1.2224371595238197,
+    "input_images_per_second": 0.2726793199440844,
+    "relative_time_budget_seconds": 42.0,
+    "seconds_500_equivalent": 1833.6557392857296,
+    "relative_speed_target_met": false,
+    "all_inputs_have_confirmed_labels": true,
+    "output_complete": true,
+    "runtime_errors_zero": true,
+    "local_relative_joint_target_met": false,
+    "local_500_joint_target_met": null,
+    "actual_500_timeout_met": null,
+    "time_assessment": "internal_target_missed_within_hard_limit",
+    "scope": "Local measured run; see runtime.timing_scope for included costs. 500-equivalent is normalization, not a measured 500-image result; independent accuracy and official-environment acceptance are not established here."
+  }
+}

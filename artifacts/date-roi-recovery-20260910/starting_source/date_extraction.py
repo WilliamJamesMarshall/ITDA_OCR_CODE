@@ -17,14 +17,14 @@ POSITIVE_CONTEXT = re.compile(
 )
 NEGATIVE_CONTEXT = re.compile(
     r"제조(?:일자|일)?|생산(?:일자|일)?|포장(?:일자|일)?|부터|"
-    r"MFG|MFD|(?<![A-Z])PROD(?:UCTION)?(?![A-Z])|PACK(?:ED)?\s*ON",
+    r"MFG|MFD|PROD(?:UCTION)?|PACK(?:ED)?\s*ON",
     re.IGNORECASE,
 )
 UNTIL_CONTEXT = re.compile(
     r"까지|EXP(?:IRY|IRES|DATE)?|USE\s*BY|BEST\s*(?:BEFORE|BY)", re.IGNORECASE
 )
 FROM_CONTEXT = re.compile(
-    r"부터|제조(?:일자|일)?|생산(?:일자|일)?|MFG|MFD|(?<![A-Z])PROD(?:UCTION)?(?![A-Z])", re.IGNORECASE
+    r"부터|제조(?:일자|일)?|생산(?:일자|일)?|MFG|MFD|PROD(?:UCTION)?", re.IGNORECASE
 )
 
 MONTHS = {
@@ -947,12 +947,7 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_
 
     if best.score < 1.05 and not interval_preferred:
         explicit_manufacturing = (
-            best.explicit_negative and not best.explicit_positive and best.ocr_score >= 0.70
-            and all(item.explicit_negative and not item.explicit_positive for item in ranked)
-            # A damaged expiry with unreadable digits is still a reason to
-            # recover, even when only the manufacturing date parsed correctly.
-            and not any(POSITIVE_CONTEXT.search(line.text) and not NEGATIVE_CONTEXT.search(line.text)
-                        and sum(char.isdigit() for char in line.text) >= 2 for line in lines)
+            best.explicit_negative and not has_positive and best.ocr_score >= 0.70
         )
         return DateSelection(
             None,

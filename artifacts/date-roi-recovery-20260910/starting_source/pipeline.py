@@ -4,10 +4,9 @@ import csv
 import json
 import math
 import os
-import re
 import time
 from collections import Counter
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -18,7 +17,7 @@ import cv2
 import numpy as np
 from PIL import Image, ImageOps
 
-from .date_extraction import DateSelection, OCRLine, ProductDateRule, parse_dates, select_date, submission_fields
+from .date_extraction import DateSelection, OCRLine, ProductDateRule, select_date, submission_fields
 
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 OUTPUT_COLUMNS = ["image_id", "year", "month", "day", "final_date"]
@@ -191,38 +190,14 @@ def _clahe(image: np.ndarray) -> np.ndarray:
 
 
 def _date_fragment_lines(lines: Sequence[OCRLine]) -> list[OCRLine]:
-    """Choose at most two recovery anchors, not two most legible numbers.
-
-    Damaged date-like text is only a crop hint: no glyphs/digits are repaired
-    here. Keep legacy numeric anchors as a last resort, including for tiles.
-    """
     selected = []
     for line in lines:
-        text = line.text.strip()
-        digits = sum(character.isdigit() for character in text)
-        separated = any(separator in text for separator in (".", "/", "-", ":"))
-        legacy = digits >= 4 and separated
-        # Explicit non-date context outranks superficial numeric resemblance.
-        non_date = re.search(
-            r"%|kcal|\d\s*(?:mg|ml|g|brix)\b|영양|내용량|지방|당류|고객|상담|전화|품목|보고번호|"
-            r"\b(?:tel|fax|lot)\b|(?<!\d)0\d{1,2}[- )]\d{2,4}-\d{3,4}|"
-            r"(?:로|길)\s*\d+.*\d+-\d+",
-            text, re.IGNORECASE,
-        )
-        # Small, mostly numeric fragments can have missing digits/separators.
-        # Do not promote arbitrary long ingredient lines or compact barcodes.
-        fragment = (
-            separated and len(text) <= 32
-            and (digits >= 4 or (digits >= 3 and sum(text.count(s) for s in './-') >= 2))
-            and digits / max(1, len(text)) >= 0.25 and not non_date
-            and not re.fullmatch(r"\d{1,2}:\d{2}(?::\d{2})?", text)
-        )
-        if legacy or fragment:
-            priority = 2 if fragment and parse_dates(text) else 1 if fragment else 0
-            selected.append((priority, line))
-    return [line for _, line in sorted(
-        selected, key=lambda item: (item[0], item[1].score), reverse=True
-    )[:2]]
+        digits = sum(character.isdigit() for character in line.text)
+        if digits >= 4 and any(
+            separator in line.text for separator in (".", "/", "-", ":")
+        ):
+            selected.append(line)
+    return sorted(selected, key=lambda line: line.score, reverse=True)[:2]
 
 
 def _crop_fragment(image: np.ndarray, line: OCRLine) -> np.ndarray | None:
@@ -437,7 +412,6 @@ def run_pipeline(
     config: PipelineConfig | None = None,
     backend: Any | None = None,
     max_images: int | None = None,
-    on_image: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     total_started = time.perf_counter()
     config = config or PipelineConfig()
@@ -483,9 +457,6 @@ def run_pipeline(
         pass_counts.update(prediction.passes)
         reason_counts.update([prediction.selection.reason])
         none_count += prediction.final_date is None
-        if on_image is not None:
-            on_image({"row": rows[-1], "seconds": prediction.elapsed_seconds,
-                      "error": prediction.error, "passes": list(prediction.passes)})
         if (
             config.progress_every > 0 and index % config.progress_every == 0
         ) or index == len(images):
