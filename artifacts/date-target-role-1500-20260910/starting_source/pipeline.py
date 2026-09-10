@@ -7,7 +7,7 @@ import os
 import re
 import time
 from collections import Counter
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -437,7 +437,6 @@ def run_pipeline(
     config: PipelineConfig | None = None,
     backend: Any | None = None,
     max_images: int | None = None,
-    on_image: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     total_started = time.perf_counter()
     config = config or PipelineConfig()
@@ -483,9 +482,6 @@ def run_pipeline(
         pass_counts.update(prediction.passes)
         reason_counts.update([prediction.selection.reason])
         none_count += prediction.final_date is None
-        if on_image is not None:
-            on_image({"row": rows[-1], "seconds": prediction.elapsed_seconds,
-                      "error": prediction.error, "passes": list(prediction.passes)})
         if (
             config.progress_every > 0 and index % config.progress_every == 0
         ) or index == len(images):

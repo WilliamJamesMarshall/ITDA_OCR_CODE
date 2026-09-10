@@ -7,7 +7,7 @@ import os
 import re
 import time
 from collections import Counter
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -217,8 +217,15 @@ def _date_fragment_lines(lines: Sequence[OCRLine]) -> list[OCRLine]:
             and digits / max(1, len(text)) >= 0.25 and not non_date
             and not re.fullmatch(r"\d{1,2}:\d{2}(?::\d{2})?", text)
         )
-        if legacy or fragment:
-            priority = 2 if fragment and parse_dates(text) else 1 if fragment else 0
+        label = re.fullmatch(
+            r"(?:소비기한|유통기한|품질유지기한|best\s+before|use\s+by|exp(?:iry)?)\s*[:.]?",
+            text, re.IGNORECASE,
+        )
+        if legacy or fragment or label:
+            priority = (3 if fragment and parse_dates(text) else 2 if fragment
+                        else 1 if label and line.score >= 0.75 else 0)
+            if label and not legacy and line.score < 0.75:
+                continue
             selected.append((priority, line))
     return [line for _, line in sorted(
         selected, key=lambda item: (item[0], item[1].score), reverse=True
@@ -437,7 +444,6 @@ def run_pipeline(
     config: PipelineConfig | None = None,
     backend: Any | None = None,
     max_images: int | None = None,
-    on_image: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     total_started = time.perf_counter()
     config = config or PipelineConfig()
@@ -483,9 +489,6 @@ def run_pipeline(
         pass_counts.update(prediction.passes)
         reason_counts.update([prediction.selection.reason])
         none_count += prediction.final_date is None
-        if on_image is not None:
-            on_image({"row": rows[-1], "seconds": prediction.elapsed_seconds,
-                      "error": prediction.error, "passes": list(prediction.passes)})
         if (
             config.progress_every > 0 and index % config.progress_every == 0
         ) or index == len(images):
