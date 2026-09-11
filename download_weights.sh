@@ -77,4 +77,11 @@ fetch "korean_PP-OCRv5_mobile_rec" "24b085d9d3d9153a21d97f585fcaaee7a362a487" "i
 fetch "korean_PP-OCRv5_mobile_rec" "24b085d9d3d9153a21d97f585fcaaee7a362a487" "inference.yml" \
     "f757fa1c40e99edcf27e9cce879b93eb2a51fa46f5ef39095689b8c37dd75998"
 
+fetch "en_PP-OCRv5_mobile_rec" "267c36e24c331595590fe7bd72bde2436fd286f2" "inference.json" \
+    "fd1b6ec722ea841a72d3ba43e527df1d1066d5d7808e0503ee3eec7265188753"
+fetch "en_PP-OCRv5_mobile_rec" "267c36e24c331595590fe7bd72bde2436fd286f2" "inference.pdiparams" \
+    "3ec8a97ed6cefe8568d3e2ee90bb193299b566a7661aa4fd52d224b96b59f66b"
+fetch "en_PP-OCRv5_mobile_rec" "267c36e24c331595590fe7bd72bde2436fd286f2" "inference.yml" \
+    "27e91d0582f40168aa218303c76e184bc78fa7a5d105aad0cfbad8458b441067"
+
 echo "All PaddleOCR weights are ready under ${WEIGHTS_DIR}."

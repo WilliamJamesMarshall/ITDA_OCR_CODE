@@ -208,7 +208,7 @@ class OrderPolicyTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "any-filename.jpg"
             Image.new("RGB", (400,400)).save(path)
-            for rules, expected in [((), "2024-01-12"),
+            for rules, expected in [((), None),
                                     ((ProductDateRule("test", ("TEST OLIVES", "500G VERSION2"), "mdy", "fixture"),), "2024-12-01")]:
                 backend = Backend()
                 result = predict_image(path, backend, PipelineConfig(product_date_rules=rules))

@@ -474,13 +474,13 @@ OUTPUT_PATH = os.environ.get("ITDA_OUTPUT_PATH", "./submission.csv")
 | 2 | `year` | 4자리 문자열 또는 `NONE` |
 | 3 | `month` | 2자리 문자열 또는 `NONE` |
 | 4 | `day` | 2자리 문자열 또는 `NONE` |
-| 5 | `final_date` | `YYYY-MM-DD` 또는 `NONE` |
+| 5 | `final_date` | `YYYY-MM-DD`, 기존 부분 날짜 `NONE-MM-DD`/`YYYY-MM-NONE`, 또는 `NONE-NONE-NONE` |
 
 - 한 이미지당 정확히 한 행을 생성한다.
 - 날짜 열은 문자열로 유지해 앞의 0을 보존한다.
 - 결정적인 정렬 기준을 사용한다.
 - CSV 인덱스를 저장하지 않는다.
-- 공식 예시처럼 미인식 시 날짜 네 필드를 모두 `NONE`으로 둔다.
+- 2026-09-10 전달된 운영진 답변에 따라 전체 미인식 시 `year,month,day`는 각각 `NONE`, `final_date`는 `NONE-NONE-NONE`으로 둔다. 단독 `NONE`은 과거 기록의 의미 비교에서만 호환한다.
 - 부분 날짜 허용 여부는 공식 확인 전 임의로 확정하지 않는다.
 
 ### 모델·실행 환경
@@ -643,7 +643,7 @@ $inputDir = Join-Path $itdaRoot '상품사진입니다'
 | 소비기한 하나 | 올바른 `YYYY-MM-DD` 한 행 생성 |
 | 제조일자와 소비기한 동시 존재 | 제조일자가 아니라 소비기한 선택 |
 | 날짜 후보 다수 | 명시된 우선순위로 결정적인 한 날짜 선택 |
-| 판독 불가·날짜 없음 | 날짜 네 필드를 `NONE`으로 저장 |
+| 판독 불가·날짜 없음 | `year,month,day`는 각각 `NONE`, `final_date`는 `NONE-NONE-NONE`으로 저장 |
 | 새 입력 경로 | 환경변수만 바꿔 코드 수정 없이 실행 |
 | 새 커널 Run All | 수동 입력 없이 CSV 생성 |
 | 오프라인 Run All | 네트워크 연결·런타임 다운로드 없이 준비된 로컬 가중치만 사용 |

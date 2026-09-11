@@ -1,5 +1,6 @@
 """Process-isolated validation: soft targets never interrupt OCR; deadline does."""
 import json
+from collections import Counter
 import math
 import multiprocessing
 from pathlib import Path
@@ -71,6 +72,11 @@ def _supervise(worker, worker_args, *, hard_timeout_seconds=HARD_TIMEOUT_SECONDS
 def run_timed_pipeline(input_dir, output_path, *, config, expected_images, max_images=None):
     from src.pipeline import _write_submission
 
+    trace_path = Path(str(output_path) + '.trace.jsonl') if config and config.collect_trace else None
+    if trace_path is not None:
+        trace_path.parent.mkdir(parents=True, exist_ok=True)
+        with trace_path.open('w', encoding='utf-8'):
+            pass  # An initialization timeout must not expose the previous run's trace.
     result = _supervise(_pipeline_worker, (str(input_dir), str(output_path), config, max_images))
     records = [e for e in result["events"] if e["kind"] == "image"]
     completed = next((e for e in result["events"] if e["kind"] == "completed"), None)
@@ -81,6 +87,9 @@ def run_timed_pipeline(input_dir, output_path, *, config, expected_images, max_i
         # Replace stale output with this run's completed rows, never invented rows.
         _write_submission(Path(output_path), [e["row"] for e in records])
     failures = [{"image_id": e["row"]["image_id"], "error": e["error"]} for e in records if e["error"]]
+    trace_totals = Counter()
+    for record in records:
+        trace_totals.update(record.get('trace_summary', {}))
     runtime.update(
         images=len(expected_images), completed_images=len(records),
         unprocessed_images=len(expected_images) - len(records),
@@ -88,6 +97,10 @@ def run_timed_pipeline(input_dir, output_path, *, config, expected_images, max_i
         seconds_per_image=(result["elapsed_seconds"] / len(records) if records else None),
         hard_timeout_seconds=result["hard_timeout_seconds"], worker_exit_code=result["exit_code"],
         failures=failures,
+        trace_path=str(trace_path.resolve()) if trace_path is not None else None,
+        completed_trace_summary=dict(trace_totals),
+        ocr_backend_seconds_per_completed_image=(trace_totals['ocr_seconds'] / len(records)
+                                                if records and trace_path is not None else None),
         worker_errors=[e["error"] for e in result["events"] if e["kind"] == "failed"],
         completed_prediction_seconds=sum(e["seconds"] for e in records),
         completed_prediction_seconds_per_image=(sum(e["seconds"] for e in records) / len(records) if records else None),

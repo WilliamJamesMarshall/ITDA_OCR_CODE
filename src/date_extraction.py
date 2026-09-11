@@ -8,11 +8,11 @@ from dataclasses import dataclass, replace
 from datetime import date
 
 MIN_YEAR = 1
-MAX_YEAR = 2035
+MAX_YEAR = 2099
 
 POSITIVE_CONTEXT = re.compile(
     r"소비\s*기한|유통\s*기한|품질\s*유지\s*기한|까지|"
-    r"EXP(?:IRY|IRES|DATE)?|USE\s*BY|BEST\s*(?:BEFORE|BY)|BBE?\b|賞味|有效期?",
+    r"EXP(?:IRY|IRES|DATE)?|USE\s*BY|BEST\s*(?:BEFORE|BY)|BB[DE]?\b|TETT\b|賞味|有效期?",
     re.IGNORECASE,
 )
 NEGATIVE_CONTEXT = re.compile(
@@ -51,6 +51,15 @@ class OCRLine:
     source: str = "paddle-mobile"
     variant: str = "original"
     members: tuple[int, ...] = ()
+    polygon: tuple[tuple[float, float], ...] = ()
+    geometry_valid: bool = True
+    geometry_source: str = "box"
+    original_box: tuple[float, float, float, float] | None = None
+    role: str | None = None
+    role_basis: str | None = None
+    character_scores: tuple[float, ...] = ()
+    date_digit_score: float | None = None
+    date_digit_min_score: float | None = None
 
     @property
     def width(self) -> float:
@@ -114,6 +123,7 @@ class DateSelection:
     candidates: tuple[DateCandidate, ...]
     digits_confident: bool = False
     order_resolved: bool = False
+    policy_details: dict | None = None
 
     @property
     def stop_ocr(self) -> bool:
@@ -148,6 +158,79 @@ class ProductDateRule:
             raise ValueError("Product rules require package identifiers and verification evidence")
 
 
+@dataclass(frozen=True)
+class DateContext:
+    """Caller-supplied product context; None market is inferred, never image-ID based.
+
+    Passing this activates the 2026-09-11 market/review policy. Omitting it from
+    the low-level parser retains the old DMY API for reproducible comparisons.
+    """
+    market: str | None = None
+    product_type: str = 'food'
+    language: str | None = None
+
+    def __post_init__(self):
+        if self.market not in {None, 'KR', 'JP', 'US', 'GB', 'EU'}:
+            raise ValueError('Unsupported market; use None for unknown')
+
+
+_KOREAN_EXPIRY = re.compile(r'소비\s*기한|유통\s*기한|품질\s*유지\s*기한|까지')
+_IMPORT_CONTEXT = re.compile(r'수입|(?:원산지|제조국)\s*[:：]?\s*(?:중국|미국|일본|영국|독일|벨기에|터키|튀르키예)|'
+                             r'MADE\s+IN\s+(?!KOREA)\w+', re.I)
+_CLOCK = re.compile(r'(?<![\d:])(?:[01]?\d|2[0-3]):[0-5]\d(?::[0-5]\d)?(?![\d:])')
+
+
+def _market_order(line, originals, context):
+    if context is None or context.product_type != 'food':
+        return None, 'unknown_context'
+    nearby = [other for other in originals if other.geometry_valid and other.score >= .8
+              and (other.source, other.variant) == (line.source, line.variant)
+              and math.hypot(*_box_gap(line, other)) <= 8*max(line.height, other.height)]
+    # A role token must belong to this date; Korean prose elsewhere is not enough.
+    korean = bool(_KOREAN_EXPIRY.search(line.text)) or (line.role in {'start','end'} and any(
+        _KOREAN_EXPIRY.search(other.text) for other in nearby))
+    imported = any(_IMPORT_CONTEXT.search(other.text) for other in nearby)
+    if not imported and line.original_box:
+        anchor = replace(line,box=line.original_box)
+        imported = any(other.original_box and other.geometry_valid and other.score >= .8
+                       and _IMPORT_CONTEXT.search(other.text)
+                       and math.hypot(*_box_gap(anchor,replace(other,box=other.original_box)))
+                           <= 8*max(anchor.height,other.original_box[3]-other.original_box[1])
+                       for other in originals)
+    if context.market is not None:
+        if context.market == 'KR' and imported:
+            return None, 'conflicting_import_context'
+        if context.market == 'KR' and not (korean or context.language == 'ko'):
+            return None, 'missing_korean_expiry_context'
+        return {'KR':'ymd','JP':'ymd','US':'mdy','GB':'dmy','EU':'dmy'}[context.market], 'metadata:'+context.market
+    if imported:
+        return None, 'import_context'
+    if korean and line.role != 'conflict':
+        return 'ymd', 'korean_food_context'
+    return None, 'unknown_context'
+
+
+def _mask_auxiliary(text):
+    """Mask clocks/barcode candidates without shifting date or character offsets."""
+    chars = list(text)
+    spans = [m.span() for m in _CLOCK.finditer(text)]
+    for match in re.finditer(r'(?<![\d.\-/])\d(?:[ \t]*\d){7,13}(?![\d.\-/])', text):
+        # Three separated date fields are not a barcode merely because their
+        # combined digit count is eight. EAN split into two long runs is not this.
+        if re.match(r'(?:\d{4}\s+\d{1,2}\s+\d{1,2}|\d{1,2}\s+\d{1,2}\s+\d{4})(?!\d)',match[0]):
+            continue
+        spans.append(match.span())
+    for start, end in spans:
+        chars[start:end] = ' '*(end-start)
+    return ''.join(chars)
+
+
+def _policy_parses(text):
+    masked = _mask_auxiliary(text)
+    return [p for p in parse_dates(text)
+            if not any(masked[i] == ' ' and text[i] != ' ' for i in range(p.start, min(p.end,len(text))))]
+
+
 def _valid_date(year: int, month: int, day: int) -> date | None:
     if year < 100:
         year += 2000
@@ -177,7 +260,7 @@ def _date_text(text: str) -> str:
     # a legend, not a preceding numeric date fragment).
     for start, end, _ in _format_hints(value):
         value = value[:start] + " " * (end - start) + value[end:]
-    return value.replace("년", ".").replace("월", ".").replace("일", " ")
+    return value.replace("년", ".").replace("월", ".").replace("일", " ").replace("·", ".")
 
 
 def _format_hints(text: str) -> list[tuple[int, int, str]]:
@@ -555,6 +638,103 @@ def _box_gap(left: OCRLine, right: OCRLine) -> tuple[float, float]:
     return horizontal, vertical
 
 
+def _role_text(text: str) -> str:
+    """Mask facility/origin prose without moving token offsets."""
+    return re.sub(r'(?:제조|생산|포장)\s*(?:시설|공장|업소|회사|원|국가?|방법|방식)',
+                  lambda match: ' ' * len(match.group()), text)
+
+
+def _date_fragment(text: str) -> bool:
+    return (len(text) <= 64 and sum(c.isdigit() for c in text) >= 2
+            and any(separator in text for separator in './-')
+            and not re.search(r'전화|고객|영양|%|\b(?:TEL|LOT|kcal|mg|ml)\b', text, re.I))
+
+
+def _inline_role(text: str) -> str | None:
+    text = _role_text(_normalise_text(text))
+    positive = bool(POSITIVE_CONTEXT.search(text))
+    negative = bool(NEGATIVE_CONTEXT.search(text))
+    if positive != negative:
+        return 'end' if positive else 'start'
+    # A single substitution in an inline Korean date heading is role evidence,
+    # not permission to change any date digit (e.g. 제조일파: ...).
+    prefix = re.match(r'^([가-힣]{3,4})\s*[:：]\s*\S', text)
+    if not positive and not negative and prefix:
+        matches = {role for target, role in (('제조일자', 'start'), ('소비기한', 'end'), ('유통기한', 'end'))
+                   if len(prefix[1]) == len(target) and sum(a != b for a, b in zip(prefix[1], target)) == 1}
+        if len(matches) == 1:
+            return matches.pop()
+    return None
+
+
+def _same_region(first: OCRLine, other: OCRLine) -> bool:
+    if first.original_box is None or other.original_box is None:
+        return False
+    a, b = first.original_box, other.original_box
+    area_a, area_b = (a[2]-a[0])*(a[3]-a[1]), (b[2]-b[0])*(b[3]-b[1])
+    intersection = max(0., min(a[2], b[2])-max(a[0], b[0])) * max(0., min(a[3], b[3])-max(a[1], b[1]))
+    union = area_a + area_b - intersection
+    overlap = union > 0 and intersection / union >= .85
+    # Cropping can remove the role prefix and half the date. A smaller row
+    # wholly contained in a unique original row still belongs to that row;
+    # never allow a larger merged row to inherit one child's exclusive role.
+    clipped = (area_a > 0 and area_b > 0 and .25 <= area_a/area_b <= 1.
+               and intersection/area_a >= .95
+               and .5 <= (a[3]-a[1])/max(1.,b[3]-b[1]) <= 1.5)
+    return overlap or clipped
+
+
+def _link_roles(lines: Sequence[OCRLine]) -> list[OCRLine]:
+    """Retain grounded roles even when a date has not parsed; never rewrite text."""
+    normalized = [replace(line, text=_normalise_text(line.text)) for line in lines]
+    parsed = [parse_dates(line.text) for line in normalized]
+    paired = _printed_pair_roles(normalized, parsed)
+    direct = {i: _inline_role(line.text) or (line.role if line.role_basis == 'recovery_anchor' else None)
+              for i, line in enumerate(normalized)}
+    roles = {i: role for i, role in direct.items() if role}
+    roles.update(paired)
+    for i, line in enumerate(normalized):
+        if i in roles or not (parsed[i] or _date_fragment(line.text)):
+            continue
+        proposals = set()
+        for j, label in enumerate(normalized):
+            if not direct[j] or parsed[j] or _date_fragment(label.text) or len(label.text) > 32 or label.score < .8:
+                continue
+            if (line.source, line.variant) != (label.source, label.variant):
+                continue
+            scale = max(line.height, label.height)
+            dx, dy = _box_gap(line, label)
+            # Inline/same-row short labels only. A shared heading above two
+            # dates must not assign an exclusive expiry role to the first row.
+            if dx > 6*scale or dy > scale or abs(line.center[1]-label.center[1]) > .5*scale:
+                continue
+            rivals = [other for k, other in enumerate(normalized) if k != i and
+                      (parsed[k] or _date_fragment(other.text)) and
+                      (other.source, other.variant) == (line.source, line.variant) and
+                      math.hypot(*_box_gap(other, label)) <= math.hypot(dx, dy)]
+            if not rivals:
+                proposals.add(direct[j])
+        if len(proposals) == 1:
+            roles[i] = proposals.pop()
+    result = []
+    for i, line in enumerate(normalized):
+        inherited = set()
+        for j, other in enumerate(normalized):
+            if j not in roles or other.score < .7 or (line.source, line.variant) == (other.source, other.variant):
+                continue
+            if not _same_region(line, other):
+                continue
+            rivals = [candidate for k, candidate in enumerate(normalized) if k != i and
+                      (candidate.source, candidate.variant) == (line.source, line.variant) and _same_region(candidate, other)]
+            if not rivals:
+                inherited.add(roles[j])
+        if i in roles:
+            inherited.add(roles[i])
+        role = next(iter(inherited)) if len(inherited) == 1 else 'conflict' if inherited else None
+        result.append(replace(line, role=role, role_basis='local' if i in roles else 'same_region' if inherited else None))
+    return result
+
+
 def _nearby_context(
     line: OCRLine, originals: Sequence[OCRLine]
 ) -> tuple[list[str], list[str], float]:
@@ -566,8 +746,12 @@ def _nearby_context(
     for index, other in enumerate(originals):
         if index in member_set or (line.source, line.variant) != (other.source, other.variant):
             continue
+        # Weak surrounding prose is not a reliable role label. Keep the date's
+        # own inline evidence; only gate the optional neighbouring context.
+        if other.score < .7:
+            continue
         positive = POSITIVE_CONTEXT.search(other.text)
-        negative = NEGATIVE_CONTEXT.search(other.text)
+        negative = NEGATIVE_CONTEXT.search(_role_text(other.text))
         if not positive and not negative:
             continue
         horizontal, vertical = _box_gap(line, other)
@@ -605,7 +789,9 @@ def _candidate_from_match(
 ) -> DateCandidate:
     before = line.text[max(0, match.start - 24) : match.start]
     after = line.text[match.end : match.end + 24]
-    local = f"{before} {match.raw} {after}"
+    before, after = _role_text(before), _role_text(after)
+    local = _role_text(f"{before} {match.raw} {after}")
+    role = role or line.role
     if role is not None:
         # A one-to-one block match is stronger than a slanted box's nearest
         # keyword. Use the same role scoring as an inline printed role.
@@ -649,7 +835,7 @@ def _candidate_from_match(
         value=match.value,
         raw=match.raw,
         score=score,
-        ocr_score=line.score,
+        ocr_score=line.date_digit_score if line.date_digit_score is not None else line.score,
         year_digits=match.year_digits,
         repaired=match.repaired,
         separator=match.separator,
@@ -674,7 +860,7 @@ def _printed_pair_roles(originals: Sequence[OCRLine], parsed: Sequence[list[Pars
     labels to the same nearest date. Competing dates/labels invalidate the block.
     """
     date_rows = [(i, line) for i, (line, dates) in enumerate(zip(originals, parsed))
-                 if dates and len({(d.start, d.end) for d in dates}) == 1]
+            if (dates and len({(d.start, d.end) for d in dates}) == 1) or (not dates and _date_fragment(line.text))]
     proposals: dict[int, set[str]] = {}
     for pos, (i, first) in enumerate(date_rows):
         for j, second in date_rows[pos + 1:]:
@@ -725,12 +911,14 @@ def _paired_orders(originals: Sequence[OCRLine], parsed: Sequence[list[ParsedDat
     """Use chronology only for a close, explicitly labelled, same-format pair.
 
     Identical field widths/separators on one printed block are the bounded
-    same-order assumption. Unlabelled pairs, repaired digits, other frames,
+    same-order assumption. Across OCR frames, both explicit roles and original
+    image coordinates are required. Unlabelled pairs, repaired digits,
     conflicting pairs and multiple possible orders supply no order evidence.
     """
     groups = []
     for index, (line, dates) in enumerate(zip(originals, parsed)):
-        if line.score < .85 or not dates or any(d.repaired for d in dates):
+        if (line.role == 'conflict' or (line.date_digit_score if line.date_digit_score is not None else line.score) < .85
+                or not dates or any(d.repaired for d in dates)):
             continue
         if len({(d.start, d.end) for d in dates}) != 1:
             continue
@@ -745,10 +933,19 @@ def _paired_orders(originals: Sequence[OCRLine], parsed: Sequence[list[ParsedDat
         for other_index, other, other_dates, other_signature, other_candidate in groups:
             if index >= other_index or signature != other_signature:
                 continue
+            first_geometry, second_geometry = line, other
             if (line.source, line.variant) != (other.source, other.variant):
-                continue
-            horizontal, vertical = _box_gap(line, other)
-            scale = max(line.height, other.height)
+                if (not line.geometry_valid or not other.geometry_valid
+                        or line.original_box is None or other.original_box is None
+                        or {line.role, other.role} != {'start', 'end'}):
+                    continue
+                first_geometry = replace(line, box=line.original_box)
+                second_geometry = replace(other, box=other.original_box)
+                # Distinct printed rows, not conflicting re-reads of one row.
+                if _same_region(line, other) or _same_region(other, line):
+                    continue
+            horizontal, vertical = _box_gap(first_geometry, second_geometry)
+            scale = max(first_geometry.height, second_geometry.height)
             if horizontal > scale or vertical > 3 * scale:
                 continue
             start = candidate.explicit_negative
@@ -771,7 +968,7 @@ def _paired_orders(originals: Sequence[OCRLine], parsed: Sequence[list[ParsedDat
 def _resolve_orders(
     line: OCRLine, matches: list[ParsedDate], originals: Sequence[OCRLine],
     parsed_originals: Sequence[list[ParsedDate]], product_rules: Sequence[ProductDateRule],
-    paired_orders: dict[int, str],
+    paired_orders: dict[int, str], context: DateContext | None = None,
 ) -> list[ParsedDate]:
     """Resolve a printed token before OCR scores rank different printed dates."""
     if not matches:
@@ -793,7 +990,7 @@ def _resolve_orders(
                   and not set(other.members) & set(line.members)]
         explicit_reference = (not rivals and len(groups) == 1
                               and POSITIVE_CONTEXT.search(hint_line.text)
-                              and re.search(r"별도\s*표기|후면\s*표기|상단\s*표기", hint_line.text))
+                              and re.search(r"별도\s*표[기시]|(?:후면|뒷면|상단)\s*표[기시]", hint_line.text))
         if gap > 3 * max(line.height, hint_line.height) and not explicit_reference:
             continue
         if any(math.hypot(*_box_gap(other, hint_line)) <= gap for other in rivals):
@@ -814,7 +1011,7 @@ def _resolve_orders(
             if len(nearby) == 1:
                 result.extend(replace(v, order_reason="explicit_order") for v in values if v.order in nearby)
             continue
-        if len({v.value for v in values}) == 1:
+        if len({v.value for v in values}) == 1 and (context is None or values[0].year_digits == 4):
             result.append(values[0])
             continue
         # A nearby fully written expiry can disambiguate the SAME date value.
@@ -838,27 +1035,44 @@ def _resolve_orders(
                 result.extend(replace(v, order_reason="product_rule:" + matching_rules[0].name)
                               for v in values if v.order in orders)
             continue
+        if context is not None:
+            order, basis = _market_order(line, originals, context)
+            short = bool(re.fullmatch(r'\d{2}(?:\s*[./,:·-]\s*|\s+)\d{2}(?:\s*[./,:·-]\s*|\s+)\d{2}',values[0].raw))
+            if order and (short or (values[0].year_digits == 4 and order in {'dmy','mdy'})):
+                chosen = [v for v in values if v.order == order]
+                if chosen:
+                    result.extend(replace(v,order_reason='market_policy:'+basis) for v in chosen)
+                else:
+                    result.extend(replace(v,order_reason='review_invalid_market_date') for v in values)
+            elif len({v.value for v in values}) == 1:
+                result.append(values[0])
+            else:
+                result.extend(replace(v,order_reason='review_order:'+basis) for v in values)
+            continue
         dmy = next((v for v in values if v.order == "dmy"), None)
         if dmy:
             result.append(replace(dmy, order_reason="fallback_dmy"))
     return result
 
 
-def extract_candidates(lines: Sequence[OCRLine], *, product_rules: Sequence[ProductDateRule] = ()) -> list[DateCandidate]:
+def extract_candidates(lines: Sequence[OCRLine], *, product_rules: Sequence[ProductDateRule] = (), context: DateContext | None = None) -> list[DateCandidate]:
     originals = [
         replace(line, text=_normalise_text(line.text), members=line.members or (index,))
         for index, line in enumerate(lines)
     ]
     search_lines = originals + merge_horizontal_lines(originals)
-    parsed_originals = [parse_dates(line.text) for line in originals]
+    parser = _policy_parses if context is not None else parse_dates
+    parsed_originals = [parser(line.text) for line in originals]
     roles = _printed_pair_roles(originals, parsed_originals)
     paired_orders = _paired_orders(originals, parsed_originals, roles)
     candidates: list[DateCandidate] = []
     for index, line in enumerate(search_lines):
-        matches = parsed_originals[index] if index < len(originals) else parse_dates(line.text)
+        matches = parsed_originals[index] if index < len(originals) else parser(line.text)
         member_roles = {roles[member] for member in line.members if member in roles}
         role = next(iter(member_roles)) if len(member_roles) == 1 else None
-        for match in _resolve_orders(line, matches, originals, parsed_originals, product_rules, paired_orders):
+        if line.role == 'conflict' or any(originals[m].role == 'conflict' for m in line.members if m < len(originals)):
+            continue
+        for match in _resolve_orders(line, matches, originals, parsed_originals, product_rules, paired_orders, context):
             candidates.append(_candidate_from_match(match, line, originals, role))
     return candidates
 
@@ -883,6 +1097,8 @@ def _interval_endpoint(candidates: Sequence[DateCandidate], ranked: Sequence[Dat
     ranked_scores = {item.iso: item.score for item in ranked}
     for first in candidates:
         for last in candidates:
+            if first.order_reason.startswith('review_') or last.order_reason.startswith('review_'):
+                continue
             if (first.source, first.variant) != (last.source, last.variant):
                 continue
             if not 1 <= (last.value - first.value).days <= 550:
@@ -912,8 +1128,64 @@ def _interval_endpoint(candidates: Sequence[DateCandidate], ranked: Sequence[Dat
     return max(choices, key=lambda item: (item.score, item.value), default=None)
 
 
-def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules: Sequence[ProductDateRule] = ()) -> DateSelection:
-    candidates = extract_candidates(lines, product_rules=product_rules)
+def _policy_pair_endpoint(candidates: Sequence[DateCandidate]) -> DateCandidate | None:
+    """Organizer fallback on exactly two close printed tokens, after order resolution."""
+    frames = {}
+    # Explicit expiry evidence wins globally; chronology must not choose an
+    # OCR variant of that expiry, or an unrelated numeric pair, over it.
+    if any(c.explicit_positive and not c.explicit_negative for c in candidates):
+        return None
+    for candidate in candidates:
+        if len(candidate.members) == 1:
+            frames.setdefault((candidate.source, candidate.variant), {})[(candidate.members, candidate.span)] = candidate
+    endpoints = []
+    for frame in frames.values():
+        values = list(frame.values())
+        for i, first in enumerate(values):
+            for last in values[i+1:]:
+                if first.value > last.value:
+                    start, end = last, first
+                else:
+                    start, end = first, last
+                if (start.value == end.value or min(start.ocr_score, end.ocr_score) < .85
+                        or start.repaired or end.repaired
+                        or any((c.order_reason == 'fallback_dmy' and c.year_digits != 4) or c.order_reason.startswith('review_') or c.negative_hits for c in (start, end))
+                        or any(not re.fullmatch(r'\d{2,4}([./-])\d{2}\1\d{2,4}', c.raw) for c in (start, end))):
+                    continue
+                if end.explicit_negative or (start.explicit_positive and not start.explicit_negative):
+                    continue
+                if start.members == end.members and max(start.span[0], end.span[0]) < min(start.span[1], end.span[1]):
+                    continue
+                a = OCRLine('', 1., start.box)
+                b = OCRLine('', 1., end.box)
+                dx, dy = _box_gap(a, b)
+                scale = max(a.height, b.height)
+                if dx > scale or dy > 3*scale:
+                    continue
+                block = OCRLine('', 1., _union_box((a, b)))
+                if any(other is not first and other is not last and
+                       math.hypot(*_box_gap(block, OCRLine('', 1., other.box))) <= 2*scale for other in values):
+                    continue
+                endpoints.append(end)
+    if len({candidate.iso for candidate in endpoints}) == 1:
+        return max(endpoints, key=lambda candidate: candidate.score)
+    return None
+
+
+def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules: Sequence[ProductDateRule] = (), context: DateContext | None = None) -> DateSelection:
+    candidates = extract_candidates(lines, product_rules=product_rules, context=context)
+    if _expiry_not_printed(lines,candidates):
+        return DateSelection(None, float('-inf'), float('inf'), True, 'expiry-not-printed', tuple(candidates))
+    readable_end = any(line.role == 'end' and (parse_dates(line.text) or list(_partial_dates(line.text))) for line in lines)
+    pending_end = any(line.role == 'end' and line.score >= .7 and
+                      (_date_fragment(line.text) or (
+                          re.fullmatch(r'소비\s*기한|유통\s*기한|EXP|BBD|BEST\s*BEFORE', line.text, re.I)
+                          and any(other.role == 'start' and parse_dates(other.text) and
+                                  (line.source, line.variant) == (other.source, other.variant) and
+                                  math.hypot(*_box_gap(line, other)) <= 3*max(line.height, other.height) for other in lines)))
+                      for line in lines)
+    if pending_end and not readable_end and all(c.explicit_negative and not c.explicit_positive for c in candidates):
+        return DateSelection(None, float('-inf'), 0., False, 'unreadable-expiry', tuple(candidates))
     if not candidates:
         return DateSelection(
             None, float("-inf"), float("inf"), False, "no-valid-date", ()
@@ -933,7 +1205,10 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_
 
     # Pair only dates supported by the same local OCR coordinate frame.
     interval_preferred = False
-    endpoint = _interval_endpoint(candidates, ranked, lines)
+    policy_endpoint = _policy_pair_endpoint(candidates)
+    endpoint = next((item for item in ranked if policy_endpoint and item.iso == policy_endpoint.iso), None)
+    if endpoint is None:
+        endpoint = _interval_endpoint(candidates, ranked, lines)
     if endpoint is not None:
         best_score = ranked[0].score
         ranked.remove(endpoint)
@@ -964,6 +1239,12 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_
             digits_confident=best.ocr_score >= .85 and not best.repaired,
             order_resolved=best.order_reason != "fallback_dmy",
         )
+
+    if best.order_reason.startswith('review_'):
+        clear = best.ocr_score >= .85 and not best.repaired and not has_negative
+        order_only = best.order_reason.startswith('review_order:')
+        return DateSelection(None,best.score,margin,final or (clear and order_only),best.order_reason,tuple(ranked),
+                             digits_confident=clear,order_resolved=False)
 
     confident = (
         (
@@ -997,7 +1278,7 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_
         confident = True
     if (len(ranked) == 1 and best.ocr_score >= 0.85 and not best.repaired and not has_negative
             and (best.order_reason in {"explicit_order", "corresponding_date", "calendar_unique"}
-                 or best.order_reason.startswith("product_rule:"))):
+                 or best.order_reason.startswith(("product_rule:", "market_policy:")))):
         confident = True
     reason = "accepted" if confident else "ambiguous"
     if best.order_reason == "fallback_dmy":
@@ -1006,9 +1287,73 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_
             confident = ((confident or len(ranked) == 1) and best.ocr_score >= 0.85
                          and not best.repaired and not has_negative)
         reason = "fallback_dmy" if confident else "low-confidence-digits"
+    if policy_endpoint is not None:
+        reason = 'local-date-pair'
+        # A resolved local role relationship is not numerical ambiguity. Do not
+        # repeat OCR merely because the two dates have similar ranking scores.
+        # Merged windows containing the SAME complete token are not independent
+        # weak date readings (e.g. a clear date plus a poorly read email address).
+        singles = [c for c in candidates if len(c.members) == 1]
+        covered = all(any(c.iso == s.iso and c.raw == s.raw
+                          and (c.source,c.variant) == (s.source,s.variant)
+                          and set(s.members) <= set(c.members) for s in singles) for c in candidates)
+        if (best.ocr_score >= .95 and not best.repaired
+                and singles and covered
+                and all(c.ocr_score >= .95 and not c.repaired for c in singles)
+                and not any(c.explicit_negative for c in candidates)
+                and len({c.iso for c in candidates}) == 2):
+            confident = True
     return DateSelection(best.iso, best.score, margin, confident, reason, tuple(ranked),
                          digits_confident=best.ocr_score >= .85 and not best.repaired,
                          order_resolved=best.order_reason != "fallback_dmy")
+
+
+def _printed_month_day_token(text: str):
+    """An explicit MM.DD-until token, optionally followed by a separate clock.
+
+    Preserve the raw span for character evidence. A year/lot fragment or broken
+    full date cannot be truncated into this shape.
+    """
+    match = re.fullmatch(r'\s*(\d{2})\s*[./-]\s*(\d{2})\s*까지\s*'
+                         r'(?:(?:[01]\d|2[0-3]):[0-5]\d)?\s*',text)
+    if match and _valid_date(2000,int(match[1]),int(match[2])):
+        return match
+    return None
+
+
+def _expiry_not_printed(lines, candidates):
+    """A local explicit omission statement, never a missing-OCR assumption."""
+    if (not candidates or any(not c.explicit_negative or c.explicit_positive or c.ocr_score < .85 for c in candidates)
+            or any((line.role != 'start' and list(_partial_dates(line.text)))
+                   or (line.role == 'end' and _date_fragment(line.text)) for line in lines)):
+        return False
+    for note in lines:
+        if (note.score < .9 or not note.geometry_valid
+                or not re.search(r'(?:표기|표시)\s*하지\s*않',note.text)
+                or re.search(r'아니|않는\s*경우|않으면|않을',note.text)):
+            continue
+        frame = (note.source,note.variant)
+        if not any((c.source,c.variant)==frame for c in candidates):
+            continue
+        labels = [line for line in lines if line.geometry_valid and line.score >= .9
+                  and (line.source,line.variant)==frame
+                  and re.fullmatch(r'유통\s*기한|소비\s*기한|제조\s*일자?',line.text)]
+        nearby=[]
+        for label in labels:
+            # Table value and heading must follow the same printed orientation.
+            vertical = note.height > note.box[2]-note.box[0]
+            if vertical != (label.height > label.box[2]-label.box[0]):
+                continue
+            dx,dy = _box_gap(label,note)
+            thickness = min(note.height,note.box[2]-note.box[0],label.height,label.box[2]-label.box[0])
+            aligned = (abs(label.center[0]-note.center[0]) if vertical else abs(label.center[1]-note.center[1])) <= thickness
+            if aligned and math.hypot(dx,dy) <= 3*thickness:
+                nearby.append((math.hypot(dx,dy),label))
+        nearby.sort(key=lambda item:item[0])
+        if (nearby and (len(nearby)==1 or nearby[0][0]+5 < nearby[1][0])
+                and re.fullmatch(r'유통\s*기한|소비\s*기한',nearby[0][1].text)):
+            return True
+    return False
 
 
 def _partial_dates(text: str) -> Iterable[str]:
@@ -1043,19 +1388,61 @@ def _partial_dates(text: str) -> Iterable[str]:
         yield f"NONE-{int(match[1]):02d}-{int(match[2]):02d}"
 
 
-def select_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules: Sequence[ProductDateRule] = ()) -> DateSelection:
-    full = _select_full_date(lines, final=final, product_rules=product_rules)
-    if full.final_date is not None:
+def _printed_month_year(lines: Sequence[OCRLine]) -> DateSelection | None:
+    """An explicit MM/YYYY legend constrains a printed token, not its digits."""
+    legend = re.compile(r'(?<![A-Z])MM\s*[/.-]\s*YYYY(?![A-Z])|월\s*[/.-]\s*년\s*순', re.I)
+    values = set()
+    for hint in lines:
+        if hint.score < .75 or not legend.search(hint.text) or _format_hints(hint.text):
+            continue
+        targets = []
+        for target in lines:
+            if (target.source,target.variant)!=(hint.source,hint.variant) or target.score < .85 or target.role in ('start','conflict'):
+                continue
+            match = re.fullmatch(r'(\d{2})\s*[/.-]?\s*(20\d{2})',target.text)
+            if not match or not 1<=int(match[1])<=12 or int(match[2])>MAX_YEAR:
+                continue
+            targets.append((target,f'{match[2]}-{match[1]}-NONE'))
+        if len(targets)!=1:
+            continue
+        target,value=targets[0]
+        reference = re.search(r'별도\s*표[기시]|표시|표기|SEE',hint.text,re.I)
+        if not reference and math.hypot(*_box_gap(target,hint)) > 5*max(target.height,hint.height):
+            continue
+        # A second explicit full expiry is a conflict, not permission to hide
+        # an actual day. Cross-frame compact readings of this token are allowed.
+        if any(other is not target and other.role=='end' and parse_dates(other.text)
+               and not re.fullmatch(r'\d{2}\s*[/.-]?\s*20\d{2}',other.text) for other in lines):
+            continue
+        values.add(value)
+    if len(values)==1:
+        return DateSelection(values.pop(),3.,float('inf'),True,'printed-month-year',(),
+                             digits_confident=True,order_resolved=True)
+    return None
+
+
+def _select_date_impl(lines: Sequence[OCRLine], *, final: bool = False, product_rules: Sequence[ProductDateRule] = (), context: DateContext | None = None) -> DateSelection:
+    lines = _link_roles(lines)
+    partial = _printed_month_year(lines)
+    if partial is not None:
+        return partial
+    full = _select_full_date(lines, final=final, product_rules=product_rules, context=context)
+    if full.reason.startswith('review_'):
+        return full
+    explicit_full = any(c.iso == full.final_date and c.explicit_positive and not c.explicit_negative for c in full.candidates)
+    if full.final_date is not None and explicit_full:
         return full
     partials: dict[str, float] = {}
     clear_month_year_lines: dict[str, list[OCRLine]] = {}
     for index, line in enumerate(lines):
         text = _normalise_text(line.text)
+        if context is not None:
+            text = _mask_auxiliary(text)
         if parse_dates(text) or line.score < 0.65:
             continue
-        positive = bool(POSITIVE_CONTEXT.search(text))
-        negative = bool(NEGATIVE_CONTEXT.search(text))
-        if negative or re.search(r"보관|온도|℃|kg|mg|g\b|cm|%|TEL|전화|LOT\s*NO", text, re.IGNORECASE):
+        positive = line.role == 'end' or bool(POSITIVE_CONTEXT.search(text))
+        negative = line.role in ('start', 'conflict') or bool(NEGATIVE_CONTEXT.search(_role_text(text)))
+        if negative or re.search(r"보관|온도|℃|kg|mg|g\b|cm|%|TEL|전화|LOT\s*NO|품목|인증|허가|등록|제\s*\d.*호", text, re.IGNORECASE):
             continue
         _, near_negative, adjustment = _nearby_context(replace(line, members=(index,)), lines)
         if near_negative and not positive:
@@ -1070,12 +1457,27 @@ def select_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules:
         return full
     ordered = sorted(partials.items(), key=lambda item: item[1], reverse=True)
     value, score = ordered[0]
+    if full.reason == 'unreadable-expiry' and not any(line.role == 'end' and value in list(_partial_dates(line.text)) for line in lines):
+        return full
+    if full.final_date is not None and not any(
+        line.role == 'end' and len(line.text) <= 32 and line.score >= .85
+        and re.fullmatch(r'(?:소비\s*기한|유통\s*기한|EXP(?:IRY)?|BBD|BEST\s*BEFORE(?:\s*END)?)?\s*[:：]?\s*'
+                         r'[\d\s./년월일-]+\s*(?:까지)?', line.text, re.I)
+        and value in list(_partial_dates(line.text)) for line in lines
+    ):
+        return full
     margin = score - ordered[1][1] if len(ordered) > 1 else math.inf
     # Explicitly month/year-only packaging does not need repeated attempts to
     # invent an absent day. Unlabelled/cropped partials still need recovery.
     explicit_partial = False
     partial_legend = re.compile(r"월\s*[.,/\-]?\s*년\s*순|(?<!Y)MM\s*[/.-]\s*YYYY|BEST\s*BEFORE\s*END", re.I)
     if len(partials) == 1 and not full.candidates:
+        # A re-recognized, explicitly terminated month/day has evidence for
+        # the printed fields, not permission to borrow a year from the clock.
+        explicit_partial = any(_printed_month_day_token(line.text) and line.role == 'end'
+                               and line.score >= .85 and line.date_digit_score is not None
+                               and line.date_digit_score >= .9 and line.date_digit_min_score is not None
+                               and line.date_digit_min_score >= .7 for line in lines)
         for target in clear_month_year_lines.get(value, []):
             for hint in lines:
                 if ((target.source, target.variant) != (hint.source, hint.variant)
@@ -1092,9 +1494,54 @@ def select_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules:
                          digits_confident=value in clear_month_year_lines, order_resolved=explicit_partial)
 
 
+def select_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules: Sequence[ProductDateRule] = (), context: DateContext | None = None) -> DateSelection:
+    selected = _select_date_impl(lines,final=final,product_rules=product_rules,context=context)
+    if context is None:
+        return selected
+    best = selected.candidates[0] if selected.candidates else None
+    source = next((line for line in lines if best and (line.source,line.variant,line.box)==(best.source,best.variant,best.box)),None)
+    raw = source.text if source else best.raw if best else None
+    suffix = _normalise_text(raw)[best.span[1]:] if source and best else ''
+    times = [m.group() for m in _CLOCK.finditer(suffix)]
+    if not times and source:
+        for other in lines:
+            if (other is source or not other.geometry_valid or other.score < .85
+                    or (other.source,other.variant)!=(source.source,source.variant)
+                    or not _CLOCK.fullmatch(other.text.strip())):
+                continue
+            dx,dy = _box_gap(source,other)
+            if dx == 0 and dy <= 1.5*max(source.height,other.height):
+                rivals = [candidate for candidate in lines if candidate is not source and candidate is not other
+                          and (candidate.source,candidate.variant)==(source.source,source.variant)
+                          and parse_dates(candidate.text)
+                          and math.hypot(*_box_gap(candidate,other)) <= math.hypot(dx,dy)]
+                if not rivals:
+                    times.append(other.text.strip())
+    lots = re.findall(r'(?<![A-Za-z0-9])([A-Z][A-Z0-9]{0,2})(?![A-Za-z0-9])',_CLOCK.sub(' ',suffix))
+    lots = [lot for lot in lots if lot not in {'EXP','MFG','MFD','BBD','BBE','LOT'}]
+    basis = best.order_reason if best else selected.reason
+    invalid = selected.final_date is None and not selected.candidates and any(
+        _KOREAN_EXPIRY.search(line.text) and re.search(r'(?<!\d)\d{2,4}[./-]\d{2}[./-]\d{2}(?!\d)',line.text)
+        for line in lines)
+    review = selected.reason.startswith('review_') or invalid
+    if invalid:
+        basis = 'invalid_calendar_date'
+    market = context.market or ('KR' if basis=='market_policy:korean_food_context' else None)
+    manufactured = {c.iso for c in selected.candidates if c.explicit_negative and not c.explicit_positive
+                    and not c.repaired and c.ocr_score >= .85 and not c.order_reason.startswith(('review_','fallback_'))}
+    details = dict(policy='market-context-20260911',status='REVIEW_REQUIRED' if review else 'SELECTED' if selected.final_date else 'NOT_FOUND',
+                   market=market,raw_text=raw,expiration_date=selected.final_date,
+                   manufactured_date=next(iter(manufactured)) if len(manufactured)==1 else None,
+                   date_format=best.order.upper() if best and not review else None,
+                   auxiliary_time=times[0] if len(times)==1 else None,lot_code=lots[0] if len(lots)==1 else None,
+                   confidence_level='REVIEW' if review or not selected.digits_confident else 'MEDIUM' if basis.startswith('market_policy:') else 'HIGH',
+                   reason=[basis],confidence_is_calibrated=False)
+    return replace(selected,policy_details=details)
+
+
 def submission_fields(final_date: str | None) -> dict[str, str]:
-    if final_date is None or final_date == "NONE":
-        return {"year": "NONE", "month": "NONE", "day": "NONE", "final_date": "NONE"}
+    if final_date is None or final_date in ("NONE", "NONE-NONE-NONE"):
+        return {"year": "NONE", "month": "NONE", "day": "NONE", "final_date": "NONE-NONE-NONE"}
     if "NONE" in final_date:
         if not re.fullmatch(r"(?:NONE-\d{2}-\d{2}|\d{4}-\d{2}-NONE)", final_date):
             raise ValueError(f"Invalid partial date: {final_date}")

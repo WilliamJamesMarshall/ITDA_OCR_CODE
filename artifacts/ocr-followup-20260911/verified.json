@@ -1,0 +1,269 @@
+{
+  "code_sha256": {
+    "src/pipeline.py": "92b4b69532f887bf02ea00fb8e981931bf95aa79fd571ca5963fc80f119e522b",
+    "src/date_extraction.py": "2ff112cebfd664493340259b48177f1eed3fda7ef244c4a6e63531400ccc3fe9"
+  },
+  "input_hashes_verified": true,
+  "live_metrics": {
+    "before": {
+      "evaluated_labels": 34,
+      "exact_matches": 31,
+      "exact_match_rate": 0.9117647058823529,
+      "accuracy_target": 0.95,
+      "accuracy_target_met": false,
+      "accuracy_metric": "exact_match_rate",
+      "field_metrics": {
+        "year": {
+          "total": 34,
+          "matches": 32,
+          "known_total": 31,
+          "known_matches": 29,
+          "known_wrong": 0,
+          "known_missing": 2,
+          "known_unavailable": 0,
+          "absent_total": 3,
+          "absent_matches": 3,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9411764705882353,
+          "known_match_rate": 0.9354838709677419,
+          "absent_match_rate": 1.0
+        },
+        "month": {
+          "total": 34,
+          "matches": 32,
+          "known_total": 32,
+          "known_matches": 30,
+          "known_wrong": 0,
+          "known_missing": 2,
+          "known_unavailable": 0,
+          "absent_total": 2,
+          "absent_matches": 2,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9411764705882353,
+          "known_match_rate": 0.9375,
+          "absent_match_rate": 1.0
+        },
+        "day": {
+          "total": 34,
+          "matches": 31,
+          "known_total": 28,
+          "known_matches": 26,
+          "known_wrong": 0,
+          "known_missing": 2,
+          "known_unavailable": 0,
+          "absent_total": 6,
+          "absent_matches": 5,
+          "absent_spurious": 1,
+          "absent_unavailable": 0,
+          "match_rate": 0.9117647058823529,
+          "known_match_rate": 0.9285714285714286,
+          "absent_match_rate": 0.8333333333333334
+        }
+      },
+      "prediction_categories": {
+        "full": 26,
+        "partial": 4,
+        "none": 4,
+        "invalid": 0
+      },
+      "submission_format": {
+        "rows": 34,
+        "final_date_compliant": 34,
+        "rows_compliant": 34,
+        "all_rows_compliant": true,
+        "final_date_compliant_rate": 1.0,
+        "rows_compliant_rate": 1.0
+      },
+      "official_partial_score": null,
+      "metric_scope": "Internal exact match target is 95%; field metrics are diagnostics, not official points. Official field weights and NONE scoring are unknown. Legacy NONE is normalized only for semantic comparison. Field denominators include all eligible labels; unavailable means failure, invalid output or missing row. Submission format and prediction categories cover all returned rows.",
+      "categories": {
+        "full": {
+          "total": 27,
+          "correct": 25
+        },
+        "partial": {
+          "total": 5,
+          "correct": 4
+        },
+        "none": {
+          "total": 2,
+          "correct": 2
+        }
+      },
+      "errors": [
+        {
+          "image_id": "003355",
+          "expected": "2021-05-26",
+          "actual": "NONE-NONE-NONE",
+          "label_status": "frozen-development-reference",
+          "difficulty": "",
+          "error_types": "",
+          "failure_type": "미검출"
+        },
+        {
+          "image_id": "003531",
+          "expected": "2020-09-20",
+          "actual": "NONE-NONE-NONE",
+          "label_status": "frozen-development-reference",
+          "difficulty": "",
+          "error_types": "",
+          "failure_type": "미검출"
+        },
+        {
+          "image_id": "003590",
+          "expected": "2022-02-NONE",
+          "actual": "2022-02-20",
+          "label_status": "frozen-development-reference",
+          "difficulty": "",
+          "error_types": "",
+          "failure_type": "날짜 불일치"
+        }
+      ],
+      "error_type_counts": {
+        "미검출": 2,
+        "날짜 불일치": 1
+      },
+      "skipped": {},
+      "labels_without_predictions": []
+    },
+    "after": {
+      "evaluated_labels": 34,
+      "exact_matches": 33,
+      "exact_match_rate": 0.9705882352941176,
+      "accuracy_target": 0.95,
+      "accuracy_target_met": true,
+      "accuracy_metric": "exact_match_rate",
+      "field_metrics": {
+        "year": {
+          "total": 34,
+          "matches": 33,
+          "known_total": 31,
+          "known_matches": 30,
+          "known_wrong": 0,
+          "known_missing": 1,
+          "known_unavailable": 0,
+          "absent_total": 3,
+          "absent_matches": 3,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9705882352941176,
+          "known_match_rate": 0.967741935483871,
+          "absent_match_rate": 1.0
+        },
+        "month": {
+          "total": 34,
+          "matches": 33,
+          "known_total": 32,
+          "known_matches": 31,
+          "known_wrong": 0,
+          "known_missing": 1,
+          "known_unavailable": 0,
+          "absent_total": 2,
+          "absent_matches": 2,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9705882352941176,
+          "known_match_rate": 0.96875,
+          "absent_match_rate": 1.0
+        },
+        "day": {
+          "total": 34,
+          "matches": 33,
+          "known_total": 28,
+          "known_matches": 27,
+          "known_wrong": 0,
+          "known_missing": 1,
+          "known_unavailable": 0,
+          "absent_total": 6,
+          "absent_matches": 6,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9705882352941176,
+          "known_match_rate": 0.9642857142857143,
+          "absent_match_rate": 1.0
+        }
+      },
+      "prediction_categories": {
+        "full": 26,
+        "partial": 5,
+        "none": 3,
+        "invalid": 0
+      },
+      "submission_format": {
+        "rows": 34,
+        "final_date_compliant": 34,
+        "rows_compliant": 34,
+        "all_rows_compliant": true,
+        "final_date_compliant_rate": 1.0,
+        "rows_compliant_rate": 1.0
+      },
+      "official_partial_score": null,
+      "metric_scope": "Internal exact match target is 95%; field metrics are diagnostics, not official points. Official field weights and NONE scoring are unknown. Legacy NONE is normalized only for semantic comparison. Field denominators include all eligible labels; unavailable means failure, invalid output or missing row. Submission format and prediction categories cover all returned rows.",
+      "categories": {
+        "full": {
+          "total": 27,
+          "correct": 26
+        },
+        "partial": {
+          "total": 5,
+          "correct": 5
+        },
+        "none": {
+          "total": 2,
+          "correct": 2
+        }
+      },
+      "errors": [
+        {
+          "image_id": "003355",
+          "expected": "2021-05-26",
+          "actual": "NONE-NONE-NONE",
+          "label_status": "frozen-development-reference",
+          "difficulty": "",
+          "error_types": "",
+          "failure_type": "미검출"
+        }
+      ],
+      "error_type_counts": {
+        "미검출": 1
+      },
+      "skipped": {},
+      "labels_without_predictions": []
+    }
+  },
+  "runner_targets": {
+    "reference_images": 500,
+    "accuracy_target": 0.95,
+    "accuracy_metric": "exact_match_rate",
+    "submission_format_met": true,
+    "internal_seconds_500": 1500.0,
+    "timeout_seconds_500": 2400.0,
+    "target_seconds_per_image": 3.0,
+    "ocr_backend_seconds_per_completed_image": 3.467657678575571,
+    "ocr_backend_seconds_per_image_over_target": 0.46765767857557083,
+    "ocr_backend_timing_scope": "Completed images only; recognize calls including lazy recovery initialization. Excludes image load, crop/preprocessing, date selection, trace/CSV writes and unfinished calls. Diagnostic only; joint acceptance still uses total elapsed time.",
+    "timeout_reference_seconds_per_image": 4.8,
+    "run_status": "completed",
+    "run_complete": true,
+    "completed_images": 14,
+    "unprocessed_images": 0,
+    "total_seconds_per_input_image": 3.9366315642858223,
+    "actual_seconds_per_completed_image": 3.9366315642858223,
+    "seconds_per_image_over_target": 0.9366315642858223,
+    "actual_to_target_time_ratio": 1.3122105214286075,
+    "input_images_per_second": 0.2540242803193137,
+    "relative_time_budget_seconds": 42.0,
+    "seconds_500_equivalent": 1968.315782142911,
+    "relative_speed_target_met": false,
+    "all_inputs_have_confirmed_labels": true,
+    "output_complete": true,
+    "runtime_errors_zero": true,
+    "local_relative_joint_target_met": false,
+    "local_500_joint_target_met": null,
+    "actual_500_timeout_met": null,
+    "time_assessment": "internal_target_missed_within_hard_limit",
+    "scope": "Local measured run; see runtime.timing_scope for included costs. 500-equivalent is normalization, not a measured 500-image result; independent accuracy and official-environment acceptance are not established here."
+  }
+}

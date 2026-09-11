@@ -36,7 +36,7 @@ class ParseDatesTest(unittest.TestCase):
         self.assertTrue(parsed[0].repaired)
 
     def test_invalid_or_yearless_values_are_rejected(self):
-        for raw in ("2026.13.02", "2025.02.29", "2036.09.20", "12.04", "8801234567890"):
+        for raw in ("2026.13.02", "2025.02.29", "2100.09.20", "12.04", "8801234567890"):
             with self.subTest(raw=raw):
                 self.assertEqual(parse_dates(raw), [])
 
@@ -165,7 +165,9 @@ class DateSelectionTest(unittest.TestCase):
             submission_fields("2026-05-09"),
             {"year": "2026", "month": "05", "day": "09", "final_date": "2026-05-09"},
         )
-        self.assertEqual(set(submission_fields(None).values()), {"NONE"})
+        for value in (None, "NONE", "NONE-NONE-NONE"):
+            self.assertEqual(submission_fields(value), {
+                "year": "NONE", "month": "NONE", "day": "NONE", "final_date": "NONE-NONE-NONE"})
 
     def test_partial_dates_and_output_contract(self):
         for raw, expected in {
@@ -185,12 +187,12 @@ class DateSelectionTest(unittest.TestCase):
                 self.assertEqual('-'.join(fields[k] for k in ('year','month','day')), expected)
 
     def test_partial_dates_do_not_salvage_invalid_full_dates_or_measurements(self):
-        for raw in ("EXP 2021.02.30", "EXP 2036.05.29", "EXP 2021년 05월 32일", "EXP 02.30", "보관 02.14℃", "제조 05.12", "LOT NO 05.12"):
+        for raw in ("EXP 2021.02.30", "EXP 2100.05.29", "EXP 2021년 05월 32일", "EXP 02.30", "보관 02.14℃", "제조 05.12", "LOT NO 05.12"):
             with self.subTest(raw=raw):
                 self.assertIsNone(select_date([line(raw)], final=True).final_date)
 
     def test_partial_output_rejects_malformed_values(self):
-        for value in ("NONE-02-30", "2021-13-NONE", "2036-01-NONE", "NONE-NONE-01", "NONE-2-14"):
+        for value in ("NONE-02-30", "2021-13-NONE", "2100-01-NONE", "NONE-NONE-01", "NONE-2-14"):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 submission_fields(value)
 

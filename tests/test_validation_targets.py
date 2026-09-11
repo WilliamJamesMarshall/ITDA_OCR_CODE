@@ -7,7 +7,8 @@ from scripts.evaluate_pipeline import assess_targets
 def report(n=500, elapsed=1500, correct=475):
     runtime = dict(images=n, total_elapsed_seconds=elapsed, failures=[])
     accuracy = dict(evaluated_labels=n, exact_matches=correct, exact_match_rate=correct / n,
-                    accuracy_target_met=correct / n >= .95, labels_without_predictions=[], skipped={})
+                    accuracy_target_met=correct / n >= .95, labels_without_predictions=[], skipped={},
+                    submission_format={'all_rows_compliant': True})
     return runtime, accuracy
 
 

@@ -35,7 +35,8 @@ def _crashed_worker(journal):
 
 def accuracy(n=500, correct=475):
     return {'evaluated_labels': n, 'exact_matches': correct, 'exact_match_rate': correct / n,
-            'accuracy_target_met': correct / n >= .95, 'labels_without_predictions': [], 'skipped': {}}
+            'accuracy_target_met': correct / n >= .95, 'labels_without_predictions': [], 'skipped': {},
+            'submission_format': {'all_rows_compliant': True}}
 
 
 class ValidationTimeoutTest(unittest.TestCase):
@@ -109,6 +110,22 @@ class ValidationTimeoutTest(unittest.TestCase):
             self.assertIn('000001', data)
             self.assertNotIn('000002', data)
             self.assertNotIn('stale', data)
+
+    def test_timeout_preserves_completed_missing_result_and_failure_reason(self):
+        record = _record()
+        record['row'].update(year='NONE', month='NONE', day='NONE', final_date='NONE')
+        record['error'] = 'OCR error'
+        result = {'status': 'timeout', 'elapsed_seconds': 2400.1, 'exit_code': -1,
+                  'hard_timeout_seconds': 2400, 'events': [record]}
+        with tempfile.TemporaryDirectory() as directory, patch(
+            'scripts.validation_runner._supervise', return_value=result,
+        ):
+            output = Path(directory) / 'predictions.csv'
+            runtime = run_timed_pipeline(directory, output, config=None,
+                                         expected_images=[Path('000001.jpg'), Path('000002.jpg')])
+            self.assertIn('NONE-NONE-NONE', output.read_text(encoding='utf-8'))
+            self.assertNotIn('000002', output.read_text(encoding='utf-8'))
+            self.assertEqual(runtime['failures'], [{'image_id': '000001', 'error': 'OCR error'}])
 
     def test_cli_reports_timeout_or_failure_before_nonzero_exit(self):
         for status, exit_code in [('timeout', 124), ('failed', 1)]:

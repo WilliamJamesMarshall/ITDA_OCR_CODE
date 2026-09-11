@@ -8,11 +8,11 @@ def line(text, score=.99, box=(0, 0, 300, 40), variant='original'):
 
 
 class ManufacturingExitTest(unittest.TestCase):
-    def test_only_explicit_manufacturing_is_not_retried_for_nearby_expiry_heading(self):
+    def test_unread_expiry_heading_prevents_manufacturing_only_exit(self):
         result = select_date([line('제조2020.04.03'), line('유통기한', box=(0, 60, 300, 100))])
         self.assertIsNone(result.final_date)
-        self.assertTrue(result.stop_ocr)
-        self.assertEqual(result.reason, 'negative-context')
+        self.assertFalse(result.stop_ocr)
+        self.assertEqual(result.reason, 'unreadable-expiry')
 
     def test_another_unlabelled_date_prevents_manufacturing_only_exit(self):
         result = select_date([line('MFG 2021.01.01'), line('2021.02.03', score=.3, box=(0, 70, 300, 110))])

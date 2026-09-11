@@ -8,7 +8,7 @@ import re
 import time
 from collections import Counter
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -18,7 +18,10 @@ import cv2
 import numpy as np
 from PIL import Image, ImageOps
 
-from .date_extraction import DateSelection, OCRLine, ProductDateRule, parse_dates, select_date, submission_fields
+from .date_extraction import DateContext, DateSelection, OCRLine, ProductDateRule, parse_dates, select_date, submission_fields
+from .ocr_trace import ImageFrame, ImageTrace
+from .line_recovery import recover_lines, recover_missing_rows, recovery_targets
+from .recognition_evidence import CTCEvidence
 
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 OUTPUT_COLUMNS = ["image_id", "year", "month", "day", "final_date"]
@@ -45,6 +48,9 @@ class PipelineConfig:
     tile_sparse_line_limit: int = 5
     progress_every: int = 25
     product_date_rules: tuple[ProductDateRule, ...] = ()
+    date_context: DateContext | None = field(default_factory=DateContext)
+    collect_trace: bool = True
+    enable_line_recovery: bool = True
 
 
 @dataclass(frozen=True)
@@ -55,6 +61,7 @@ class ImagePrediction:
     elapsed_seconds: float
     passes: tuple[str, ...]
     error: str | None = None
+    trace: dict[str, Any] | None = None
 
 
 class PaddleOCRBackend:
@@ -66,6 +73,7 @@ class PaddleOCRBackend:
         self._validate_model("korean_PP-OCRv5_mobile_rec")
         self._mobile = self._build("PP-OCRv5_mobile_det", config.mobile_side_limit)
         self._recovery = None
+        self._date_recognizer = None
 
     def _model_dir(self, name: str) -> Path:
         return self.config.weights_dir / name
@@ -116,6 +124,7 @@ class PaddleOCRBackend:
     def recognize(
         self, image: np.ndarray, *, detector: str, variant: str
     ) -> list[OCRLine]:
+        self.last_unrecognized_regions = []
         model = self._mobile if detector == "mobile" else self._recovery_model()
         results = list(model.predict(image))
         if not results:
@@ -127,11 +136,15 @@ class PaddleOCRBackend:
         polygons = data.get("rec_polys", [])
         boxes = data.get("rec_boxes", [])
         lines: list[OCRLine] = []
+        recognized_polygons = set()
+        empty_regions = []
         for index, (text, score) in enumerate(zip(texts, scores)):
-            if not str(text).strip():
-                continue
+            polygon = ()
+            geometry_valid = True
+            geometry_source = "polygon"
             if index < len(polygons):
                 points = np.asarray(polygons[index], dtype=float)
+                polygon = tuple(tuple(point) for point in points.tolist())
                 box = (
                     float(points[:, 0].min()),
                     float(points[:, 1].min()),
@@ -141,18 +154,74 @@ class PaddleOCRBackend:
             elif index < len(boxes):
                 values = np.asarray(boxes[index], dtype=float).tolist()
                 box = tuple(values[:4])
+                geometry_source = "box"
             else:
                 box = (0.0, float(index), 1.0, float(index + 1))
-            lines.append(
-                OCRLine(
-                    text=str(text),
-                    score=float(score),
-                    box=box,
-                    source=f"paddle-{detector}",
-                    variant=variant,
-                )
+                geometry_valid = False
+                geometry_source = "synthetic_index"
+            line = OCRLine(
+                text=str(text),
+                score=float(score),
+                box=box,
+                source=f"paddle-{detector}",
+                variant=variant,
+                polygon=polygon,
+                geometry_valid=geometry_valid,
+                geometry_source=geometry_source,
             )
+            if str(text).strip():
+                lines.append(line)
+                if polygon:
+                    recognized_polygons.add(polygon)
+            else:
+                empty_regions.append(line)
+        # PaddleX keeps detection polygons even when recognition was filtered out.
+        # Do not feed these empty regions into the legacy selector or crop scheduler.
+        unmatched = {}
+        for points in data.get("dt_polys", []):
+            polygon = tuple(tuple(float(v) for v in point) for point in points)
+            if polygon and polygon not in recognized_polygons:
+                xs, ys = zip(*polygon)
+                unmatched[polygon] = OCRLine("", 0., (min(xs), min(ys), max(xs), max(ys)),
+                    f"paddle-{detector}", variant, polygon=polygon, geometry_source="detector_polygon")
+        for line in empty_regions:
+            if line.polygon not in unmatched:
+                self.last_unrecognized_regions.append(line)
+        self.last_unrecognized_regions.extend(unmatched.values())
         return lines
+
+    def recognize_crops(self, crops):
+        """Use the already-loaded recognizer without rerunning detection."""
+        pipeline = self._mobile.paddlex_pipeline
+        if not hasattr(pipeline, 'text_rec_model'):
+            pipeline = pipeline._pipeline
+        model = pipeline.text_rec_model
+        return self._recognize_with_evidence(model,crops)
+
+    def recognize_date_crops(self, crops):
+        """Lazy offline English/numeric recovery; no additional detector."""
+        if self._date_recognizer is None:
+            from paddlex import create_model
+            name = 'en_PP-OCRv5_mobile_rec'
+            self._validate_model(name)
+            wrapper = create_model(name,model_dir=str(self._model_dir(name)),device='cpu',
+                                   cpu_threads=self.config.cpu_threads,enable_mkldnn=True)
+            self._date_recognizer = wrapper._predictor
+        return self._recognize_with_evidence(self._date_recognizer,crops)
+
+    @staticmethod
+    def _recognize_with_evidence(model,crops):
+        original = model.post_op
+        evidence = CTCEvidence(original)
+        try:
+            model.post_op = evidence
+            results = list(model(crops))
+        finally:
+            model.post_op = original
+        aligned = len(evidence.rows) == len(results) and all(
+            text == result['rec_text'] for (text, _), result in zip(evidence.rows, results))
+        return [(str(result['rec_text']), float(result['rec_score']), evidence.rows[i][1] if aligned else ())
+                for i, result in enumerate(results)]
 
 
 def discover_images(input_dir: str | os.PathLike[str]) -> list[Path]:
@@ -225,7 +294,7 @@ def _date_fragment_lines(lines: Sequence[OCRLine]) -> list[OCRLine]:
     )[:2]]
 
 
-def _crop_fragment(image: np.ndarray, line: OCRLine) -> np.ndarray | None:
+def _fragment_bounds(image: np.ndarray, line: OCRLine) -> tuple[int, int, int, int]:
     height, width = image.shape[:2]
     left, top, right, bottom = line.box
     box_width = max(1.0, right - left)
@@ -234,6 +303,11 @@ def _crop_fragment(image: np.ndarray, line: OCRLine) -> np.ndarray | None:
     x2 = min(width, int(right + max(64.0, box_width * 0.8)))
     y1 = max(0, int(top - max(64.0, box_height * 2.5)))
     y2 = min(height, int(bottom + max(64.0, box_height * 2.5)))
+    return x1, y1, x2, y2
+
+
+def _crop_fragment(image: np.ndarray, line: OCRLine) -> np.ndarray | None:
+    x1, y1, x2, y2 = _fragment_bounds(image, line)
     if x2 - x1 < 24 or y2 - y1 < 16:
         return None
     crop = image[y1:y2, x1:x2]
@@ -244,7 +318,23 @@ def _crop_fragment(image: np.ndarray, line: OCRLine) -> np.ndarray | None:
     return crop
 
 
-def _overlapping_tiles(image: np.ndarray, fraction: float) -> list[np.ndarray]:
+def _label_crop_bounds(image, lines):
+    """At most one bounded search beside a clear, standalone expiry label."""
+    height,width=image.shape[:2]
+    labels=[line for line in lines if line.geometry_valid and line.score>=.9
+            and line.width>=line.height and re.fullmatch(r'까지|소비\s*기한|유통\s*기한|EXP|BBD',line.text,re.I)]
+    if not labels:
+        return None
+    # Only a unique expiry label is a safe missing-region anchor.
+    if len(labels)!=1:
+        return None
+    label=labels[0]
+    h=label.height
+    return (max(0,int(label.box[0]-12*h)),max(0,int(label.box[1]-2*h)),
+            min(width,int(label.box[2]+h)),min(height,int(label.box[3]+h)))
+
+
+def _tile_bounds(image: np.ndarray, fraction: float) -> list[tuple[int, int, int, int]]:
     if not 0.5 < fraction < 1.0:
         raise ValueError("tile_fraction must be between 0.5 and 1.0")
     height, width = image.shape[:2]
@@ -256,10 +346,11 @@ def _overlapping_tiles(image: np.ndarray, fraction: float) -> list[np.ndarray]:
         (height - tile_height, 0),
         (height - tile_height, width - tile_width),
     )
-    return [
-        image[top : top + tile_height, left : left + tile_width]
-        for top, left in origins
-    ]
+    return [(left, top, left+tile_width, top+tile_height) for top, left in origins]
+
+
+def _overlapping_tiles(image: np.ndarray, fraction: float) -> list[np.ndarray]:
+    return [image[top:bottom, left:right] for left, top, right, bottom in _tile_bounds(image, fraction)]
 
 
 def _append_pass(
@@ -271,47 +362,140 @@ def _append_pass(
     detector: str,
     variant: str,
     product_rules: Sequence[ProductDateRule] = (),
+    trace: ImageTrace | None = None,
+    frame: ImageFrame | None = None,
+    context: DateContext | None = None,
 ) -> DateSelection:
-    all_lines.extend(backend.recognize(image, detector=detector, variant=variant))
+    if trace is not None:
+        trace.start_pass(frame, detector, variant)
+    started = time.perf_counter()
+    try:
+        lines = backend.recognize(image, detector=detector, variant=variant)
+    except Exception as exc:
+        if trace is not None:
+            trace.record_pass([], [], frame, detector, variant, time.perf_counter()-started,
+                              error=f"{type(exc).__name__}: {exc}")
+        raise
+    ocr_seconds = time.perf_counter()-started
+    if frame is not None:
+        mapped_lines = []
+        for line in lines:
+            if line.geometry_valid:
+                left, top, right, bottom = line.box
+                points = frame.map_polygon(((left, top), (right, top), (right, bottom), (left, bottom)))
+                xs, ys = zip(*points)
+                line = replace(line, original_box=(min(xs), min(ys), max(xs), max(ys)))
+            mapped_lines.append(line)
+        lines = mapped_lines
+    all_lines.extend(lines)
     passes.append(f"{detector}:{variant}")
-    return select_date(all_lines, product_rules=product_rules)
+    try:
+        selection = select_date(all_lines, product_rules=product_rules, context=context)
+    except Exception as exc:
+        if trace is not None:
+            trace.record_pass(lines, getattr(backend, "last_unrecognized_regions", ()), frame,
+                              detector, variant, ocr_seconds, error=f"selection: {type(exc).__name__}: {exc}")
+        raise
+    if trace is not None:
+        trace.record_pass(lines, getattr(backend, "last_unrecognized_regions", ()),
+                          frame, detector, variant, ocr_seconds, selection)
+    return selection
 
 
-def predict_image(path: Path, backend: Any, config: PipelineConfig) -> ImagePrediction:
+def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: ImageTrace | None = None) -> ImagePrediction:
     started = time.perf_counter()
     image = _load_bgr(path)
+    height, width = image.shape[:2]
+    if trace is None and config.collect_trace:
+        trace = ImageTrace(path.stem)
+    if trace is not None:
+        trace.start(width, height)
+    original_frame = ImageFrame(width, height)
     all_lines: list[OCRLine] = []
     passes: list[str] = []
 
+    def finish(selection):
+        if trace is not None:
+            trace.finish(selection)
+        details = (dict(schema_version=1, original_size=trace.original_size,
+                        coordinate_space='exif_oriented_image_edges',
+                        frames=trace.frames, observations=trace.observations, regions=trace.regions,
+                        outcomes=trace.outcomes, recovery_decisions=trace.recovery_decisions,
+                        summary=trace.summary()) if trace is not None else None)
+        return ImagePrediction(path.stem, selection.final_date, selection, time.perf_counter()-started,
+                               tuple(passes), trace=details)
+
     selection = _append_pass(
-        all_lines, passes, backend, image, detector="mobile", variant="original", product_rules=config.product_date_rules
+        all_lines, passes, backend, image, detector="mobile", variant="original", product_rules=config.product_date_rules,
+        trace=trace, frame=original_frame, context=config.date_context,
     )
+    if config.enable_line_recovery and hasattr(backend, 'recognize_crops') and recovery_targets(all_lines):
+        recovery_started = time.perf_counter()
+        if trace is not None:
+            trace.start_pass(original_frame, 'recognition-only', 'date-lines')
+        try:
+            active, observations, decisions, seconds = recover_lines(
+                image, all_lines, backend.recognize_crops, getattr(backend,'recognize_date_crops',None))
+            recovered_selection = select_date(active, product_rules=config.product_date_rules, context=config.date_context)
+            all_lines[:] = active
+            selection = recovered_selection
+            if observations:
+                passes.append('recognition-only:date-lines')
+            if trace is not None:
+                trace.record_recovery(decisions)
+                trace.record_pass(observations, [], original_frame, 'recognition-only', 'date-lines', seconds, selection)
+        except Exception as exc:
+            # Optional recovery failure must not discard successful base OCR.
+            if trace is not None:
+                trace.record_pass([], [], original_frame, 'recognition-only', 'date-lines',
+                                  time.perf_counter()-recovery_started, error=f'{type(exc).__name__}: {exc}')
     original_line_count = len(all_lines)
     original_fragments = _date_fragment_lines(all_lines)
     if selection.stop_ocr:
-        return ImagePrediction(
-            path.stem,
-            selection.final_date,
-            selection,
-            time.perf_counter() - started,
-            tuple(passes),
-        )
+        return finish(selection)
+
+    if selection.final_date is None and not selection.candidates:
+        label_lines = list(all_lines)
+        bounds = _label_crop_bounds(image, all_lines)
+        if bounds is not None:
+            left,top,right,bottom=bounds
+            crop=cv2.resize(image[top:bottom,left:right],None,fx=2,fy=2,interpolation=cv2.INTER_CUBIC)
+            selection = _append_pass(all_lines,passes,backend,crop,detector='mobile',variant='label-roi',
+                                     product_rules=config.product_date_rules,trace=trace,frame=ImageFrame.crop(bounds,crop.shape),context=config.date_context)
+            if selection.stop_ocr:
+                return finish(selection)
+            if (config.enable_line_recovery and hasattr(backend, 'recognize_crops')
+                    and selection.final_date is None and not selection.candidates):
+                recovery_started = time.perf_counter()
+                if trace is not None:
+                    trace.start_pass(original_frame, 'recognition-only', 'label-rows')
+                try:
+                    added, observations, decisions, seconds = recover_missing_rows(
+                        image,label_lines,backend.recognize_crops,getattr(backend,'recognize_date_crops',None))
+                    all_lines.extend(added)
+                    selection = select_date(all_lines,product_rules=config.product_date_rules,context=config.date_context)
+                    if observations:
+                        passes.append('recognition-only:label-rows')
+                    if trace is not None:
+                        trace.record_recovery(decisions)
+                        trace.record_pass([*observations,*added],[],original_frame,'recognition-only','label-rows',seconds,selection)
+                except Exception as exc:
+                    if trace is not None:
+                        trace.record_pass([],[],original_frame,'recognition-only','label-rows',
+                                          time.perf_counter()-recovery_started,error=f'{type(exc).__name__}: {exc}')
+                if selection.stop_ocr:
+                    return finish(selection)
 
     for index, fragment in enumerate(original_fragments, start=1):
         crop = _crop_fragment(image, fragment)
         if crop is None:
             continue
         selection = _append_pass(
-            all_lines, passes, backend, crop, detector="mobile", variant=f"roi-{index}", product_rules=config.product_date_rules
+            all_lines, passes, backend, crop, detector="mobile", variant=f"roi-{index}", product_rules=config.product_date_rules,
+            trace=trace, frame=ImageFrame.crop(_fragment_bounds(image, fragment), crop.shape), context=config.date_context,
         )
         if selection.stop_ocr:
-            return ImagePrediction(
-                path.stem,
-                selection.final_date,
-                selection,
-                time.perf_counter() - started,
-                tuple(passes),
-            )
+            return finish(selection)
 
     if config.enable_clahe:
         selection = _append_pass(
@@ -322,28 +506,18 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig) -> ImagePred
             detector="mobile",
             variant="clahe",
             product_rules=config.product_date_rules,
+            trace=trace, frame=original_frame, context=config.date_context,
         )
         if selection.stop_ocr:
-            return ImagePrediction(
-                path.stem,
-                selection.final_date,
-                selection,
-                time.perf_counter() - started,
-                tuple(passes),
-            )
+            return finish(selection)
 
     if config.enable_recovery_fallback:
         selection = _append_pass(
-            all_lines, passes, backend, image, detector="recovery", variant="original", product_rules=config.product_date_rules
+            all_lines, passes, backend, image, detector="recovery", variant="original", product_rules=config.product_date_rules,
+            trace=trace, frame=original_frame, context=config.date_context,
         )
         if selection.stop_ocr:
-            return ImagePrediction(
-                path.stem,
-                selection.final_date,
-                selection,
-                time.perf_counter() - started,
-                tuple(passes),
-            )
+            return finish(selection)
 
     if config.enable_rotation_fallback and (
         selection.final_date is None or selection.is_partial
@@ -364,15 +538,10 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig) -> ImagePred
                 detector="mobile",
                 variant=f"rot{angle}",
                 product_rules=config.product_date_rules,
+                trace=trace, frame=ImageFrame.rotated(width, height, angle), context=config.date_context,
             )
             if selection.stop_ocr:
-                return ImagePrediction(
-                    path.stem,
-                    selection.final_date,
-                    selection,
-                    time.perf_counter() - started,
-                    tuple(passes),
-                )
+                return finish(selection)
 
     # The last fallback zooms four overlapping quadrants. It is intentionally
     # restricted to images with no date after every full-image pass.
@@ -396,24 +565,13 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig) -> ImagePred
                 detector="mobile",
                 variant=f"tile-{index}",
                 product_rules=config.product_date_rules,
+                trace=trace, frame=ImageFrame.crop(_tile_bounds(image, config.tile_fraction)[index-1], tile.shape), context=config.date_context,
             )
             if selection.stop_ocr:
-                return ImagePrediction(
-                    path.stem,
-                    selection.final_date,
-                    selection,
-                    time.perf_counter() - started,
-                    tuple(passes),
-                )
+                return finish(selection)
 
-    selection = select_date(all_lines, final=True, product_rules=config.product_date_rules)
-    return ImagePrediction(
-        path.stem,
-        selection.final_date,
-        selection,
-        time.perf_counter() - started,
-        tuple(passes),
-    )
+    selection = select_date(all_lines, final=True, product_rules=config.product_date_rules, context=config.date_context)
+    return finish(selection)
 
 
 def _write_submission(path: Path, rows: Sequence[dict[str, str]]) -> None:
@@ -421,7 +579,7 @@ def _write_submission(path: Path, rows: Sequence[dict[str, str]]) -> None:
     with path.open("w", encoding="utf-8", newline="") as output:
         writer = csv.DictWriter(output, fieldnames=OUTPUT_COLUMNS, lineterminator="\n")
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows({"image_id": row["image_id"], **submission_fields(row["final_date"])} for row in rows)
 
 
 def _percentile(values: Sequence[float], fraction: float) -> float:
@@ -446,6 +604,17 @@ def run_pipeline(
         if max_images <= 0:
             raise ValueError("max_images must be positive")
         images = images[:max_images]
+    trace_path = Path(str(output_path) + ".trace.jsonl") if config.collect_trace else None
+    if trace_path is not None:
+        trace_path.parent.mkdir(parents=True, exist_ok=True)
+        with trace_path.open("w", encoding="utf-8"):
+            pass
+
+    def emit_trace(event):
+        # Close/flush each completed pass so timeout retains earlier evidence.
+        with trace_path.open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps(event, ensure_ascii=False) + "\n")
+
     init_started = time.perf_counter()
     if backend is None:
         backend = PaddleOCRBackend(config)
@@ -458,11 +627,14 @@ def run_pipeline(
     reason_counts: Counter[str] = Counter()
     failures: list[dict[str, str]] = []
     none_count = 0
+    trace_totals: Counter[str] = Counter()
 
     for index, image_path in enumerate(images, start=1):
         image_started = time.perf_counter()
+        trace = ImageTrace(image_path.stem, emit_trace) if config.collect_trace else None
         try:
-            prediction = predict_image(image_path, backend, config)
+            prediction = (predict_image(image_path, backend, config, trace=trace) if trace is not None
+                          else predict_image(image_path, backend, config))
             fields = submission_fields(prediction.final_date)
         except Exception as exc:  # noqa: BLE001 - one bad image must not abort the submission.
             selection = DateSelection(
@@ -478,14 +650,19 @@ def run_pipeline(
             )
             failures.append({"image_id": image_path.stem, "error": prediction.error})
             fields = submission_fields(None)
+            if trace is not None:
+                trace.finish(selection, error=prediction.error)
         rows.append({"image_id": image_path.stem, **fields})
         timings.append(prediction.elapsed_seconds)
         pass_counts.update(prediction.passes)
         reason_counts.update([prediction.selection.reason])
-        none_count += prediction.final_date is None
+        none_count += fields["final_date"] == "NONE-NONE-NONE"
+        trace_summary = trace.summary() if trace is not None else {}
+        trace_totals.update(trace_summary)
         if on_image is not None:
             on_image({"row": rows[-1], "seconds": prediction.elapsed_seconds,
-                      "error": prediction.error, "passes": list(prediction.passes)})
+                      "error": prediction.error, "passes": list(prediction.passes),
+                      "trace_summary": trace_summary})
         if (
             config.progress_every > 0 and index % config.progress_every == 0
         ) or index == len(images):
@@ -511,6 +688,9 @@ def run_pipeline(
         "passes": dict(pass_counts),
         "selection_reasons": dict(reason_counts),
         "ocr_calls": sum(pass_counts.values()),
+        "trace_path": str(trace_path.resolve()) if trace_path is not None else None,
+        "trace_summary": dict(trace_totals),
+        "ocr_backend_seconds_per_image": trace_totals["ocr_seconds"] / len(images) if trace_path is not None else None,
         "output_path": str(output.resolve()),
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2), flush=True)

@@ -1,0 +1,239 @@
+{
+  "code_sha256": {
+    "src/pipeline.py": "4080a28186a272a59b6f2d46bf978169dd697ed0954c131754f8f2ee1237421b",
+    "src/date_extraction.py": "9d3b9e504ed257ddce29de273f96340d5c60953189be157bf0996593fa02ef1b",
+    "src/line_recovery.py": "f1df1710514da223970ee5812c823c802366ec8f265623666268ed3ed834fd09"
+  },
+  "input_hashes_verified": true,
+  "live_metrics": {
+    "before": {
+      "evaluated_labels": 34,
+      "exact_matches": 33,
+      "exact_match_rate": 0.9705882352941176,
+      "accuracy_target": 0.95,
+      "accuracy_target_met": true,
+      "accuracy_metric": "exact_match_rate",
+      "field_metrics": {
+        "year": {
+          "total": 34,
+          "matches": 33,
+          "known_total": 31,
+          "known_matches": 30,
+          "known_wrong": 0,
+          "known_missing": 1,
+          "known_unavailable": 0,
+          "absent_total": 3,
+          "absent_matches": 3,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9705882352941176,
+          "known_match_rate": 0.967741935483871,
+          "absent_match_rate": 1.0
+        },
+        "month": {
+          "total": 34,
+          "matches": 33,
+          "known_total": 32,
+          "known_matches": 31,
+          "known_wrong": 0,
+          "known_missing": 1,
+          "known_unavailable": 0,
+          "absent_total": 2,
+          "absent_matches": 2,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9705882352941176,
+          "known_match_rate": 0.96875,
+          "absent_match_rate": 1.0
+        },
+        "day": {
+          "total": 34,
+          "matches": 33,
+          "known_total": 28,
+          "known_matches": 27,
+          "known_wrong": 0,
+          "known_missing": 1,
+          "known_unavailable": 0,
+          "absent_total": 6,
+          "absent_matches": 6,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 0.9705882352941176,
+          "known_match_rate": 0.9642857142857143,
+          "absent_match_rate": 1.0
+        }
+      },
+      "prediction_categories": {
+        "full": 26,
+        "partial": 5,
+        "none": 3,
+        "invalid": 0
+      },
+      "submission_format": {
+        "rows": 34,
+        "final_date_compliant": 34,
+        "rows_compliant": 34,
+        "all_rows_compliant": true,
+        "final_date_compliant_rate": 1.0,
+        "rows_compliant_rate": 1.0
+      },
+      "official_partial_score": null,
+      "metric_scope": "Internal exact match target is 95%; field metrics are diagnostics, not official points. Official field weights and NONE scoring are unknown. Legacy NONE is normalized only for semantic comparison. Field denominators include all eligible labels; unavailable means failure, invalid output or missing row. Submission format and prediction categories cover all returned rows.",
+      "categories": {
+        "full": {
+          "total": 27,
+          "correct": 26
+        },
+        "partial": {
+          "total": 5,
+          "correct": 5
+        },
+        "none": {
+          "total": 2,
+          "correct": 2
+        }
+      },
+      "errors": [
+        {
+          "image_id": "003355",
+          "expected": "2021-05-26",
+          "actual": "NONE-NONE-NONE",
+          "label_status": "frozen-development-reference",
+          "difficulty": "",
+          "error_types": "",
+          "failure_type": "미검출"
+        }
+      ],
+      "error_type_counts": {
+        "미검출": 1
+      },
+      "skipped": {},
+      "labels_without_predictions": []
+    },
+    "after": {
+      "evaluated_labels": 34,
+      "exact_matches": 34,
+      "exact_match_rate": 1.0,
+      "accuracy_target": 0.95,
+      "accuracy_target_met": true,
+      "accuracy_metric": "exact_match_rate",
+      "field_metrics": {
+        "year": {
+          "total": 34,
+          "matches": 34,
+          "known_total": 31,
+          "known_matches": 31,
+          "known_wrong": 0,
+          "known_missing": 0,
+          "known_unavailable": 0,
+          "absent_total": 3,
+          "absent_matches": 3,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 1.0,
+          "known_match_rate": 1.0,
+          "absent_match_rate": 1.0
+        },
+        "month": {
+          "total": 34,
+          "matches": 34,
+          "known_total": 32,
+          "known_matches": 32,
+          "known_wrong": 0,
+          "known_missing": 0,
+          "known_unavailable": 0,
+          "absent_total": 2,
+          "absent_matches": 2,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 1.0,
+          "known_match_rate": 1.0,
+          "absent_match_rate": 1.0
+        },
+        "day": {
+          "total": 34,
+          "matches": 34,
+          "known_total": 28,
+          "known_matches": 28,
+          "known_wrong": 0,
+          "known_missing": 0,
+          "known_unavailable": 0,
+          "absent_total": 6,
+          "absent_matches": 6,
+          "absent_spurious": 0,
+          "absent_unavailable": 0,
+          "match_rate": 1.0,
+          "known_match_rate": 1.0,
+          "absent_match_rate": 1.0
+        }
+      },
+      "prediction_categories": {
+        "full": 27,
+        "partial": 5,
+        "none": 2,
+        "invalid": 0
+      },
+      "submission_format": {
+        "rows": 34,
+        "final_date_compliant": 34,
+        "rows_compliant": 34,
+        "all_rows_compliant": true,
+        "final_date_compliant_rate": 1.0,
+        "rows_compliant_rate": 1.0
+      },
+      "official_partial_score": null,
+      "metric_scope": "Internal exact match target is 95%; field metrics are diagnostics, not official points. Official field weights and NONE scoring are unknown. Legacy NONE is normalized only for semantic comparison. Field denominators include all eligible labels; unavailable means failure, invalid output or missing row. Submission format and prediction categories cover all returned rows.",
+      "categories": {
+        "full": {
+          "total": 27,
+          "correct": 27
+        },
+        "partial": {
+          "total": 5,
+          "correct": 5
+        },
+        "none": {
+          "total": 2,
+          "correct": 2
+        }
+      },
+      "errors": [],
+      "error_type_counts": {},
+      "skipped": {},
+      "labels_without_predictions": []
+    }
+  },
+  "runner_targets": {
+    "reference_images": 500,
+    "accuracy_target": 0.95,
+    "accuracy_metric": "exact_match_rate",
+    "submission_format_met": true,
+    "internal_seconds_500": 1500.0,
+    "timeout_seconds_500": 2400.0,
+    "target_seconds_per_image": 3.0,
+    "ocr_backend_seconds_per_completed_image": 2.9417908928589895,
+    "ocr_backend_seconds_per_image_over_target": -0.05820910714101046,
+    "ocr_backend_timing_scope": "Completed images only; recognize calls including lazy recovery initialization. Excludes image load, crop/preprocessing, date selection, trace/CSV writes and unfinished calls. Diagnostic only; joint acceptance still uses total elapsed time.",
+    "timeout_reference_seconds_per_image": 4.8,
+    "run_status": "completed",
+    "run_complete": true,
+    "completed_images": 14,
+    "unprocessed_images": 0,
+    "total_seconds_per_input_image": 3.378167407143337,
+    "actual_seconds_per_completed_image": 3.378167407143337,
+    "seconds_per_image_over_target": 0.3781674071433372,
+    "actual_to_target_time_ratio": 1.1260558023811125,
+    "input_images_per_second": 0.29601848561010924,
+    "relative_time_budget_seconds": 42.0,
+    "seconds_500_equivalent": 1689.0837035716686,
+    "relative_speed_target_met": false,
+    "all_inputs_have_confirmed_labels": true,
+    "output_complete": true,
+    "runtime_errors_zero": true,
+    "local_relative_joint_target_met": false,
+    "local_500_joint_target_met": null,
+    "actual_500_timeout_met": null,
+    "time_assessment": "internal_target_missed_within_hard_limit",
+    "scope": "Local measured run; see runtime.timing_scope for included costs. 500-equivalent is normalization, not a measured 500-image result; independent accuracy and official-environment acceptance are not established here."
+  }
+}

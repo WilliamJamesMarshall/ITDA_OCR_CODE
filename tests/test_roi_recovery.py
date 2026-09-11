@@ -72,7 +72,8 @@ class ROIRecoveryTest(unittest.TestCase):
         backend = Backend()
         with patch("src.pipeline._load_bgr", return_value=np.zeros((500, 500, 3), dtype=np.uint8)):
             prediction = predict_image(Path("unrelated.jpg"), backend, PipelineConfig())
-        self.assertEqual(prediction.final_date, "2021-06-20")
+        self.assertIsNone(prediction.final_date)
+        self.assertEqual(prediction.selection.policy_details['status'], 'REVIEW_REQUIRED')
         self.assertEqual(backend.calls, [("mobile", "original")])
 
     def test_pipeline_crops_damaged_date_before_readable_nutrition(self):
@@ -89,7 +90,8 @@ class ROIRecoveryTest(unittest.TestCase):
             "src.pipeline._crop_fragment", return_value=pixels,
         ) as crop:
             prediction = predict_image(Path("unrelated.jpg"), Backend(), PipelineConfig())
-        self.assertEqual(crop.call_args.args[1], damaged)
+        self.assertEqual(crop.call_args.args[1].text, damaged.text)
+        self.assertEqual(crop.call_args.args[1].box, damaged.box)
         self.assertEqual(prediction.final_date, "2021-09-02")
         self.assertEqual(prediction.passes, ("mobile:original", "mobile:roi-1"))
 
