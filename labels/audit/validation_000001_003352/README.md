@@ -9,3 +9,5 @@
 - `pipeline_submission_3352.csv`: 3,352장 전체의 OCR 파이프라인 최종 출력
 
 캐시, 미리보기, 크롭 이미지, 중간 체크포인트, `node_modules`, 샤드용 이미지 복제본은 재생성 가능한 임시 산출물이므로 저장소에서 제외한다.
+
+정답지를 수정한 뒤 `python scripts/manual_validation_guard.py sync --update-lock`으로 CSV·NDJSON·잠금 파일을 함께 갱신한다. 커밋·병합 전 검사는 `python scripts/manual_validation_guard.py check`로 실행한다.
