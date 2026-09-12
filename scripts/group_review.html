@@ -1,0 +1,21 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>상품 그룹 후보 검수</title>
+<style>body{font:16px system-ui;margin:24px;background:#f1f4f7;color:#15293d}header,nav{display:flex;gap:12px;align-items:center;flex-wrap:wrap}h1{font-size:24px}button,input,select{font:inherit;padding:10px}main{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}figure{margin:0;background:white;padding:12px}img{width:100%;height:62vh;object-fit:contain}figcaption{font-weight:700}#error{color:#a00}small{display:block;margin:12px 0}button.same{background:#166750;color:white}button.diff{background:#1c547e;color:white}</style>
+<header><h1>상품 그룹 후보 비교</h1><span id="stats"></span></header>
+<p>날짜가 달라도 같은 상품·포장 버전·연속 촬영·확대/회전 파생본이면 같은 그룹입니다. 비슷한 색상만으로 묶지 마세요.</p>
+<small>자동 유사 후보이며 확정 그룹이 아닙니다. 이 화면의 판단은 별도 저장됩니다. 기존 승인 주석·fold는 바꾸지 않습니다. 후보 밖의 동일 상품도 있을 수 있어 후보 검수만으로 전체 그룹 검증을 완료했다고 보지 않습니다.</small>
+<nav><input id="reviewer" placeholder="검수자 이름" value="사용자"><select id="filter"><option value="pending">미검수/보류</option><option value="all">전체</option></select><button id="prev">이전</button><button id="next">다음</button><span id="position"></span></nav>
+<main><figure><figcaption id="aid"></figcaption><img id="a"></figure><figure><figcaption id="bid"></figcaption><img id="b"></figure></main>
+<p id="metrics"></p><nav><button class="same" data-choice="same">같은 그룹 → 다음</button><button class="diff" data-choice="different">다른 그룹 → 다음</button><button data-choice="uncertain">판단 보류 → 다음</button></nav><p id="error" role="status"></p>
+<script>
+let pairs=[],decisions={},visible=[],index=0;const $=id=>document.getElementById(id);
+async function api(path,options){const r=await fetch(path,options);const data=await r.json();if(!r.ok)throw Error(data.error||r.status);return data}
+function render(){const p=visible[index];$('stats').textContent=`전체 ${pairs.length}쌍 · 판단 저장 ${Object.keys(decisions).length}쌍`;
+if(!p){$('position').textContent='현재 필터에 항목 없음';return} $('position').textContent=`${index+1} / ${visible.length}`;
+for(const side of ['a','b']){$(side+'id').textContent=p[side];$(side).src='/image/'+p[side]}
+$('metrics').textContent=`유사도 ${p.score} · pHash 거리 ${p.phash_distance} · 기존 판단 ${decisions[p.pair_id]?.decision||'미검수'} (유사도는 동일 상품 확률이 아닙니다)`}
+function filter(){visible=pairs.filter(p=>$('filter').value==='all'||!decisions[p.pair_id]||decisions[p.pair_id].decision==='uncertain');index=0;render()}
+$('filter').onchange=filter;$('prev').onclick=()=>{index=Math.max(0,index-1);render()};$('next').onclick=()=>{index=Math.min(visible.length-1,index+1);render()};
+for(const button of document.querySelectorAll('[data-choice]'))button.onclick=async()=>{const p=visible[index];if(!p)return;
+try{$('error').textContent='';const saved=await api('/api/decision',{method:'POST',headers:{'Content-Type':'application/json','X-Review-Token':'__TOKEN__'},body:JSON.stringify({pair_id:p.pair_id,decision:button.dataset.choice,reviewer:$('reviewer').value})});decisions[p.pair_id]=saved;index=Math.min(visible.length-1,index+1);render()}catch(e){$('error').textContent=e.message}};
+api('/api/data').then(data=>{pairs=data.pairs;decisions=data.decisions;filter()}).catch(e=>$('error').textContent=e.message);
+</script></html>

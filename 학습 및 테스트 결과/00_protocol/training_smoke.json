@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "completed_at": "2026-09-11T22:44:16+09:00",
+  "scope": "synthetic temporary data only; project images and labels were not read or changed",
+  "device": "cpu",
+  "cpu_threads": 4,
+  "python": "3.10.20",
+  "paddlepaddle": "3.2.2",
+  "epoch_num": 1,
+  "optimizer_train_samples": 16,
+  "inner_validation_samples": 8,
+  "train_iterations": 3,
+  "initial_checkpoint_loaded": true,
+  "saved_checkpoints": [
+    "latest.pdparams",
+    "iter_epoch_1.pdparams"
+  ],
+  "iter_epoch_1": {
+    "bytes": 110996479,
+    "sha256": "aae28c4c63110c0b8ac487a3199dd1f774cd40e56a44d11d258eba0f1eef4bcd"
+  },
+  "note": "This proves CPU forward/backward and checkpoint serialization. Synthetic metrics are not project performance evidence."
+}

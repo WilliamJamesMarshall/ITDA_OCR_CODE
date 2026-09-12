@@ -1,0 +1,5385 @@
+{
+  "schema_version": 1,
+  "image_id": "AMLC001909",
+  "source_image_id": "002761",
+  "image_path": "학습대상데이터/AMLC001909.jpg",
+  "image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+  "width": 1223,
+  "height": 789,
+  "source_dataset": "product",
+  "final_date": "2023-06-01",
+  "final_date_review": {
+    "status": "approved",
+    "scope": "normalized_final_date_only",
+    "reviewer": "user",
+    "method": "user_approved_workbook",
+    "source": {
+      "path": "상품사진_정답지/answer_000001_003352_manual.xlsx",
+      "sha256": "df1149e5032370d86494f5d1a1ea6865bf6402d15072bb6135f33e036c432b8c",
+      "rows": 3352,
+      "sheet": "검수 정답지",
+      "cell": "C2762"
+    }
+  },
+  "seen_in_development": false,
+  "legacy_metadata": {
+    "difficulty": "medium",
+    "condition_tags": [
+      "제조일자·소비기한 동시",
+      "다양한 구분자",
+      "full_date"
+    ]
+  },
+  "group_id": "sha256:18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+  "group_evidence": "초안: SHA-256 파일 동일성 기준. 동일 상품·연속 촬영 관계는 아직 미확정.",
+  "difficulty": "medium",
+  "quality_tags": [],
+  "notes": "",
+  "regions": [
+    {
+      "region_id": "cache_006",
+      "kind": "date_line",
+      "polygon": [
+        [
+          787.0,
+          162.0
+        ],
+        [
+          1223.0,
+          162.0
+        ],
+        [
+          1223.0,
+          184.0
+        ],
+        [
+          787.0,
+          184.0
+        ]
+      ],
+      "transcription": "infuse for 3-5 minutes. Add sugar, milk or lemon if",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 인쇄 표제와 역할 연결 근거가 없어 기타·불명으로 제안. 사진에서 확인 필요.",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "absent",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": "-.",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9576,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_020",
+      "kind": "date_line",
+      "polygon": [
+        [
+          607.0,
+          321.0
+        ],
+        [
+          753.0,
+          321.0
+        ],
+        [
+          753.0,
+          355.0
+        ],
+        [
+          607.0,
+          355.0
+        ]
+      ],
+      "transcription": "2020/06/01",
+      "role": "manufacture",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 같은 높이의 표제 cache_024 / PRODUCT INFORMATION",
+      "header_region_ids": [
+        "cache_024"
+      ],
+      "field_states": {
+        "year": "present",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": "/",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9988,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_024",
+      "kind": "header",
+      "polygon": [
+        [
+          872.0,
+          332.0
+        ],
+        [
+          1075.0,
+          332.0
+        ],
+        [
+          1075.0,
+          352.0
+        ],
+        [
+          872.0,
+          352.0
+        ]
+      ],
+      "transcription": "PRODUCT INFORMATION",
+      "role": "manufacture",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 원문 표제 단서 PRODUCT INFORMATION",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9605,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_026",
+      "kind": "date_line",
+      "polygon": [
+        [
+          609.0,
+          350.0
+        ],
+        [
+          755.0,
+          350.0
+        ],
+        [
+          755.0,
+          382.0
+        ],
+        [
+          609.0,
+          382.0
+        ]
+      ],
+      "transcription": "2023/06/01",
+      "role": "manufacture",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 같은 높이의 표제 cache_024 / PRODUCT INFORMATION",
+      "header_region_ids": [
+        "cache_024"
+      ],
+      "field_states": {
+        "year": "present",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": "/",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9978,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_066",
+      "kind": "date_line",
+      "polygon": [
+        [
+          80.0,
+          528.0
+        ],
+        [
+          515.0,
+          528.0
+        ],
+        [
+          515.0,
+          557.0
+        ],
+        [
+          80.0,
+          557.0
+        ]
+      ],
+      "transcription": "Bara HeTo/Macca HeTro/Ta3a caJMarbl/ Masa net",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 인쇄 표제와 역할 연결 근거가 없어 기타·불명으로 제안. 사진에서 확인 필요.",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "/",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9435,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [
+          "날짜 순서·부분 날짜·가려짐 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_074",
+      "kind": "date_line",
+      "polygon": [
+        [
+          620.0,
+          565.0
+        ],
+        [
+          733.0,
+          565.0
+        ],
+        [
+          733.0,
+          601.0
+        ],
+        [
+          620.0,
+          601.0
+        ]
+      ],
+      "transcription": "7.04 0z",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 인쇄 표제와 역할 연결 근거가 없어 기타·불명으로 제안. 사진에서 확인 필요.",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "absent",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": ".",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8897,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_080",
+      "kind": "date_line",
+      "polygon": [
+        [
+          263.0,
+          625.0
+        ],
+        [
+          853.0,
+          625.0
+        ],
+        [
+          853.0,
+          661.0
+        ],
+        [
+          263.0,
+          661.0
+        ]
+      ],
+      "transcription": "CocTaB: ga yepHbi axoBb ueoHckn MeJkn; apoMaTH3aTop,",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 인쇄 표제와 역할 연결 근거가 없어 기타·불명으로 제안. 사진에서 확인 필요.",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7389,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [
+          "OCR 신뢰도 낮음: 원문 확인",
+          "날짜 순서·부분 날짜·가려짐 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_092",
+      "kind": "date_line",
+      "polygon": [
+        [
+          265.0,
+          719.0
+        ],
+        [
+          456.0,
+          719.0
+        ],
+        [
+          456.0,
+          747.0
+        ],
+        [
+          265.0,
+          747.0
+        ]
+      ],
+      "transcription": "3aBapuBaTb 3-5 MHHyT",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 인쇄 표제와 역할 연결 근거가 없어 기타·불명으로 제안. 사진에서 확인 필요.",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "absent",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": "-",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8416,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [
+          "OCR 신뢰도 낮음: 원문 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    }
+  ],
+  "revision": 7,
+  "review": {
+    "status": "pending",
+    "reviewer": "user",
+    "approved_at": null,
+    "date_regions_complete": false,
+    "header_regions_complete": false,
+    "quality_reviewed": false,
+    "group_reviewed": false,
+    "no_date_regions": false
+  },
+  "draft": {
+    "method": "candidate_only_v1",
+    "human_verified": false,
+    "issues": [
+      "상품 그룹은 파일 동일성만 확인됨: 같은 상품·연속 촬영 확인 필요",
+      "반사·곡면·번짐 등 품질은 사진 대조 필요"
+    ],
+    "quality_basis": "기존 진단 태그 재사용; 태그 없음은 결함 없음이 아님",
+    "version": 2
+  },
+  "ocr_context": [
+    {
+      "region_id": "cache_000",
+      "kind": "other",
+      "polygon": [
+        [
+          657.0,
+          63.0
+        ],
+        [
+          1223.0,
+          63.0
+        ],
+        [
+          1223.0,
+          95.0
+        ],
+        [
+          657.0,
+          95.0
+        ]
+      ],
+      "transcription": "Akbar Tea is a blend of the finest small leaf Ceylon tea grown b",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9719,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_001",
+      "kind": "other",
+      "polygon": [
+        [
+          656.0,
+          81.0
+        ],
+        [
+          1223.0,
+          81.0
+        ],
+        [
+          1223.0,
+          114.0
+        ],
+        [
+          656.0,
+          114.0
+        ]
+      ],
+      "transcription": "feet in the mountain ranges of Ceylon where the air is crisp and pl",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9603,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_002",
+      "kind": "other",
+      "polygon": [
+        [
+          656.0,
+          102.0
+        ],
+        [
+          1134.0,
+          102.0
+        ],
+        [
+          1134.0,
+          126.0
+        ],
+        [
+          656.0,
+          126.0
+        ]
+      ],
+      "transcription": "pleasing aroma, bright colour and rich smooth flavour.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9818,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_003",
+      "kind": "other",
+      "polygon": [
+        [
+          791.0,
+          127.0
+        ],
+        [
+          1014.0,
+          127.0
+        ],
+        [
+          1014.0,
+          146.0
+        ],
+        [
+          791.0,
+          146.0
+        ]
+      ],
+      "transcription": "TO MAKE PERFECT TEA",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.974,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_004",
+      "kind": "other",
+      "polygon": [
+        [
+          654.0,
+          143.0
+        ],
+        [
+          750.0,
+          143.0
+        ],
+        [
+          750.0,
+          168.0
+        ],
+        [
+          654.0,
+          168.0
+        ]
+      ],
+      "transcription": "In a Cup:",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9849,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_005",
+      "kind": "other",
+      "polygon": [
+        [
+          786.0,
+          141.0
+        ],
+        [
+          1223.0,
+          141.0
+        ],
+        [
+          1223.0,
+          171.0
+        ],
+        [
+          786.0,
+          171.0
+        ]
+      ],
+      "transcription": "Put one AKBAR tea bag in a cup. Add fresh boiling",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9733,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_007",
+      "kind": "other",
+      "polygon": [
+        [
+          656.0,
+          194.0
+        ],
+        [
+          740.0,
+          194.0
+        ],
+        [
+          740.0,
+          214.0
+        ],
+        [
+          656.0,
+          214.0
+        ]
+      ],
+      "transcription": "In a Pot:",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9866,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_008",
+      "kind": "other",
+      "polygon": [
+        [
+          787.0,
+          193.0
+        ],
+        [
+          1222.0,
+          193.0
+        ],
+        [
+          1222.0,
+          216.0
+        ],
+        [
+          787.0,
+          216.0
+        ]
+      ],
+      "transcription": "Put one AKBAR tea bag for each person. Add fresh",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9881,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_009",
+      "kind": "other",
+      "polygon": [
+        [
+          119.0,
+          212.0
+        ],
+        [
+          525.0,
+          212.0
+        ],
+        [
+          525.0,
+          256.0
+        ],
+        [
+          119.0,
+          256.0
+        ]
+      ],
+      "transcription": "51014176118007901",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8345,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_010",
+      "kind": "other",
+      "polygon": [
+        [
+          790.0,
+          212.0
+        ],
+        [
+          1223.0,
+          212.0
+        ],
+        [
+          1223.0,
+          231.0
+        ],
+        [
+          790.0,
+          231.0
+        ]
+      ],
+      "transcription": "Leave it to infuse for at least 3 minutes before servin",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9917,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_011",
+      "kind": "other",
+      "polygon": [
+        [
+          656.0,
+          243.0
+        ],
+        [
+          1223.0,
+          243.0
+        ],
+        [
+          1223.0,
+          264.0
+        ],
+        [
+          656.0,
+          264.0
+        ]
+      ],
+      "transcription": "For Iced Tea: Prepare AKBAR hot tea at double strength. Pour int",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9702,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_012",
+      "kind": "other",
+      "polygon": [
+        [
+          788.0,
+          259.0
+        ],
+        [
+          1223.0,
+          259.0
+        ],
+        [
+          1223.0,
+          281.0
+        ],
+        [
+          788.0,
+          281.0
+        ]
+      ],
+      "transcription": "(melting ice will dilute to serving strength). Serve wi",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9888,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_013",
+      "kind": "other",
+      "polygon": [
+        [
+          71.0,
+          278.0
+        ],
+        [
+          479.0,
+          278.0
+        ],
+        [
+          479.0,
+          303.0
+        ],
+        [
+          71.0,
+          303.0
+        ]
+      ],
+      "transcription": "Packing Date/Date d'emballage/Verpackdatum",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9854,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_014",
+      "kind": "other",
+      "polygon": [
+        [
+          787.0,
+          275.0
+        ],
+        [
+          882.0,
+          275.0
+        ],
+        [
+          882.0,
+          297.0
+        ],
+        [
+          787.0,
+          297.0
+        ]
+      ],
+      "transcription": "as desired.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9944,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_015",
+      "kind": "other",
+      "polygon": [
+        [
+          73.0,
+          299.0
+        ],
+        [
+          576.0,
+          299.0
+        ],
+        [
+          576.0,
+          321.0
+        ],
+        [
+          73.0,
+          321.0
+        ]
+      ],
+      "transcription": "ara yⅡakyBaHHg/ M3roToBieH H ynakoBaH/KacairaH yakbIbI",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7613,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_016",
+      "kind": "other",
+      "polygon": [
+        [
+          883.0,
+          309.0
+        ],
+        [
+          1068.0,
+          309.0
+        ],
+        [
+          1068.0,
+          337.0
+        ],
+        [
+          883.0,
+          337.0
+        ]
+      ],
+      "transcription": "ABAR",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9781,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_017",
+      "kind": "other",
+      "polygon": [
+        [
+          1106.0,
+          309.0
+        ],
+        [
+          1166.0,
+          309.0
+        ],
+        [
+          1166.0,
+          322.0
+        ],
+        [
+          1106.0,
+          322.0
+        ]
+      ],
+      "transcription": "AKBAT TEA",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8342,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_018",
+      "kind": "other",
+      "polygon": [
+        [
+          1192.0,
+          305.0
+        ],
+        [
+          1223.0,
+          305.0
+        ],
+        [
+          1223.0,
+          319.0
+        ],
+        [
+          1192.0,
+          319.0
+        ]
+      ],
+      "transcription": "Harbe",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7293,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_019",
+      "kind": "other",
+      "polygon": [
+        [
+          75.0,
+          318.0
+        ],
+        [
+          409.0,
+          318.0
+        ],
+        [
+          409.0,
+          336.0
+        ],
+        [
+          75.0,
+          336.0
+        ]
+      ],
+      "transcription": "Ambalat la data de/lepakoanas datums",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9749,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_021",
+      "kind": "other",
+      "polygon": [
+        [
+          1191.0,
+          324.0
+        ],
+        [
+          1223.0,
+          324.0
+        ],
+        [
+          1223.0,
+          338.0
+        ],
+        [
+          1191.0,
+          338.0
+        ]
+      ],
+      "transcription": "Wartod",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9095,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_022",
+      "kind": "other",
+      "polygon": [
+        [
+          1192.0,
+          315.0
+        ],
+        [
+          1223.0,
+          315.0
+        ],
+        [
+          1223.0,
+          328.0
+        ],
+        [
+          1192.0,
+          328.0
+        ]
+      ],
+      "transcription": "Jakos",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7789,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_023",
+      "kind": "other",
+      "polygon": [
+        [
+          75.0,
+          331.0
+        ],
+        [
+          515.0,
+          331.0
+        ],
+        [
+          515.0,
+          360.0
+        ],
+        [
+          75.0,
+          360.0
+        ]
+      ],
+      "transcription": "lpakavimo data/Pakkimise kuupev/Data pakowania",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9914,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_025",
+      "kind": "other",
+      "polygon": [
+        [
+          1189.0,
+          332.0
+        ],
+        [
+          1223.0,
+          332.0
+        ],
+        [
+          1223.0,
+          348.0
+        ],
+        [
+          1189.0,
+          348.0
+        ]
+      ],
+      "transcription": "suchye",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7742,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_027",
+      "kind": "other",
+      "polygon": [
+        [
+          859.0,
+          347.0
+        ],
+        [
+          983.0,
+          347.0
+        ],
+        [
+          983.0,
+          379.0
+        ],
+        [
+          859.0,
+          379.0
+        ]
+      ],
+      "transcription": "ea with Bergamot",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.5993,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_028",
+      "kind": "other",
+      "polygon": [
+        [
+          75.0,
+          357.0
+        ],
+        [
+          371.0,
+          357.0
+        ],
+        [
+          371.0,
+          384.0
+        ],
+        [
+          75.0,
+          384.0
+        ]
+      ],
+      "transcription": "/",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4921,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_029",
+      "kind": "other",
+      "polygon": [
+        [
+          775.0,
+          357.0
+        ],
+        [
+          837.0,
+          357.0
+        ],
+        [
+          837.0,
+          370.0
+        ],
+        [
+          775.0,
+          370.0
+        ]
+      ],
+      "transcription": "AKBAR TEA",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9647,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_030",
+      "kind": "other",
+      "polygon": [
+        [
+          868.0,
+          357.0
+        ],
+        [
+          941.0,
+          357.0
+        ],
+        [
+          941.0,
+          370.0
+        ],
+        [
+          868.0,
+          370.0
+        ]
+      ],
+      "transcription": "Temwth Ber",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8391,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_031",
+      "kind": "other",
+      "polygon": [
+        [
+          1191.0,
+          350.0
+        ],
+        [
+          1222.0,
+          350.0
+        ],
+        [
+          1222.0,
+          364.0
+        ],
+        [
+          1191.0,
+          364.0
+        ]
+      ],
+      "transcription": "Toe m",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8092,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_032",
+      "kind": "other",
+      "polygon": [
+        [
+          885.0,
+          371.0
+        ],
+        [
+          900.0,
+          371.0
+        ],
+        [
+          900.0,
+          383.0
+        ],
+        [
+          885.0,
+          383.0
+        ]
+      ],
+      "transcription": "onle",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.404,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_033",
+      "kind": "other",
+      "polygon": [
+        [
+          1193.0,
+          366.0
+        ],
+        [
+          1216.0,
+          366.0
+        ],
+        [
+          1216.0,
+          376.0
+        ],
+        [
+          1193.0,
+          376.0
+        ]
+      ],
+      "transcription": "Kalo",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.6709,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_034",
+      "kind": "other",
+      "polygon": [
+        [
+          598.0,
+          374.0
+        ],
+        [
+          766.0,
+          374.0
+        ],
+        [
+          766.0,
+          412.0
+        ],
+        [
+          598.0,
+          412.0
+        ]
+      ],
+      "transcription": "LOTND: 86336",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9051,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_035",
+      "kind": "other",
+      "polygon": [
+        [
+          1196.0,
+          373.0
+        ],
+        [
+          1212.0,
+          373.0
+        ],
+        [
+          1212.0,
+          384.0
+        ],
+        [
+          1196.0,
+          384.0
+        ]
+      ],
+      "transcription": "ond",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4524,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_036",
+      "kind": "other",
+      "polygon": [
+        [
+          773.0,
+          393.0
+        ],
+        [
+          841.0,
+          393.0
+        ],
+        [
+          841.0,
+          411.0
+        ],
+        [
+          773.0,
+          411.0
+        ]
+      ],
+      "transcription": "THEAKBAR",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9631,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_037",
+      "kind": "other",
+      "polygon": [
+        [
+          1095.0,
+          394.0
+        ],
+        [
+          1129.0,
+          394.0
+        ],
+        [
+          1129.0,
+          407.0
+        ],
+        [
+          1095.0,
+          407.0
+        ]
+      ],
+      "transcription": "AKRAR",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.6569,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_038",
+      "kind": "other",
+      "polygon": [
+        [
+          1141.0,
+          395.0
+        ],
+        [
+          1165.0,
+          395.0
+        ],
+        [
+          1165.0,
+          402.0
+        ],
+        [
+          1141.0,
+          402.0
+        ]
+      ],
+      "transcription": "BAT",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.5378,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_039",
+      "kind": "other",
+      "polygon": [
+        [
+          1189.0,
+          388.0
+        ],
+        [
+          1217.0,
+          388.0
+        ],
+        [
+          1217.0,
+          403.0
+        ],
+        [
+          1189.0,
+          403.0
+        ]
+      ],
+      "transcription": "Barg",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.796,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_040",
+      "kind": "other",
+      "polygon": [
+        [
+          76.0,
+          400.0
+        ],
+        [
+          496.0,
+          400.0
+        ],
+        [
+          496.0,
+          424.0
+        ],
+        [
+          76.0,
+          424.0
+        ]
+      ],
+      "transcription": "Expiry Date/ Date d'expiration/ Verbrauchsdatum",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9854,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_041",
+      "kind": "other",
+      "polygon": [
+        [
+          870.0,
+          411.0
+        ],
+        [
+          879.0,
+          411.0
+        ],
+        [
+          879.0,
+          419.0
+        ],
+        [
+          870.0,
+          419.0
+        ]
+      ],
+      "transcription": "a",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4533,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_043",
+      "kind": "other",
+      "polygon": [
+        [
+          793.0,
+          421.0
+        ],
+        [
+          821.0,
+          421.0
+        ],
+        [
+          821.0,
+          434.0
+        ],
+        [
+          793.0,
+          434.0
+        ]
+      ],
+      "transcription": "FRN",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8725,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_044",
+      "kind": "other",
+      "polygon": [
+        [
+          78.0,
+          437.0
+        ],
+        [
+          417.0,
+          437.0
+        ],
+        [
+          417.0,
+          460.0
+        ],
+        [
+          78.0,
+          460.0
+        ]
+      ],
+      "transcription": "Expira la data de/ Izgatavoanas datums",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9694,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_045",
+      "kind": "other",
+      "polygon": [
+        [
+          775.0,
+          432.0
+        ],
+        [
+          841.0,
+          432.0
+        ],
+        [
+          841.0,
+          448.0
+        ],
+        [
+          775.0,
+          448.0
+        ]
+      ],
+      "transcription": "AKBAP VAR",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8978,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_046",
+      "kind": "other",
+      "polygon": [
+        [
+          861.0,
+          439.0
+        ],
+        [
+          948.0,
+          439.0
+        ],
+        [
+          948.0,
+          464.0
+        ],
+        [
+          861.0,
+          464.0
+        ]
+      ],
+      "transcription": "R",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.5406,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_047",
+      "kind": "other",
+      "polygon": [
+        [
+          865.0,
+          433.0
+        ],
+        [
+          975.0,
+          433.0
+        ],
+        [
+          975.0,
+          446.0
+        ],
+        [
+          865.0,
+          446.0
+        ]
+      ],
+      "transcription": "yaR o GepraMoTOM",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7284,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_048",
+      "kind": "other",
+      "polygon": [
+        [
+          1105.0,
+          431.0
+        ],
+        [
+          1131.0,
+          431.0
+        ],
+        [
+          1131.0,
+          441.0
+        ],
+        [
+          1105.0,
+          441.0
+        ]
+      ],
+      "transcription": "LARA",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.6989,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_049",
+      "kind": "other",
+      "polygon": [
+        [
+          75.0,
+          448.0
+        ],
+        [
+          492.0,
+          448.0
+        ],
+        [
+          492.0,
+          480.0
+        ],
+        [
+          75.0,
+          480.0
+        ]
+      ],
+      "transcription": "Pagaminimo data/ Parim enne/Data przydatnosci:",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.961,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_050",
+      "kind": "other",
+      "polygon": [
+        [
+          793.0,
+          458.0
+        ],
+        [
+          821.0,
+          458.0
+        ],
+        [
+          821.0,
+          470.0
+        ],
+        [
+          793.0,
+          470.0
+        ]
+      ],
+      "transcription": "RUB",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.877,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_051",
+      "kind": "other",
+      "polygon": [
+        [
+          866.0,
+          456.0
+        ],
+        [
+          950.0,
+          456.0
+        ],
+        [
+          950.0,
+          466.0
+        ],
+        [
+          866.0,
+          466.0
+        ]
+      ],
+      "transcription": "npoxnaaNoM MeoTe",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.5511,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_052",
+      "kind": "other",
+      "polygon": [
+        [
+          943.0,
+          449.0
+        ],
+        [
+          978.0,
+          449.0
+        ],
+        [
+          978.0,
+          459.0
+        ],
+        [
+          943.0,
+          459.0
+        ]
+      ],
+      "transcription": "HTeoy",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.6522,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_053",
+      "kind": "other",
+      "polygon": [
+        [
+          78.0,
+          471.0
+        ],
+        [
+          363.0,
+          471.0
+        ],
+        [
+          363.0,
+          499.0
+        ],
+        [
+          78.0,
+          499.0
+        ]
+      ],
+      "transcription": "mo/",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.3921,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_054",
+      "kind": "other",
+      "polygon": [
+        [
+          767.0,
+          467.0
+        ],
+        [
+          846.0,
+          467.0
+        ],
+        [
+          846.0,
+          485.0
+        ],
+        [
+          767.0,
+          485.0
+        ]
+      ],
+      "transcription": "AKRAPWARN",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8171,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_055",
+      "kind": "other",
+      "polygon": [
+        [
+          862.0,
+          463.0
+        ],
+        [
+          1008.0,
+          463.0
+        ],
+        [
+          1008.0,
+          481.0
+        ],
+        [
+          862.0,
+          481.0
+        ]
+      ],
+      "transcription": "EepraMoT AaMl Cap uaR",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8046,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_056",
+      "kind": "other",
+      "polygon": [
+        [
+          863.0,
+          474.0
+        ],
+        [
+          946.0,
+          474.0
+        ],
+        [
+          946.0,
+          494.0
+        ],
+        [
+          863.0,
+          494.0
+        ]
+      ],
+      "transcription": "HRD",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.2222,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_057",
+      "kind": "other",
+      "polygon": [
+        [
+          882.0,
+          481.0
+        ],
+        [
+          895.0,
+          481.0
+        ],
+        [
+          895.0,
+          488.0
+        ],
+        [
+          882.0,
+          488.0
+        ]
+      ],
+      "transcription": "0",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.1516,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_058",
+      "kind": "other",
+      "polygon": [
+        [
+          547.0,
+          493.0
+        ],
+        [
+          744.0,
+          493.0
+        ],
+        [
+          744.0,
+          583.0
+        ],
+        [
+          547.0,
+          583.0
+        ]
+      ],
+      "transcription": "200g/paM",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9368,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_059",
+      "kind": "other",
+      "polygon": [
+        [
+          795.0,
+          495.0
+        ],
+        [
+          818.0,
+          495.0
+        ],
+        [
+          818.0,
+          505.0
+        ],
+        [
+          795.0,
+          505.0
+        ]
+      ],
+      "transcription": "KAZ",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9687,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_060",
+      "kind": "other",
+      "polygon": [
+        [
+          1119.0,
+          488.0
+        ],
+        [
+          1137.0,
+          488.0
+        ],
+        [
+          1137.0,
+          498.0
+        ],
+        [
+          1119.0,
+          498.0
+        ]
+      ],
+      "transcription": "EST",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.5789,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_061",
+      "kind": "other",
+      "polygon": [
+        [
+          772.0,
+          507.0
+        ],
+        [
+          841.0,
+          507.0
+        ],
+        [
+          841.0,
+          520.0
+        ],
+        [
+          772.0,
+          520.0
+        ]
+      ],
+      "transcription": "CEAIAKHAR",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9076,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_062",
+      "kind": "other",
+      "polygon": [
+        [
+          861.0,
+          501.0
+        ],
+        [
+          970.0,
+          501.0
+        ],
+        [
+          970.0,
+          520.0
+        ],
+        [
+          861.0,
+          520.0
+        ]
+      ],
+      "transcription": "Ceal ou bergamot",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9265,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_063",
+      "kind": "other",
+      "polygon": [
+        [
+          1096.0,
+          498.0
+        ],
+        [
+          1159.0,
+          498.0
+        ],
+        [
+          1159.0,
+          514.0
+        ],
+        [
+          1096.0,
+          514.0
+        ]
+      ],
+      "transcription": "AKRAR TRIA",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8297,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_064",
+      "kind": "other",
+      "polygon": [
+        [
+          80.0,
+          513.0
+        ],
+        [
+          416.0,
+          513.0
+        ],
+        [
+          416.0,
+          539.0
+        ],
+        [
+          80.0,
+          539.0
+        ]
+      ],
+      "transcription": "Nett Weight/Poids Net Netto Gewicht/",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9762,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_065",
+      "kind": "other",
+      "polygon": [
+        [
+          916.0,
+          514.0
+        ],
+        [
+          945.0,
+          514.0
+        ],
+        [
+          945.0,
+          527.0
+        ],
+        [
+          916.0,
+          527.0
+        ]
+      ],
+      "transcription": "emiun",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4239,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_067",
+      "kind": "other",
+      "polygon": [
+        [
+          797.0,
+          531.0
+        ],
+        [
+          818.0,
+          531.0
+        ],
+        [
+          818.0,
+          540.0
+        ],
+        [
+          797.0,
+          540.0
+        ]
+      ],
+      "transcription": "RUM",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9684,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_068",
+      "kind": "other",
+      "polygon": [
+        [
+          888.0,
+          530.0
+        ],
+        [
+          914.0,
+          530.0
+        ],
+        [
+          914.0,
+          537.0
+        ],
+        [
+          888.0,
+          537.0
+        ]
+      ],
+      "transcription": "DaB0",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.2067,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_069",
+      "kind": "other",
+      "polygon": [
+        [
+          1095.0,
+          539.0
+        ],
+        [
+          1117.0,
+          539.0
+        ],
+        [
+          1117.0,
+          553.0
+        ],
+        [
+          1095.0,
+          553.0
+        ]
+      ],
+      "transcription": "Kao",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4536,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_070",
+      "kind": "other",
+      "polygon": [
+        [
+          1182.0,
+          535.0
+        ],
+        [
+          1204.0,
+          535.0
+        ],
+        [
+          1204.0,
+          544.0
+        ],
+        [
+          1182.0,
+          544.0
+        ]
+      ],
+      "transcription": "5ao",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.3695,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_071",
+      "kind": "other",
+      "polygon": [
+        [
+          83.0,
+          547.0
+        ],
+        [
+          465.0,
+          547.0
+        ],
+        [
+          465.0,
+          574.0
+        ],
+        [
+          83.0,
+          574.0
+        ]
+      ],
+      "transcription": "Neto svars/ Neto svoris/ Netokaal/Waga netto",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9731,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_072",
+      "kind": "other",
+      "polygon": [
+        [
+          791.0,
+          547.0
+        ],
+        [
+          841.0,
+          547.0
+        ],
+        [
+          841.0,
+          564.0
+        ],
+        [
+          791.0,
+          564.0
+        ]
+      ],
+      "transcription": "SIusLt",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.3975,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_073",
+      "kind": "other",
+      "polygon": [
+        [
+          82.0,
+          565.0
+        ],
+        [
+          321.0,
+          565.0
+        ],
+        [
+          321.0,
+          597.0
+        ],
+        [
+          82.0,
+          597.0
+        ]
+      ],
+      "transcription": "bggos m6s/l",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4958,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_075",
+      "kind": "other",
+      "polygon": [
+        [
+          960.0,
+          571.0
+        ],
+        [
+          966.0,
+          571.0
+        ],
+        [
+          966.0,
+          576.0
+        ],
+        [
+          960.0,
+          576.0
+        ]
+      ],
+      "transcription": "-",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.911,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_076",
+      "kind": "other",
+      "polygon": [
+        [
+          969.0,
+          562.0
+        ],
+        [
+          1004.0,
+          562.0
+        ],
+        [
+          1004.0,
+          574.0
+        ],
+        [
+          969.0,
+          574.0
+        ]
+      ],
+      "transcription": "-0",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7606,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_077",
+      "kind": "other",
+      "polygon": [
+        [
+          799.0,
+          576.0
+        ],
+        [
+          818.0,
+          576.0
+        ],
+        [
+          818.0,
+          583.0
+        ],
+        [
+          799.0,
+          583.0
+        ]
+      ],
+      "transcription": "AIVV",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.6487,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_078",
+      "kind": "other",
+      "polygon": [
+        [
+          260.0,
+          596.0
+        ],
+        [
+          888.0,
+          596.0
+        ],
+        [
+          888.0,
+          643.0
+        ],
+        [
+          260.0,
+          643.0
+        ]
+      ],
+      "transcription": "Ha yepHbi ueroHcku c apoMaToM 6epraMora AKBAP \"rPA rPE\"",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7449,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_079",
+      "kind": "other",
+      "polygon": [
+        [
+          967.0,
+          610.0
+        ],
+        [
+          1223.0,
+          610.0
+        ],
+        [
+          1223.0,
+          647.0
+        ],
+        [
+          967.0,
+          647.0
+        ]
+      ],
+      "transcription": "FULLY AUTOMATICALLY PACKED EXCI",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9732,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_081",
+      "kind": "other",
+      "polygon": [
+        [
+          127.0,
+          651.0
+        ],
+        [
+          217.0,
+          651.0
+        ],
+        [
+          217.0,
+          687.0
+        ],
+        [
+          127.0,
+          687.0
+        ]
+      ],
+      "transcription": "EDBYAKBARG",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9062,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_082",
+      "kind": "other",
+      "polygon": [
+        [
+          263.0,
+          651.0
+        ],
+        [
+          513.0,
+          651.0
+        ],
+        [
+          513.0,
+          680.0
+        ],
+        [
+          263.0,
+          680.0
+        ]
+      ],
+      "transcription": "HeHTnHbI HaTypaIbHOMy",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.5751,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_083",
+      "kind": "other",
+      "polygon": [
+        [
+          957.0,
+          634.0
+        ],
+        [
+          1223.0,
+          634.0
+        ],
+        [
+          1223.0,
+          666.0
+        ],
+        [
+          957.0,
+          666.0
+        ]
+      ],
+      "transcription": "Empaqeté a Sri Lanka par / Abgepackt in Sri Lank",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9434,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_084",
+      "kind": "other",
+      "polygon": [
+        [
+          960.0,
+          647.0
+        ],
+        [
+          1223.0,
+          647.0
+        ],
+        [
+          1223.0,
+          678.0
+        ],
+        [
+          960.0,
+          678.0
+        ]
+      ],
+      "transcription": "YnacoBanme y Wpi-laul/WpunaHcana xacann",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7198,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_085",
+      "kind": "other",
+      "polygon": [
+        [
+          211.0,
+          678.0
+        ],
+        [
+          218.0,
+          678.0
+        ],
+        [
+          218.0,
+          686.0
+        ],
+        [
+          211.0,
+          686.0
+        ]
+      ],
+      "transcription": "5",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.6171,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_086",
+      "kind": "other",
+      "polygon": [
+        [
+          265.0,
+          664.0
+        ],
+        [
+          796.0,
+          664.0
+        ],
+        [
+          796.0,
+          700.0
+        ],
+        [
+          265.0,
+          700.0
+        ]
+      ],
+      "transcription": "100 qaHbIx nakerhcoB no 2 rpaMMa B KoHBeprax c apIbIqkoM",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7541,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_087",
+      "kind": "other",
+      "polygon": [
+        [
+          948.0,
+          658.0
+        ],
+        [
+          1223.0,
+          658.0
+        ],
+        [
+          1223.0,
+          693.0
+        ],
+        [
+          948.0,
+          693.0
+        ]
+      ],
+      "transcription": "lepakota Srilanka /Supakuota Srlankoje/Pakitud",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9615,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_088",
+      "kind": "other",
+      "polygon": [
+        [
+          102.0,
+          690.0
+        ],
+        [
+          131.0,
+          690.0
+        ],
+        [
+          131.0,
+          748.0
+        ],
+        [
+          102.0,
+          748.0
+        ]
+      ],
+      "transcription": "oII",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.2038,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_089",
+      "kind": "other",
+      "polygon": [
+        [
+          209.0,
+          683.0
+        ],
+        [
+          243.0,
+          683.0
+        ],
+        [
+          243.0,
+          757.0
+        ],
+        [
+          209.0,
+          757.0
+        ]
+      ],
+      "transcription": "ROTHERS PI",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.8345,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_091",
+      "kind": "other",
+      "polygon": [
+        [
+          942.0,
+          673.0
+        ],
+        [
+          1223.0,
+          673.0
+        ],
+        [
+          1223.0,
+          709.0
+        ],
+        [
+          942.0,
+          709.0
+        ]
+      ],
+      "transcription": "w Sai Lance pez/oao-ob",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4506,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_093",
+      "kind": "other",
+      "polygon": [
+        [
+          1044.0,
+          729.0
+        ],
+        [
+          1223.0,
+          729.0
+        ],
+        [
+          1223.0,
+          763.0
+        ],
+        [
+          1044.0,
+          763.0
+        ]
+      ],
+      "transcription": "Akbar Brothers (P",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9447,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_094",
+      "kind": "other",
+      "polygon": [
+        [
+          124.0,
+          747.0
+        ],
+        [
+          177.0,
+          747.0
+        ],
+        [
+          177.0,
+          784.0
+        ],
+        [
+          124.0,
+          784.0
+        ]
+      ],
+      "transcription": "LITVIS",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4247,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_095",
+      "kind": "other",
+      "polygon": [
+        [
+          164.0,
+          743.0
+        ],
+        [
+          228.0,
+          743.0
+        ],
+        [
+          228.0,
+          787.0
+        ],
+        [
+          164.0,
+          787.0
+        ]
+      ],
+      "transcription": "'OTLA",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.4156,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_096",
+      "kind": "other",
+      "polygon": [
+        [
+          337.0,
+          749.0
+        ],
+        [
+          553.0,
+          749.0
+        ],
+        [
+          553.0,
+          778.0
+        ],
+        [
+          337.0,
+          778.0
+        ]
+      ],
+      "transcription": "Nutrition Facts",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9954,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_097",
+      "kind": "other",
+      "polygon": [
+        [
+          653.0,
+          746.0
+        ],
+        [
+          959.0,
+          746.0
+        ],
+        [
+          959.0,
+          786.0
+        ],
+        [
+          653.0,
+          786.0
+        ]
+      ],
+      "transcription": "Store in a cool dry place.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9704,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_098",
+      "kind": "other",
+      "polygon": [
+        [
+          987.0,
+          751.0
+        ],
+        [
+          1223.0,
+          751.0
+        ],
+        [
+          1223.0,
+          787.0
+        ],
+        [
+          987.0,
+          787.0
+        ]
+      ],
+      "transcription": "334, T.B Jayah Mawatha, Colon",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.973,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_100",
+      "kind": "other",
+      "polygon": [
+        [
+          1160.0,
+          776.0
+        ],
+        [
+          1221.0,
+          776.0
+        ],
+        [
+          1221.0,
+          789.0
+        ],
+        [
+          1160.0,
+          789.0
+        ]
+      ],
+      "transcription": ")Eay:(9",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.6588,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      }
+    },
+    {
+      "region_id": "cache_042",
+      "kind": "other",
+      "polygon": [
+        [
+          79.0,
+          418.0
+        ],
+        [
+          458.0,
+          418.0
+        ],
+        [
+          458.0,
+          443.0
+        ],
+        [
+          79.0,
+          443.0
+        ]
+      ],
+      "transcription": "TepMiH 36epiraHHs/ToneH 1o/CakTay Mep3iMi",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "/",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.9101,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_text_and_source_hints_v1",
+        "issues": [
+          "날짜 순서·부분 날짜·가려짐 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_090",
+      "kind": "other",
+      "polygon": [
+        [
+          264.0,
+          678.0
+        ],
+        [
+          894.0,
+          678.0
+        ],
+        [
+          894.0,
+          724.0
+        ],
+        [
+          264.0,
+          724.0
+        ]
+      ],
+      "transcription": "XpaHnTh B HoMemeHnn c oTHocnTeJbHo BIaKHocTbIO Bo3uyXa He Bhime 70%",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7166,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_text_and_source_hints_v1",
+        "issues": [
+          "OCR 신뢰도 낮음: 원문 확인",
+          "날짜 순서·부분 날짜·가려짐 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "cache_099",
+      "kind": "other",
+      "polygon": [
+        [
+          463.0,
+          777.0
+        ],
+        [
+          558.0,
+          777.0
+        ],
+        [
+          558.0,
+          789.0
+        ],
+        [
+          463.0,
+          789.0
+        ]
+      ],
+      "transcription": "0.(.07.0z/2.08)",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "./",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "historical_cpu_ocr_import",
+        "score": 0.7623,
+        "path": "artifacts/country-date-report-20260909/ocr_evidence.jsonl",
+        "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+        "source_image_id": "002761",
+        "historical_image_sha256": null,
+        "current_image_sha256": "18c18dea00cd5f51d9c4b950b7b3d59a20fd2a0f9530b2909a3f51bd494b0c56",
+        "geometry": "resized_oriented_box_to_stored_raster",
+        "warning": "당시 이미지 해시 미기록. 현재 파일 연결 및 크기 확인; 사진 대조 필요."
+      },
+      "draft": {
+        "method": "literal_text_and_source_hints_v1",
+        "issues": [
+          "OCR 신뢰도 낮음: 원문 확인",
+          "날짜 순서·부분 날짜·가려짐 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    }
+  ],
+  "ocr_draft_pass": {
+    "status": "completed",
+    "method": "historical_cpu_ocr_import",
+    "created_at": "2026-09-11T16:41:59.903531+00:00",
+    "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8",
+    "historical_image_hash_available": false
+  },
+  "quality_draft_measurements": {
+    "method": "raw_date_crop_pixel_heuristics_v1",
+    "regions": [
+      {
+        "region_id": "cache_006",
+        "height": 22,
+        "contrast": 52.95,
+        "laplacian_variance": 8226.32
+      },
+      {
+        "region_id": "cache_020",
+        "height": 34,
+        "contrast": 78.83,
+        "laplacian_variance": 8596.13
+      },
+      {
+        "region_id": "cache_026",
+        "height": 32,
+        "contrast": 81.06,
+        "laplacian_variance": 10600.74
+      },
+      {
+        "region_id": "cache_066",
+        "height": 29,
+        "contrast": 60.61,
+        "laplacian_variance": 10832.0
+      },
+      {
+        "region_id": "cache_074",
+        "height": 36,
+        "contrast": 65.81,
+        "laplacian_variance": 3707.84
+      },
+      {
+        "region_id": "cache_080",
+        "height": 36,
+        "contrast": 52.83,
+        "laplacian_variance": 7450.48
+      },
+      {
+        "region_id": "cache_092",
+        "height": 28,
+        "contrast": 58.54,
+        "laplacian_variance": 9760.81
+      }
+    ],
+    "unmeasured": [
+      "reflection",
+      "curved",
+      "bleed",
+      "dot_print",
+      "occlusion"
+    ],
+    "warning": "미검수 픽셀 기반 후보이며, 태그가 없다고 결함이 없는 것은 아님"
+  },
+  "user_draft_approval": {
+    "status": "approved",
+    "method": "explicit_user_bulk_approval",
+    "decision": "주석은 전부 초안 그대로 승인한다. 남은 작업 시작해",
+    "reviewer": "user",
+    "approved_at": "2026-09-11T17:31:25.111674+00:00",
+    "approved_revision": 5,
+    "approved_snapshot_sha256": "26d138ba89b8a8b8fc19610dc1f1677a4840e8b3a5e60182831f2ce5f64510e6",
+    "individual_visual_inspection_claimed": false
+  },
+  "training_readiness": {
+    "status": "blocked_missing_annotation",
+    "blockers": [
+      "cache_066: confirm each date field visibility",
+      "cache_080: confirm each date field visibility"
+    ]
+  },
+  "user_acceptance": {
+    "status": "approved",
+    "method": "explicit_user_chat_bulk_as_is",
+    "decision_id": "user-as-is-approval-20260912",
+    "accepted_source_sha256": "1f0bf149050dfec0e8bf1be6bd3032761393e9020933c9ef9b68a1c5058d66b5",
+    "individually_visually_verified": false,
+    "scope": "existing_draft_as_is_not_missing_annotations"
+  }
+}

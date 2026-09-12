@@ -1,0 +1,6938 @@
+{
+  "schema_version": 1,
+  "original_size": [
+    3060,
+    4080
+  ],
+  "coordinate_space": "exif_oriented_image_edges",
+  "frames": [
+    {
+      "pass_id": "p001",
+      "detector": "mobile",
+      "variant": "original",
+      "geometry": {
+        "width": 3060,
+        "height": 4080,
+        "to_original": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "pass_id": "p002",
+      "detector": "mobile",
+      "variant": "label-roi",
+      "geometry": {
+        "width": 2576,
+        "height": 672,
+        "to_original": [
+          0.5,
+          0.0,
+          552,
+          0.0,
+          0.5,
+          2000
+        ]
+      }
+    },
+    {
+      "pass_id": "p003",
+      "detector": "recognition-only",
+      "variant": "label-rows",
+      "geometry": {
+        "width": 3060,
+        "height": 4080,
+        "to_original": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "pass_id": "p004",
+      "detector": "mobile",
+      "variant": "clahe",
+      "geometry": {
+        "width": 3060,
+        "height": 4080,
+        "to_original": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "pass_id": "p005",
+      "detector": "recovery",
+      "variant": "original",
+      "geometry": {
+        "width": 3060,
+        "height": 4080,
+        "to_original": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "pass_id": "p006",
+      "detector": "mobile",
+      "variant": "rot180",
+      "geometry": {
+        "width": 3060,
+        "height": 4080,
+        "to_original": [
+          -1.0,
+          0.0,
+          3060,
+          0.0,
+          -1.0,
+          4080
+        ]
+      }
+    },
+    {
+      "pass_id": "p007",
+      "detector": "mobile",
+      "variant": "rot90",
+      "geometry": {
+        "width": 4080,
+        "height": 3060,
+        "to_original": [
+          0.0,
+          1.0,
+          0.0,
+          -1.0,
+          0.0,
+          4080
+        ]
+      }
+    },
+    {
+      "pass_id": "p008",
+      "detector": "mobile",
+      "variant": "rot270",
+      "geometry": {
+        "width": 4080,
+        "height": 3060,
+        "to_original": [
+          0.0,
+          -1.0,
+          3060,
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "p001:o0001",
+      "region_id": "r0001",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "소비기한",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9997581839561462,
+      "local_box": [
+        1560.0,
+        2168.0,
+        1756.0,
+        2252.0
+      ],
+      "local_polygon": [
+        [
+          1560.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2252.0
+        ],
+        [
+          1560.0,
+          2252.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1560.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2252.0
+        ],
+        [
+          1560.0,
+          2252.0
+        ]
+      ],
+      "original_box": [
+        1560.0,
+        2168.0,
+        1756.0,
+        2252.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [
+        {
+          "role": "expiry",
+          "text": "소비기한",
+          "span": [
+            0,
+            4
+          ],
+          "basis": "lexical_only"
+        }
+      ],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p001:o0002",
+      "region_id": "r0002",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "더맞있게",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8549341559410095,
+      "local_box": [
+        882.0,
+        2187.0,
+        1108.0,
+        2288.0
+      ],
+      "local_polygon": [
+        [
+          882.0,
+          2194.0
+        ],
+        [
+          1105.0,
+          2187.0
+        ],
+        [
+          1108.0,
+          2281.0
+        ],
+        [
+          885.0,
+          2288.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          882.0,
+          2194.0
+        ],
+        [
+          1105.0,
+          2187.0
+        ],
+        [
+          1108.0,
+          2281.0
+        ],
+        [
+          885.0,
+          2288.0
+        ]
+      ],
+      "original_box": [
+        882.0,
+        2187.0,
+        1108.0,
+        2288.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p001:o0003",
+      "region_id": "r0003",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "오로록",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7709410190582275,
+      "local_box": [
+        385.0,
+        2219.0,
+        730.0,
+        2510.0
+      ],
+      "local_polygon": [
+        [
+          463.0,
+          2219.0
+        ],
+        [
+          730.0,
+          2360.0
+        ],
+        [
+          653.0,
+          2510.0
+        ],
+        [
+          385.0,
+          2369.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          463.0,
+          2219.0
+        ],
+        [
+          730.0,
+          2360.0
+        ],
+        [
+          653.0,
+          2510.0
+        ],
+        [
+          385.0,
+          2369.0
+        ]
+      ],
+      "original_box": [
+        385.0,
+        2219.0,
+        730.0,
+        2510.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p001:o0004",
+      "region_id": "r0004",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "먹고 싶다고?",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9322346448898315,
+      "local_box": [
+        883.0,
+        2252.0,
+        1180.0,
+        2351.0
+      ],
+      "local_polygon": [
+        [
+          883.0,
+          2252.0
+        ],
+        [
+          1180.0,
+          2252.0
+        ],
+        [
+          1180.0,
+          2351.0
+        ],
+        [
+          883.0,
+          2351.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          883.0,
+          2252.0
+        ],
+        [
+          1180.0,
+          2252.0
+        ],
+        [
+          1180.0,
+          2351.0
+        ],
+        [
+          883.0,
+          2351.0
+        ]
+      ],
+      "original_box": [
+        883.0,
+        2252.0,
+        1180.0,
+        2351.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p001:o0005",
+      "region_id": "r0005",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "그럼말아보자",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9180929064750671,
+      "local_box": [
+        886.0,
+        2336.0,
+        1195.0,
+        2428.0
+      ],
+      "local_polygon": [
+        [
+          886.0,
+          2336.0
+        ],
+        [
+          1195.0,
+          2336.0
+        ],
+        [
+          1195.0,
+          2428.0
+        ],
+        [
+          886.0,
+          2428.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          886.0,
+          2336.0
+        ],
+        [
+          1195.0,
+          2336.0
+        ],
+        [
+          1195.0,
+          2428.0
+        ],
+        [
+          886.0,
+          2428.0
+        ]
+      ],
+      "original_box": [
+        886.0,
+        2336.0,
+        1195.0,
+        2428.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p001:o0006",
+      "region_id": "r0006",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "수식",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7033529281616211,
+      "local_box": [
+        56.0,
+        2293.0,
+        235.0,
+        2466.0
+      ],
+      "local_polygon": [
+        [
+          56.0,
+          2390.0
+        ],
+        [
+          175.0,
+          2293.0
+        ],
+        [
+          235.0,
+          2369.0
+        ],
+        [
+          116.0,
+          2466.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          56.0,
+          2390.0
+        ],
+        [
+          175.0,
+          2293.0
+        ],
+        [
+          235.0,
+          2369.0
+        ],
+        [
+          116.0,
+          2466.0
+        ]
+      ],
+      "original_box": [
+        56.0,
+        2293.0,
+        235.0,
+        2466.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p001:o0007",
+      "region_id": "r0007",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "COl",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.629642903804779,
+      "local_box": [
+        881.0,
+        2392.0,
+        1150.0,
+        2545.0
+      ],
+      "local_polygon": [
+        [
+          881.0,
+          2392.0
+        ],
+        [
+          1150.0,
+          2392.0
+        ],
+        [
+          1150.0,
+          2545.0
+        ],
+        [
+          881.0,
+          2545.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          881.0,
+          2392.0
+        ],
+        [
+          1150.0,
+          2392.0
+        ],
+        [
+          1150.0,
+          2545.0
+        ],
+        [
+          881.0,
+          2545.0
+        ]
+      ],
+      "original_box": [
+        881.0,
+        2392.0,
+        1150.0,
+        2545.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p001:o0008",
+      "region_id": "r0008",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1574.0,
+        2340.0,
+        2291.0,
+        2454.0
+      ],
+      "local_polygon": [
+        [
+          1574.0,
+          2365.0
+        ],
+        [
+          2288.0,
+          2340.0
+        ],
+        [
+          2291.0,
+          2429.0
+        ],
+        [
+          1577.0,
+          2454.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1574.0,
+          2365.0
+        ],
+        [
+          2288.0,
+          2340.0
+        ],
+        [
+          2291.0,
+          2429.0
+        ],
+        [
+          1577.0,
+          2454.0
+        ]
+      ],
+      "original_box": [
+        1574.0,
+        2340.0,
+        2291.0,
+        2454.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p001:o0009",
+      "region_id": "r0009",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1084.0,
+        2850.0,
+        1413.0,
+        3127.0
+      ],
+      "local_polygon": [
+        [
+          1084.0,
+          2879.0
+        ],
+        [
+          1390.0,
+          2850.0
+        ],
+        [
+          1413.0,
+          3098.0
+        ],
+        [
+          1107.0,
+          3127.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1084.0,
+          2879.0
+        ],
+        [
+          1390.0,
+          2850.0
+        ],
+        [
+          1413.0,
+          3098.0
+        ],
+        [
+          1107.0,
+          3127.0
+        ]
+      ],
+      "original_box": [
+        1084.0,
+        2850.0,
+        1413.0,
+        3127.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p002:o0001",
+      "region_id": "r0001",
+      "pass_id": "p002",
+      "source": "paddle-mobile",
+      "variant": "label-roi",
+      "text": "소비기한",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.999897837638855,
+      "local_box": [
+        2032.0,
+        352.0,
+        2402.0,
+        498.0
+      ],
+      "local_polygon": [
+        [
+          2032.0,
+          352.0
+        ],
+        [
+          2402.0,
+          352.0
+        ],
+        [
+          2402.0,
+          498.0
+        ],
+        [
+          2032.0,
+          498.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1568.0,
+          2176.0
+        ],
+        [
+          1753.0,
+          2176.0
+        ],
+        [
+          1753.0,
+          2249.0
+        ],
+        [
+          1568.0,
+          2249.0
+        ]
+      ],
+      "original_box": [
+        1568.0,
+        2176.0,
+        1753.0,
+        2249.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [
+        {
+          "role": "expiry",
+          "text": "소비기한",
+          "span": [
+            0,
+            4
+          ],
+          "basis": "lexical_only"
+        }
+      ],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p002:o0002",
+      "region_id": "r0010",
+      "pass_id": "p002",
+      "source": "paddle-mobile",
+      "variant": "label-roi",
+      "text": "더맛있게",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9075427055358887,
+      "local_box": [
+        675.0,
+        401.0,
+        1098.0,
+        557.0
+      ],
+      "local_polygon": [
+        [
+          675.0,
+          401.0
+        ],
+        [
+          1098.0,
+          401.0
+        ],
+        [
+          1098.0,
+          557.0
+        ],
+        [
+          675.0,
+          557.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          889.5,
+          2200.5
+        ],
+        [
+          1101.0,
+          2200.5
+        ],
+        [
+          1101.0,
+          2278.5
+        ],
+        [
+          889.5,
+          2278.5
+        ]
+      ],
+      "original_box": [
+        889.5,
+        2200.5,
+        1101.0,
+        2278.5
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p002:o0003",
+      "region_id": "r0011",
+      "pass_id": "p002",
+      "source": "paddle-mobile",
+      "variant": "label-roi",
+      "text": "먹고 싶다고?",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9384183883666992,
+      "local_box": [
+        677.0,
+        525.0,
+        1232.0,
+        672.0
+      ],
+      "local_polygon": [
+        [
+          679.0,
+          525.0
+        ],
+        [
+          1232.0,
+          529.0
+        ],
+        [
+          1231.0,
+          672.0
+        ],
+        [
+          677.0,
+          672.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          891.5,
+          2262.5
+        ],
+        [
+          1168.0,
+          2264.5
+        ],
+        [
+          1167.5,
+          2336.0
+        ],
+        [
+          890.5,
+          2336.0
+        ]
+      ],
+      "original_box": [
+        890.5,
+        2262.5,
+        1168.0,
+        2336.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0001",
+      "region_id": "r0012",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "불업",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.45375415682792664,
+      "local_box": [
+        1811.0,
+        527.0,
+        2412.0,
+        916.0
+      ],
+      "local_polygon": [
+        [
+          1832.0,
+          527.0
+        ],
+        [
+          2412.0,
+          562.0
+        ],
+        [
+          2391.0,
+          916.0
+        ],
+        [
+          1811.0,
+          881.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1832.0,
+          527.0
+        ],
+        [
+          2412.0,
+          562.0
+        ],
+        [
+          2391.0,
+          916.0
+        ],
+        [
+          1811.0,
+          881.0
+        ]
+      ],
+      "original_box": [
+        1811.0,
+        527.0,
+        2412.0,
+        916.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0002",
+      "region_id": "r0013",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "업",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.853468656539917,
+      "local_box": [
+        2645.0,
+        622.0,
+        3052.0,
+        900.0
+      ],
+      "local_polygon": [
+        [
+          2645.0,
+          622.0
+        ],
+        [
+          3052.0,
+          622.0
+        ],
+        [
+          3052.0,
+          900.0
+        ],
+        [
+          2645.0,
+          900.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2645.0,
+          622.0
+        ],
+        [
+          3052.0,
+          622.0
+        ],
+        [
+          3052.0,
+          900.0
+        ],
+        [
+          2645.0,
+          900.0
+        ]
+      ],
+      "original_box": [
+        2645.0,
+        622.0,
+        3052.0,
+        900.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0003",
+      "region_id": "r0001",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "소비기한",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9979817271232605,
+      "local_box": [
+        1558.0,
+        2162.0,
+        1762.0,
+        2257.0
+      ],
+      "local_polygon": [
+        [
+          1558.0,
+          2162.0
+        ],
+        [
+          1762.0,
+          2162.0
+        ],
+        [
+          1762.0,
+          2257.0
+        ],
+        [
+          1558.0,
+          2257.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1558.0,
+          2162.0
+        ],
+        [
+          1762.0,
+          2162.0
+        ],
+        [
+          1762.0,
+          2257.0
+        ],
+        [
+          1558.0,
+          2257.0
+        ]
+      ],
+      "original_box": [
+        1558.0,
+        2162.0,
+        1762.0,
+        2257.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [
+        {
+          "role": "expiry",
+          "text": "소비기한",
+          "span": [
+            0,
+            4
+          ],
+          "basis": "lexical_only"
+        }
+      ],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0004",
+      "region_id": "r0002",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "더막있게",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7282454371452332,
+      "local_box": [
+        883.0,
+        2185.0,
+        1117.0,
+        2287.0
+      ],
+      "local_polygon": [
+        [
+          883.0,
+          2185.0
+        ],
+        [
+          1117.0,
+          2185.0
+        ],
+        [
+          1117.0,
+          2287.0
+        ],
+        [
+          883.0,
+          2287.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          883.0,
+          2185.0
+        ],
+        [
+          1117.0,
+          2185.0
+        ],
+        [
+          1117.0,
+          2287.0
+        ],
+        [
+          883.0,
+          2287.0
+        ]
+      ],
+      "original_box": [
+        883.0,
+        2185.0,
+        1117.0,
+        2287.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0002"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0005",
+      "region_id": "r0004",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "먹고싶다고?",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9818022847175598,
+      "local_box": [
+        883.0,
+        2249.0,
+        1183.0,
+        2351.0
+      ],
+      "local_polygon": [
+        [
+          883.0,
+          2249.0
+        ],
+        [
+          1183.0,
+          2249.0
+        ],
+        [
+          1183.0,
+          2351.0
+        ],
+        [
+          883.0,
+          2351.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          883.0,
+          2249.0
+        ],
+        [
+          1183.0,
+          2249.0
+        ],
+        [
+          1183.0,
+          2351.0
+        ],
+        [
+          883.0,
+          2351.0
+        ]
+      ],
+      "original_box": [
+        883.0,
+        2249.0,
+        1183.0,
+        2351.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0004"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0006",
+      "region_id": "r0005",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "그럼말아보자",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8300079703330994,
+      "local_box": [
+        877.0,
+        2322.0,
+        1201.0,
+        2431.0
+      ],
+      "local_polygon": [
+        [
+          880.0,
+          2322.0
+        ],
+        [
+          1201.0,
+          2332.0
+        ],
+        [
+          1198.0,
+          2431.0
+        ],
+        [
+          877.0,
+          2422.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          880.0,
+          2322.0
+        ],
+        [
+          1201.0,
+          2332.0
+        ],
+        [
+          1198.0,
+          2431.0
+        ],
+        [
+          877.0,
+          2422.0
+        ]
+      ],
+      "original_box": [
+        877.0,
+        2322.0,
+        1201.0,
+        2431.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0005"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0007",
+      "region_id": "r0007",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "Gol",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.4523567855358124,
+      "local_box": [
+        873.0,
+        2384.0,
+        1155.0,
+        2555.0
+      ],
+      "local_polygon": [
+        [
+          873.0,
+          2384.0
+        ],
+        [
+          1155.0,
+          2384.0
+        ],
+        [
+          1155.0,
+          2555.0
+        ],
+        [
+          873.0,
+          2555.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          873.0,
+          2384.0
+        ],
+        [
+          1155.0,
+          2384.0
+        ],
+        [
+          1155.0,
+          2555.0
+        ],
+        [
+          873.0,
+          2555.0
+        ]
+      ],
+      "original_box": [
+        873.0,
+        2384.0,
+        1155.0,
+        2555.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0007"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0008",
+      "region_id": "r0014",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "나수작",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.425774484872818,
+      "local_box": [
+        0.0,
+        2240.0,
+        269.0,
+        2584.0
+      ],
+      "local_polygon": [
+        [
+          0.0,
+          2495.0
+        ],
+        [
+          158.0,
+          2240.0
+        ],
+        [
+          269.0,
+          2329.0
+        ],
+        [
+          69.0,
+          2584.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          0.0,
+          2495.0
+        ],
+        [
+          158.0,
+          2240.0
+        ],
+        [
+          269.0,
+          2329.0
+        ],
+        [
+          69.0,
+          2584.0
+        ]
+      ],
+      "original_box": [
+        0.0,
+        2240.0,
+        269.0,
+        2584.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0009",
+      "region_id": "r0008",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1577.0,
+        2340.0,
+        2288.0,
+        2454.0
+      ],
+      "local_polygon": [
+        [
+          1577.0,
+          2362.0
+        ],
+        [
+          2286.0,
+          2340.0
+        ],
+        [
+          2288.0,
+          2432.0
+        ],
+        [
+          1580.0,
+          2454.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1577.0,
+          2362.0
+        ],
+        [
+          2286.0,
+          2340.0
+        ],
+        [
+          2288.0,
+          2432.0
+        ],
+        [
+          1580.0,
+          2454.0
+        ]
+      ],
+      "original_box": [
+        1577.0,
+        2340.0,
+        2288.0,
+        2454.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0008"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p005:o0001",
+      "region_id": "r0015",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "SnURE",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.35400035977363586,
+      "local_box": [
+        2546.0,
+        43.0,
+        2739.0,
+        103.0
+      ],
+      "local_polygon": [
+        [
+          2548.0,
+          43.0
+        ],
+        [
+          2739.0,
+          52.0
+        ],
+        [
+          2736.0,
+          103.0
+        ],
+        [
+          2546.0,
+          94.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2548.0,
+          43.0
+        ],
+        [
+          2739.0,
+          52.0
+        ],
+        [
+          2736.0,
+          103.0
+        ],
+        [
+          2546.0,
+          94.0
+        ]
+      ],
+      "original_box": [
+        2546.0,
+        43.0,
+        2739.0,
+        103.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0002",
+      "region_id": "r0016",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "놀업",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.5053524374961853,
+      "local_box": [
+        2516.0,
+        551.0,
+        3060.0,
+        1012.0
+      ],
+      "local_polygon": [
+        [
+          2516.0,
+          551.0
+        ],
+        [
+          3060.0,
+          551.0
+        ],
+        [
+          3060.0,
+          1012.0
+        ],
+        [
+          2516.0,
+          1012.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2516.0,
+          551.0
+        ],
+        [
+          3060.0,
+          551.0
+        ],
+        [
+          3060.0,
+          1012.0
+        ],
+        [
+          2516.0,
+          1012.0
+        ]
+      ],
+      "original_box": [
+        2516.0,
+        551.0,
+        3060.0,
+        1012.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0003",
+      "region_id": "r0001",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "소비기한",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9995827674865723,
+      "local_box": [
+        1558.0,
+        2168.0,
+        1756.0,
+        2252.0
+      ],
+      "local_polygon": [
+        [
+          1558.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2252.0
+        ],
+        [
+          1558.0,
+          2252.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1558.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2168.0
+        ],
+        [
+          1756.0,
+          2252.0
+        ],
+        [
+          1558.0,
+          2252.0
+        ]
+      ],
+      "original_box": [
+        1558.0,
+        2168.0,
+        1756.0,
+        2252.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [
+        {
+          "role": "expiry",
+          "text": "소비기한",
+          "span": [
+            0,
+            4
+          ],
+          "basis": "lexical_only"
+        }
+      ],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0004",
+      "region_id": "r0017",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "오도록",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7613509297370911,
+      "local_box": [
+        359.0,
+        2182.0,
+        764.0,
+        2538.0
+      ],
+      "local_polygon": [
+        [
+          459.0,
+          2182.0
+        ],
+        [
+          764.0,
+          2350.0
+        ],
+        [
+          663.0,
+          2538.0
+        ],
+        [
+          359.0,
+          2370.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          459.0,
+          2182.0
+        ],
+        [
+          764.0,
+          2350.0
+        ],
+        [
+          663.0,
+          2538.0
+        ],
+        [
+          359.0,
+          2370.0
+        ]
+      ],
+      "original_box": [
+        359.0,
+        2182.0,
+        764.0,
+        2538.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0005",
+      "region_id": "r0018",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "더맛있게",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7492951154708862,
+      "local_box": [
+        881.0,
+        2188.0,
+        1107.0,
+        2282.0
+      ],
+      "local_polygon": [
+        [
+          881.0,
+          2188.0
+        ],
+        [
+          1107.0,
+          2188.0
+        ],
+        [
+          1107.0,
+          2282.0
+        ],
+        [
+          881.0,
+          2282.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          881.0,
+          2188.0
+        ],
+        [
+          1107.0,
+          2188.0
+        ],
+        [
+          1107.0,
+          2282.0
+        ],
+        [
+          881.0,
+          2282.0
+        ]
+      ],
+      "original_box": [
+        881.0,
+        2188.0,
+        1107.0,
+        2282.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0002",
+        "r0010"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0006",
+      "region_id": "r0004",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "먹고 싶다고?",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9463491439819336,
+      "local_box": [
+        878.0,
+        2248.0,
+        1178.0,
+        2347.0
+      ],
+      "local_polygon": [
+        [
+          880.0,
+          2248.0
+        ],
+        [
+          1178.0,
+          2255.0
+        ],
+        [
+          1176.0,
+          2347.0
+        ],
+        [
+          878.0,
+          2340.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          880.0,
+          2248.0
+        ],
+        [
+          1178.0,
+          2255.0
+        ],
+        [
+          1176.0,
+          2347.0
+        ],
+        [
+          878.0,
+          2340.0
+        ]
+      ],
+      "original_box": [
+        878.0,
+        2248.0,
+        1178.0,
+        2347.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0004"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0007",
+      "region_id": "r0005",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "그럼말아보자",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8101268410682678,
+      "local_box": [
+        881.0,
+        2328.0,
+        1200.0,
+        2430.0
+      ],
+      "local_polygon": [
+        [
+          881.0,
+          2328.0
+        ],
+        [
+          1200.0,
+          2328.0
+        ],
+        [
+          1200.0,
+          2430.0
+        ],
+        [
+          881.0,
+          2430.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          881.0,
+          2328.0
+        ],
+        [
+          1200.0,
+          2328.0
+        ],
+        [
+          1200.0,
+          2430.0
+        ],
+        [
+          881.0,
+          2430.0
+        ]
+      ],
+      "original_box": [
+        881.0,
+        2328.0,
+        1200.0,
+        2430.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0005"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0008",
+      "region_id": "r0007",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "GOl",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.6322088241577148,
+      "local_box": [
+        871.0,
+        2389.0,
+        1150.0,
+        2542.0
+      ],
+      "local_polygon": [
+        [
+          871.0,
+          2389.0
+        ],
+        [
+          1150.0,
+          2389.0
+        ],
+        [
+          1150.0,
+          2542.0
+        ],
+        [
+          871.0,
+          2542.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          871.0,
+          2389.0
+        ],
+        [
+          1150.0,
+          2389.0
+        ],
+        [
+          1150.0,
+          2542.0
+        ],
+        [
+          871.0,
+          2542.0
+        ]
+      ],
+      "original_box": [
+        871.0,
+        2389.0,
+        1150.0,
+        2542.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0007"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0009",
+      "region_id": "r0019",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "사",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.366678386926651,
+      "local_box": [
+        0.0,
+        2175.0,
+        337.0,
+        2639.0
+      ],
+      "local_polygon": [
+        [
+          0.0,
+          2489.0
+        ],
+        [
+          182.0,
+          2175.0
+        ],
+        [
+          337.0,
+          2326.0
+        ],
+        [
+          42.0,
+          2639.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          0.0,
+          2489.0
+        ],
+        [
+          182.0,
+          2175.0
+        ],
+        [
+          337.0,
+          2326.0
+        ],
+        [
+          42.0,
+          2639.0
+        ]
+      ],
+      "original_box": [
+        0.0,
+        2175.0,
+        337.0,
+        2639.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0010",
+      "region_id": "r0008",
+      "pass_id": "p005",
+      "source": "paddle-recovery",
+      "variant": "original",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1572.0,
+        2348.0,
+        2283.0,
+        2446.0
+      ],
+      "local_polygon": [
+        [
+          1572.0,
+          2364.0
+        ],
+        [
+          2281.0,
+          2348.0
+        ],
+        [
+          2283.0,
+          2430.0
+        ],
+        [
+          1574.0,
+          2446.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1572.0,
+          2364.0
+        ],
+        [
+          2281.0,
+          2348.0
+        ],
+        [
+          2283.0,
+          2430.0
+        ],
+        [
+          1574.0,
+          2446.0
+        ]
+      ],
+      "original_box": [
+        1572.0,
+        2348.0,
+        2283.0,
+        2446.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0008"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p006:o0001",
+      "region_id": "r0007",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "~i0",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7717660069465637,
+      "local_box": [
+        1911.0,
+        1523.0,
+        2183.0,
+        1687.0
+      ],
+      "local_polygon": [
+        [
+          1917.0,
+          1523.0
+        ],
+        [
+          2183.0,
+          1534.0
+        ],
+        [
+          2178.0,
+          1687.0
+        ],
+        [
+          1911.0,
+          1676.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1143.0,
+          2557.0
+        ],
+        [
+          877.0,
+          2546.0
+        ],
+        [
+          882.0,
+          2393.0
+        ],
+        [
+          1149.0,
+          2404.0
+        ]
+      ],
+      "original_box": [
+        877.0,
+        2393.0,
+        1149.0,
+        2557.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0007"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p006:o0002",
+      "region_id": "r0020",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "늘능",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.375759482383728,
+      "local_box": [
+        2313.0,
+        1554.0,
+        2674.0,
+        1866.0
+      ],
+      "local_polygon": [
+        [
+          2399.0,
+          1554.0
+        ],
+        [
+          2674.0,
+          1703.0
+        ],
+        [
+          2588.0,
+          1866.0
+        ],
+        [
+          2313.0,
+          1717.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          661.0,
+          2526.0
+        ],
+        [
+          386.0,
+          2377.0
+        ],
+        [
+          472.0,
+          2214.0
+        ],
+        [
+          747.0,
+          2363.0
+        ]
+      ],
+      "original_box": [
+        386.0,
+        2214.0,
+        747.0,
+        2526.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0003",
+        "r0017"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p006:o0003",
+      "region_id": "r0005",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "신",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.3259114623069763,
+      "local_box": [
+        1862.0,
+        1644.0,
+        2175.0,
+        1742.0
+      ],
+      "local_polygon": [
+        [
+          1863.0,
+          1644.0
+        ],
+        [
+          2175.0,
+          1650.0
+        ],
+        [
+          2173.0,
+          1742.0
+        ],
+        [
+          1862.0,
+          1736.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1197.0,
+          2436.0
+        ],
+        [
+          885.0,
+          2430.0
+        ],
+        [
+          887.0,
+          2338.0
+        ],
+        [
+          1198.0,
+          2344.0
+        ]
+      ],
+      "original_box": [
+        885.0,
+        2338.0,
+        1198.0,
+        2436.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0005"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p006:o0004",
+      "region_id": "r0021",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "IK",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.3872092366218567,
+      "local_box": [
+        1955.0,
+        1795.0,
+        2172.0,
+        1882.0
+      ],
+      "local_polygon": [
+        [
+          1955.0,
+          1795.0
+        ],
+        [
+          2172.0,
+          1795.0
+        ],
+        [
+          2172.0,
+          1882.0
+        ],
+        [
+          1955.0,
+          1882.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1105.0,
+          2285.0
+        ],
+        [
+          888.0,
+          2285.0
+        ],
+        [
+          888.0,
+          2198.0
+        ],
+        [
+          1105.0,
+          2198.0
+        ]
+      ],
+      "original_box": [
+        888.0,
+        2198.0,
+        1105.0,
+        2285.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0002",
+        "r0010",
+        "r0018"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p006:o0005",
+      "region_id": "r0001",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "∠",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.20070411264896393,
+      "local_box": [
+        1301.0,
+        1826.0,
+        1500.0,
+        1910.0
+      ],
+      "local_polygon": [
+        [
+          1301.0,
+          1826.0
+        ],
+        [
+          1500.0,
+          1826.0
+        ],
+        [
+          1500.0,
+          1910.0
+        ],
+        [
+          1301.0,
+          1910.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1759.0,
+          2254.0
+        ],
+        [
+          1560.0,
+          2254.0
+        ],
+        [
+          1560.0,
+          2170.0
+        ],
+        [
+          1759.0,
+          2170.0
+        ]
+      ],
+      "original_box": [
+        1560.0,
+        2170.0,
+        1759.0,
+        2254.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p006:o0006",
+      "region_id": "r0013",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "T물",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.2493240386247635,
+      "local_box": [
+        10.0,
+        3149.0,
+        431.0,
+        3443.0
+      ],
+      "local_polygon": [
+        [
+          10.0,
+          3165.0
+        ],
+        [
+          420.0,
+          3149.0
+        ],
+        [
+          431.0,
+          3427.0
+        ],
+        [
+          20.0,
+          3443.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          3050.0,
+          915.0
+        ],
+        [
+          2640.0,
+          931.0
+        ],
+        [
+          2629.0,
+          653.0
+        ],
+        [
+          3040.0,
+          637.0
+        ]
+      ],
+      "original_box": [
+        2629.0,
+        637.0,
+        3050.0,
+        931.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0013"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p006:o0007",
+      "region_id": "r0022",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "경들",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.2634254992008209,
+      "local_box": [
+        803.0,
+        3233.0,
+        1213.0,
+        3455.0
+      ],
+      "local_polygon": [
+        [
+          803.0,
+          3233.0
+        ],
+        [
+          1213.0,
+          3233.0
+        ],
+        [
+          1213.0,
+          3455.0
+        ],
+        [
+          803.0,
+          3455.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2257.0,
+          847.0
+        ],
+        [
+          1847.0,
+          847.0
+        ],
+        [
+          1847.0,
+          625.0
+        ],
+        [
+          2257.0,
+          625.0
+        ]
+      ],
+      "original_box": [
+        1847.0,
+        625.0,
+        2257.0,
+        847.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p006:o0008",
+      "region_id": "r0023",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        559.0,
+        296.0,
+        649.0,
+        362.0
+      ],
+      "local_polygon": [
+        [
+          559.0,
+          296.0
+        ],
+        [
+          649.0,
+          296.0
+        ],
+        [
+          649.0,
+          362.0
+        ],
+        [
+          559.0,
+          362.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2501.0,
+          3784.0
+        ],
+        [
+          2411.0,
+          3784.0
+        ],
+        [
+          2411.0,
+          3718.0
+        ],
+        [
+          2501.0,
+          3718.0
+        ]
+      ],
+      "original_box": [
+        2411.0,
+        3718.0,
+        2501.0,
+        3784.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p006:o0009",
+      "region_id": "r0024",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1242.0,
+        632.0,
+        2153.0,
+        1434.0
+      ],
+      "local_polygon": [
+        [
+          1443.0,
+          632.0
+        ],
+        [
+          2153.0,
+          912.0
+        ],
+        [
+          1952.0,
+          1434.0
+        ],
+        [
+          1242.0,
+          1154.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1617.0,
+          3448.0
+        ],
+        [
+          907.0,
+          3168.0
+        ],
+        [
+          1108.0,
+          2646.0
+        ],
+        [
+          1818.0,
+          2926.0
+        ]
+      ],
+      "original_box": [
+        907.0,
+        2646.0,
+        1818.0,
+        3448.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p006:o0010",
+      "region_id": "r0008",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        769.0,
+        1624.0,
+        1483.0,
+        1732.0
+      ],
+      "local_polygon": [
+        [
+          769.0,
+          1643.0
+        ],
+        [
+          1481.0,
+          1624.0
+        ],
+        [
+          1483.0,
+          1713.0
+        ],
+        [
+          772.0,
+          1732.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2291.0,
+          2437.0
+        ],
+        [
+          1579.0,
+          2456.0
+        ],
+        [
+          1577.0,
+          2367.0
+        ],
+        [
+          2288.0,
+          2348.0
+        ]
+      ],
+      "original_box": [
+        1577.0,
+        2348.0,
+        2291.0,
+        2456.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0008"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p006:o0011",
+      "region_id": "r0004",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1884.0,
+        1723.0,
+        2175.0,
+        1821.0
+      ],
+      "local_polygon": [
+        [
+          1886.0,
+          1723.0
+        ],
+        [
+          2175.0,
+          1730.0
+        ],
+        [
+          2173.0,
+          1821.0
+        ],
+        [
+          1884.0,
+          1815.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1174.0,
+          2357.0
+        ],
+        [
+          885.0,
+          2350.0
+        ],
+        [
+          887.0,
+          2259.0
+        ],
+        [
+          1176.0,
+          2265.0
+        ]
+      ],
+      "original_box": [
+        885.0,
+        2259.0,
+        1176.0,
+        2357.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0004"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p006:o0012",
+      "region_id": "r0025",
+      "pass_id": "p006",
+      "source": "paddle-mobile",
+      "variant": "rot180",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2796.0,
+        1576.0,
+        3012.0,
+        1810.0
+      ],
+      "local_polygon": [
+        [
+          2796.0,
+          1739.0
+        ],
+        [
+          2924.0,
+          1576.0
+        ],
+        [
+          3012.0,
+          1647.0
+        ],
+        [
+          2884.0,
+          1810.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          264.0,
+          2341.0
+        ],
+        [
+          136.0,
+          2504.0
+        ],
+        [
+          48.0,
+          2433.0
+        ],
+        [
+          176.0,
+          2270.0
+        ]
+      ],
+      "original_box": [
+        48.0,
+        2270.0,
+        264.0,
+        2504.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p007:o0001",
+      "region_id": "r0019",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "나사식",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.21975405514240265,
+      "local_box": [
+        1506.0,
+        0.0,
+        1901.0,
+        355.0
+      ],
+      "local_polygon": [
+        [
+          1506.0,
+          41.0
+        ],
+        [
+          1705.0,
+          0.0
+        ],
+        [
+          1901.0,
+          233.0
+        ],
+        [
+          1702.0,
+          355.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          41.0,
+          2574.0
+        ],
+        [
+          0.0,
+          2375.0
+        ],
+        [
+          233.0,
+          2179.0
+        ],
+        [
+          355.0,
+          2378.0
+        ]
+      ],
+      "original_box": [
+        0.0,
+        2179.0,
+        355.0,
+        2574.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0019"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0002",
+      "region_id": "r0026",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "오로독",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7034879326820374,
+      "local_box": [
+        1566.0,
+        390.0,
+        1856.0,
+        727.0
+      ],
+      "local_polygon": [
+        [
+          1700.0,
+          390.0
+        ],
+        [
+          1856.0,
+          470.0
+        ],
+        [
+          1722.0,
+          727.0
+        ],
+        [
+          1566.0,
+          648.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          390.0,
+          2380.0
+        ],
+        [
+          470.0,
+          2224.0
+        ],
+        [
+          727.0,
+          2358.0
+        ],
+        [
+          648.0,
+          2514.0
+        ]
+      ],
+      "original_box": [
+        390.0,
+        2224.0,
+        727.0,
+        2514.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0003",
+        "r0020"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0003",
+      "region_id": "r0027",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "A",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.22947871685028076,
+      "local_box": [
+        362.0,
+        559.0,
+        943.0,
+        1175.0
+      ],
+      "local_polygon": [
+        [
+          362.0,
+          740.0
+        ],
+        [
+          712.0,
+          559.0
+        ],
+        [
+          943.0,
+          994.0
+        ],
+        [
+          594.0,
+          1175.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          740.0,
+          3718.0
+        ],
+        [
+          559.0,
+          3368.0
+        ],
+        [
+          994.0,
+          3137.0
+        ],
+        [
+          1175.0,
+          3486.0
+        ]
+      ],
+      "original_box": [
+        559.0,
+        3137.0,
+        1175.0,
+        3718.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0004",
+      "region_id": "r0007",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "GOl~",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.858820378780365,
+      "local_box": [
+        1536.0,
+        881.0,
+        1673.0,
+        1144.0
+      ],
+      "local_polygon": [
+        [
+          1548.0,
+          881.0
+        ],
+        [
+          1673.0,
+          887.0
+        ],
+        [
+          1661.0,
+          1144.0
+        ],
+        [
+          1536.0,
+          1138.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          881.0,
+          2532.0
+        ],
+        [
+          887.0,
+          2407.0
+        ],
+        [
+          1144.0,
+          2419.0
+        ],
+        [
+          1138.0,
+          2544.0
+        ]
+      ],
+      "original_box": [
+        881.0,
+        2407.0,
+        1144.0,
+        2544.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0007"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0005",
+      "region_id": "r0005",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "그렇말아보자",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8636254668235779,
+      "local_box": [
+        1647.0,
+        881.0,
+        1747.0,
+        1195.0
+      ],
+      "local_polygon": [
+        [
+          1647.0,
+          881.0
+        ],
+        [
+          1747.0,
+          881.0
+        ],
+        [
+          1747.0,
+          1195.0
+        ],
+        [
+          1647.0,
+          1195.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          881.0,
+          2433.0
+        ],
+        [
+          881.0,
+          2333.0
+        ],
+        [
+          1195.0,
+          2333.0
+        ],
+        [
+          1195.0,
+          2433.0
+        ]
+      ],
+      "original_box": [
+        881.0,
+        2333.0,
+        1195.0,
+        2433.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0005"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0006",
+      "region_id": "r0028",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "먹고 싶다고?",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9747632741928101,
+      "local_box": [
+        1737.0,
+        888.0,
+        1821.0,
+        1170.0
+      ],
+      "local_polygon": [
+        [
+          1737.0,
+          888.0
+        ],
+        [
+          1821.0,
+          888.0
+        ],
+        [
+          1821.0,
+          1170.0
+        ],
+        [
+          1737.0,
+          1170.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          888.0,
+          2343.0
+        ],
+        [
+          888.0,
+          2259.0
+        ],
+        [
+          1170.0,
+          2259.0
+        ],
+        [
+          1170.0,
+          2343.0
+        ]
+      ],
+      "original_box": [
+        888.0,
+        2259.0,
+        1170.0,
+        2343.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0004",
+        "r0011"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0007",
+      "region_id": "r0029",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "5",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.1817815601825714,
+      "local_box": [
+        1816.0,
+        906.0,
+        1861.0,
+        946.0
+      ],
+      "local_polygon": [
+        [
+          1816.0,
+          906.0
+        ],
+        [
+          1861.0,
+          906.0
+        ],
+        [
+          1861.0,
+          946.0
+        ],
+        [
+          1816.0,
+          946.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          906.0,
+          2264.0
+        ],
+        [
+          906.0,
+          2219.0
+        ],
+        [
+          946.0,
+          2219.0
+        ],
+        [
+          946.0,
+          2264.0
+        ]
+      ],
+      "original_box": [
+        906.0,
+        2219.0,
+        946.0,
+        2264.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0008",
+      "region_id": "r0030",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "맞있게",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8251381516456604,
+      "local_box": [
+        1795.0,
+        929.0,
+        1874.0,
+        1087.0
+      ],
+      "local_polygon": [
+        [
+          1795.0,
+          929.0
+        ],
+        [
+          1874.0,
+          929.0
+        ],
+        [
+          1874.0,
+          1087.0
+        ],
+        [
+          1795.0,
+          1087.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          929.0,
+          2285.0
+        ],
+        [
+          929.0,
+          2206.0
+        ],
+        [
+          1087.0,
+          2206.0
+        ],
+        [
+          1087.0,
+          2285.0
+        ]
+      ],
+      "original_box": [
+        929.0,
+        2206.0,
+        1087.0,
+        2285.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0009",
+      "region_id": "r0031",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "X",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.3474021852016449,
+      "local_box": [
+        620.0,
+        949.0,
+        638.0,
+        969.0
+      ],
+      "local_polygon": [
+        [
+          620.0,
+          949.0
+        ],
+        [
+          638.0,
+          949.0
+        ],
+        [
+          638.0,
+          969.0
+        ],
+        [
+          620.0,
+          969.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          949.0,
+          3460.0
+        ],
+        [
+          949.0,
+          3442.0
+        ],
+        [
+          969.0,
+          3442.0
+        ],
+        [
+          969.0,
+          3460.0
+        ]
+      ],
+      "original_box": [
+        949.0,
+        3442.0,
+        969.0,
+        3460.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0010",
+      "region_id": "r0032",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "4",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.6938755512237549,
+      "local_box": [
+        1744.0,
+        1427.0,
+        1818.0,
+        1460.0
+      ],
+      "local_polygon": [
+        [
+          1744.0,
+          1427.0
+        ],
+        [
+          1818.0,
+          1427.0
+        ],
+        [
+          1818.0,
+          1460.0
+        ],
+        [
+          1744.0,
+          1460.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1427.0,
+          2336.0
+        ],
+        [
+          1427.0,
+          2262.0
+        ],
+        [
+          1460.0,
+          2262.0
+        ],
+        [
+          1460.0,
+          2336.0
+        ]
+      ],
+      "original_box": [
+        1427.0,
+        2262.0,
+        1460.0,
+        2336.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0011",
+      "region_id": "r0001",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "소비기한",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9995619058609009,
+      "local_box": [
+        1821.0,
+        1560.0,
+        1915.0,
+        1756.0
+      ],
+      "local_polygon": [
+        [
+          1821.0,
+          1560.0
+        ],
+        [
+          1915.0,
+          1560.0
+        ],
+        [
+          1915.0,
+          1756.0
+        ],
+        [
+          1821.0,
+          1756.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1560.0,
+          2259.0
+        ],
+        [
+          1560.0,
+          2165.0
+        ],
+        [
+          1756.0,
+          2165.0
+        ],
+        [
+          1756.0,
+          2259.0
+        ]
+      ],
+      "original_box": [
+        1560.0,
+        2165.0,
+        1756.0,
+        2259.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [
+        {
+          "role": "expiry",
+          "text": "소비기한",
+          "span": [
+            0,
+            4
+          ],
+          "basis": "lexical_only"
+        }
+      ],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0012",
+      "region_id": "r0033",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "u",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.4994552731513977,
+      "local_box": [
+        3216.0,
+        1920.0,
+        3320.0,
+        2066.0
+      ],
+      "local_polygon": [
+        [
+          3216.0,
+          1920.0
+        ],
+        [
+          3320.0,
+          1920.0
+        ],
+        [
+          3320.0,
+          2066.0
+        ],
+        [
+          3216.0,
+          2066.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1920.0,
+          864.0
+        ],
+        [
+          1920.0,
+          760.0
+        ],
+        [
+          2066.0,
+          760.0
+        ],
+        [
+          2066.0,
+          864.0
+        ]
+      ],
+      "original_box": [
+        1920.0,
+        760.0,
+        2066.0,
+        864.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0013",
+      "region_id": "r0034",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "A",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.23156535625457764,
+      "local_box": [
+        3302.0,
+        1912.0,
+        3435.0,
+        2033.0
+      ],
+      "local_polygon": [
+        [
+          3302.0,
+          1912.0
+        ],
+        [
+          3435.0,
+          1912.0
+        ],
+        [
+          3435.0,
+          2033.0
+        ],
+        [
+          3302.0,
+          2033.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1912.0,
+          778.0
+        ],
+        [
+          1912.0,
+          645.0
+        ],
+        [
+          2033.0,
+          645.0
+        ],
+        [
+          2033.0,
+          778.0
+        ]
+      ],
+      "original_box": [
+        1912.0,
+        645.0,
+        2033.0,
+        778.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0014",
+      "region_id": "r0035",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "'",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.21805626153945923,
+      "local_box": [
+        3279.0,
+        2035.0,
+        3475.0,
+        2223.0
+      ],
+      "local_polygon": [
+        [
+          3279.0,
+          2105.0
+        ],
+        [
+          3410.0,
+          2035.0
+        ],
+        [
+          3475.0,
+          2153.0
+        ],
+        [
+          3344.0,
+          2223.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2105.0,
+          801.0
+        ],
+        [
+          2035.0,
+          670.0
+        ],
+        [
+          2153.0,
+          605.0
+        ],
+        [
+          2223.0,
+          736.0
+        ]
+      ],
+      "original_box": [
+        2035.0,
+        605.0,
+        2223.0,
+        801.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0015",
+      "region_id": "r0036",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "o",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.30420899391174316,
+      "local_box": [
+        1691.0,
+        2242.0,
+        1708.0,
+        2262.0
+      ],
+      "local_polygon": [
+        [
+          1691.0,
+          2242.0
+        ],
+        [
+          1708.0,
+          2242.0
+        ],
+        [
+          1708.0,
+          2262.0
+        ],
+        [
+          1691.0,
+          2262.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2242.0,
+          2389.0
+        ],
+        [
+          2242.0,
+          2372.0
+        ],
+        [
+          2262.0,
+          2372.0
+        ],
+        [
+          2262.0,
+          2389.0
+        ]
+      ],
+      "original_box": [
+        2242.0,
+        2372.0,
+        2262.0,
+        2389.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0016",
+      "region_id": "r0037",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "2",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.819343626499176,
+      "local_box": [
+        3986.0,
+        2610.0,
+        4011.0,
+        2670.0
+      ],
+      "local_polygon": [
+        [
+          3986.0,
+          2610.0
+        ],
+        [
+          4011.0,
+          2610.0
+        ],
+        [
+          4011.0,
+          2670.0
+        ],
+        [
+          3986.0,
+          2670.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2610.0,
+          94.0
+        ],
+        [
+          2610.0,
+          69.0
+        ],
+        [
+          2670.0,
+          69.0
+        ],
+        [
+          2670.0,
+          94.0
+        ]
+      ],
+      "original_box": [
+        2610.0,
+        69.0,
+        2670.0,
+        94.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p007:o0017",
+      "region_id": "r0024",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        578.0,
+        877.0,
+        1427.0,
+        1860.0
+      ],
+      "local_polygon": [
+        [
+          896.0,
+          877.0
+        ],
+        [
+          1427.0,
+          1091.0
+        ],
+        [
+          1108.0,
+          1860.0
+        ],
+        [
+          578.0,
+          1646.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          877.0,
+          3184.0
+        ],
+        [
+          1091.0,
+          2653.0
+        ],
+        [
+          1860.0,
+          2972.0
+        ],
+        [
+          1646.0,
+          3502.0
+        ]
+      ],
+      "original_box": [
+        877.0,
+        2653.0,
+        1860.0,
+        3502.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0024"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p007:o0018",
+      "region_id": "r0038",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2132.0,
+        1437.0,
+        2306.0,
+        1609.0
+      ],
+      "local_polygon": [
+        [
+          2132.0,
+          1499.0
+        ],
+        [
+          2243.0,
+          1437.0
+        ],
+        [
+          2306.0,
+          1546.0
+        ],
+        [
+          2195.0,
+          1609.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1499.0,
+          1948.0
+        ],
+        [
+          1437.0,
+          1837.0
+        ],
+        [
+          1546.0,
+          1774.0
+        ],
+        [
+          1609.0,
+          1885.0
+        ]
+      ],
+      "original_box": [
+        1437.0,
+        1774.0,
+        1609.0,
+        1948.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p007:o0019",
+      "region_id": "r0039",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1616.0,
+        1565.0,
+        1732.0,
+        2124.0
+      ],
+      "local_polygon": [
+        [
+          1616.0,
+          1566.0
+        ],
+        [
+          1723.0,
+          1565.0
+        ],
+        [
+          1732.0,
+          2123.0
+        ],
+        [
+          1625.0,
+          2124.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1566.0,
+          2464.0
+        ],
+        [
+          1565.0,
+          2357.0
+        ],
+        [
+          2123.0,
+          2348.0
+        ],
+        [
+          2124.0,
+          2455.0
+        ]
+      ],
+      "original_box": [
+        1565.0,
+        2348.0,
+        2124.0,
+        2464.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p007:o0020",
+      "region_id": "r0040",
+      "pass_id": "p007",
+      "source": "paddle-mobile",
+      "variant": "rot90",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        1655.0,
+        2139.0,
+        1711.0,
+        2217.0
+      ],
+      "local_polygon": [
+        [
+          1655.0,
+          2139.0
+        ],
+        [
+          1711.0,
+          2139.0
+        ],
+        [
+          1711.0,
+          2217.0
+        ],
+        [
+          1655.0,
+          2217.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2139.0,
+          2425.0
+        ],
+        [
+          2139.0,
+          2369.0
+        ],
+        [
+          2217.0,
+          2369.0
+        ],
+        [
+          2217.0,
+          2425.0
+        ]
+      ],
+      "original_box": [
+        2139.0,
+        2369.0,
+        2217.0,
+        2425.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0001",
+      "region_id": "r0041",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "Ln",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.6202096939086914,
+      "local_box": [
+        648.0,
+        262.0,
+        908.0,
+        413.0
+      ],
+      "local_polygon": [
+        [
+          648.0,
+          262.0
+        ],
+        [
+          908.0,
+          262.0
+        ],
+        [
+          908.0,
+          413.0
+        ],
+        [
+          648.0,
+          413.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2798.0,
+          648.0
+        ],
+        [
+          2798.0,
+          908.0
+        ],
+        [
+          2647.0,
+          908.0
+        ],
+        [
+          2647.0,
+          648.0
+        ]
+      ],
+      "original_box": [
+        2647.0,
+        648.0,
+        2798.0,
+        908.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0002",
+      "region_id": "r0042",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "U",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.15687069296836853,
+      "local_box": [
+        534.0,
+        927.0,
+        943.0,
+        1243.0
+      ],
+      "local_polygon": [
+        [
+          534.0,
+          988.0
+        ],
+        [
+          899.0,
+          927.0
+        ],
+        [
+          943.0,
+          1181.0
+        ],
+        [
+          578.0,
+          1243.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2072.0,
+          534.0
+        ],
+        [
+          2133.0,
+          899.0
+        ],
+        [
+          1879.0,
+          943.0
+        ],
+        [
+          1817.0,
+          578.0
+        ]
+      ],
+      "original_box": [
+        1817.0,
+        534.0,
+        2133.0,
+        943.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0003",
+      "region_id": "r0001",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "희디",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.19771620631217957,
+      "local_box": [
+        2168.0,
+        1301.0,
+        2252.0,
+        1497.0
+      ],
+      "local_polygon": [
+        [
+          2168.0,
+          1301.0
+        ],
+        [
+          2252.0,
+          1301.0
+        ],
+        [
+          2252.0,
+          1497.0
+        ],
+        [
+          2168.0,
+          1497.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1759.0,
+          2168.0
+        ],
+        [
+          1759.0,
+          2252.0
+        ],
+        [
+          1563.0,
+          2252.0
+        ],
+        [
+          1563.0,
+          2168.0
+        ]
+      ],
+      "original_box": [
+        1563.0,
+        2168.0,
+        1759.0,
+        2252.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0004",
+      "region_id": "r0043",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "2",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.20685474574565887,
+      "local_box": [
+        3253.0,
+        1694.0,
+        3278.0,
+        1719.0
+      ],
+      "local_polygon": [
+        [
+          3264.0,
+          1694.0
+        ],
+        [
+          3278.0,
+          1707.0
+        ],
+        [
+          3267.0,
+          1719.0
+        ],
+        [
+          3253.0,
+          1705.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1366.0,
+          3264.0
+        ],
+        [
+          1353.0,
+          3278.0
+        ],
+        [
+          1341.0,
+          3267.0
+        ],
+        [
+          1355.0,
+          3253.0
+        ]
+      ],
+      "original_box": [
+        1341.0,
+        3253.0,
+        1366.0,
+        3278.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0005",
+      "region_id": "r0044",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "L",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.22693048417568207,
+      "local_box": [
+        3267.0,
+        1694.0,
+        3289.0,
+        1716.0
+      ],
+      "local_polygon": [
+        [
+          3267.0,
+          1694.0
+        ],
+        [
+          3289.0,
+          1694.0
+        ],
+        [
+          3289.0,
+          1716.0
+        ],
+        [
+          3267.0,
+          1716.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1366.0,
+          3267.0
+        ],
+        [
+          1366.0,
+          3289.0
+        ],
+        [
+          1344.0,
+          3289.0
+        ],
+        [
+          1344.0,
+          3267.0
+        ]
+      ],
+      "original_box": [
+        1344.0,
+        3267.0,
+        1366.0,
+        3289.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0006",
+      "region_id": "r0007",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "~",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.9334248304367065,
+      "local_box": [
+        2389.0,
+        1907.0,
+        2542.0,
+        2179.0
+      ],
+      "local_polygon": [
+        [
+          2389.0,
+          1907.0
+        ],
+        [
+          2542.0,
+          1907.0
+        ],
+        [
+          2542.0,
+          2179.0
+        ],
+        [
+          2389.0,
+          2179.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1153.0,
+          2389.0
+        ],
+        [
+          1153.0,
+          2542.0
+        ],
+        [
+          881.0,
+          2542.0
+        ],
+        [
+          881.0,
+          2389.0
+        ]
+      ],
+      "original_box": [
+        881.0,
+        2389.0,
+        1153.0,
+        2542.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0007"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0007",
+      "region_id": "r0045",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "X",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.294641375541687,
+      "local_box": [
+        3312.0,
+        2106.0,
+        3526.0,
+        2317.0
+      ],
+      "local_polygon": [
+        [
+          3312.0,
+          2177.0
+        ],
+        [
+          3453.0,
+          2106.0
+        ],
+        [
+          3526.0,
+          2246.0
+        ],
+        [
+          3386.0,
+          2317.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          883.0,
+          3312.0
+        ],
+        [
+          954.0,
+          3453.0
+        ],
+        [
+          814.0,
+          3526.0
+        ],
+        [
+          743.0,
+          3386.0
+        ]
+      ],
+      "original_box": [
+        743.0,
+        3312.0,
+        954.0,
+        3526.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0008",
+      "region_id": "r0046",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "오로독",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7230148315429688,
+      "local_box": [
+        2216.0,
+        2331.0,
+        2514.0,
+        2669.0
+      ],
+      "local_polygon": [
+        [
+          2216.0,
+          2584.0
+        ],
+        [
+          2367.0,
+          2331.0
+        ],
+        [
+          2514.0,
+          2416.0
+        ],
+        [
+          2363.0,
+          2669.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          476.0,
+          2216.0
+        ],
+        [
+          729.0,
+          2367.0
+        ],
+        [
+          644.0,
+          2514.0
+        ],
+        [
+          391.0,
+          2363.0
+        ]
+      ],
+      "original_box": [
+        391.0,
+        2216.0,
+        729.0,
+        2514.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0003",
+        "r0020",
+        "r0026"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p008:o0009",
+      "region_id": "r0047",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        676.0,
+        102.0,
+        803.0,
+        231.0
+      ],
+      "local_polygon": [
+        [
+          719.0,
+          102.0
+        ],
+        [
+          803.0,
+          142.0
+        ],
+        [
+          760.0,
+          231.0
+        ],
+        [
+          676.0,
+          192.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2958.0,
+          719.0
+        ],
+        [
+          2918.0,
+          803.0
+        ],
+        [
+          2829.0,
+          760.0
+        ],
+        [
+          2868.0,
+          676.0
+        ]
+      ],
+      "original_box": [
+        2829.0,
+        676.0,
+        2958.0,
+        803.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0010",
+      "region_id": "r0048",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        801.0,
+        325.0,
+        831.0,
+        345.0
+      ],
+      "local_polygon": [
+        [
+          801.0,
+          325.0
+        ],
+        [
+          831.0,
+          325.0
+        ],
+        [
+          831.0,
+          345.0
+        ],
+        [
+          801.0,
+          345.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2735.0,
+          801.0
+        ],
+        [
+          2735.0,
+          831.0
+        ],
+        [
+          2715.0,
+          831.0
+        ],
+        [
+          2715.0,
+          801.0
+        ]
+      ],
+      "original_box": [
+        2715.0,
+        801.0,
+        2735.0,
+        831.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0011",
+      "region_id": "r0049",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        816.0,
+        317.0,
+        854.0,
+        347.0
+      ],
+      "local_polygon": [
+        [
+          822.0,
+          317.0
+        ],
+        [
+          854.0,
+          326.0
+        ],
+        [
+          848.0,
+          347.0
+        ],
+        [
+          816.0,
+          338.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2743.0,
+          822.0
+        ],
+        [
+          2734.0,
+          854.0
+        ],
+        [
+          2713.0,
+          848.0
+        ],
+        [
+          2722.0,
+          816.0
+        ]
+      ],
+      "original_box": [
+        2713.0,
+        816.0,
+        2743.0,
+        854.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0012",
+      "region_id": "r0008",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2340.0,
+        764.0,
+        2454.0,
+        1485.0
+      ],
+      "local_polygon": [
+        [
+          2340.0,
+          766.0
+        ],
+        [
+          2437.0,
+          764.0
+        ],
+        [
+          2454.0,
+          1483.0
+        ],
+        [
+          2357.0,
+          1485.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2294.0,
+          2340.0
+        ],
+        [
+          2296.0,
+          2437.0
+        ],
+        [
+          1577.0,
+          2454.0
+        ],
+        [
+          1575.0,
+          2357.0
+        ]
+      ],
+      "original_box": [
+        1575.0,
+        2340.0,
+        2296.0,
+        2454.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0008"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0013",
+      "region_id": "r0035",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        618.0,
+        835.0,
+        797.0,
+        1004.0
+      ],
+      "local_polygon": [
+        [
+          618.0,
+          907.0
+        ],
+        [
+          736.0,
+          835.0
+        ],
+        [
+          797.0,
+          932.0
+        ],
+        [
+          679.0,
+          1004.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          2153.0,
+          618.0
+        ],
+        [
+          2225.0,
+          736.0
+        ],
+        [
+          2128.0,
+          797.0
+        ],
+        [
+          2056.0,
+          679.0
+        ]
+      ],
+      "original_box": [
+        2056.0,
+        618.0,
+        2225.0,
+        797.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0035"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0014",
+      "region_id": "r0050",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2798.0,
+        1164.0,
+        3597.0,
+        1940.0
+      ],
+      "local_polygon": [
+        [
+          2983.0,
+          1164.0
+        ],
+        [
+          3597.0,
+          1353.0
+        ],
+        [
+          3412.0,
+          1940.0
+        ],
+        [
+          2798.0,
+          1750.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1896.0,
+          2983.0
+        ],
+        [
+          1707.0,
+          3597.0
+        ],
+        [
+          1120.0,
+          3412.0
+        ],
+        [
+          1310.0,
+          2798.0
+        ]
+      ],
+      "original_box": [
+        1120.0,
+        2798.0,
+        1896.0,
+        3597.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0015",
+      "region_id": "r0051",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2762.0,
+        1526.0,
+        3205.0,
+        2090.0
+      ],
+      "local_polygon": [
+        [
+          2762.0,
+          1563.0
+        ],
+        [
+          3155.0,
+          1526.0
+        ],
+        [
+          3205.0,
+          2054.0
+        ],
+        [
+          2812.0,
+          2090.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1497.0,
+          2762.0
+        ],
+        [
+          1534.0,
+          3155.0
+        ],
+        [
+          1006.0,
+          3205.0
+        ],
+        [
+          970.0,
+          2812.0
+        ]
+      ],
+      "original_box": [
+        970.0,
+        2762.0,
+        1534.0,
+        3205.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0016",
+      "region_id": "r0052",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        3220.0,
+        1592.0,
+        3813.0,
+        2117.0
+      ],
+      "local_polygon": [
+        [
+          3324.0,
+          1592.0
+        ],
+        [
+          3813.0,
+          1716.0
+        ],
+        [
+          3709.0,
+          2117.0
+        ],
+        [
+          3220.0,
+          1993.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1468.0,
+          3324.0
+        ],
+        [
+          1344.0,
+          3813.0
+        ],
+        [
+          943.0,
+          3709.0
+        ],
+        [
+          1067.0,
+          3220.0
+        ]
+      ],
+      "original_box": [
+        943.0,
+        3220.0,
+        1468.0,
+        3813.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0017",
+      "region_id": "r0053",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2157.0,
+        1850.0,
+        2384.0,
+        2207.0
+      ],
+      "local_polygon": [
+        [
+          2157.0,
+          1850.0
+        ],
+        [
+          2384.0,
+          1850.0
+        ],
+        [
+          2384.0,
+          2207.0
+        ],
+        [
+          2157.0,
+          2207.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1210.0,
+          2157.0
+        ],
+        [
+          1210.0,
+          2384.0
+        ],
+        [
+          853.0,
+          2384.0
+        ],
+        [
+          853.0,
+          2157.0
+        ]
+      ],
+      "original_box": [
+        853.0,
+        2157.0,
+        1210.0,
+        2384.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0018",
+      "region_id": "r0005",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2328.0,
+        1857.0,
+        2438.0,
+        2172.0
+      ],
+      "local_polygon": [
+        [
+          2328.0,
+          1857.0
+        ],
+        [
+          2438.0,
+          1857.0
+        ],
+        [
+          2438.0,
+          2172.0
+        ],
+        [
+          2328.0,
+          2172.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1203.0,
+          2328.0
+        ],
+        [
+          1203.0,
+          2438.0
+        ],
+        [
+          888.0,
+          2438.0
+        ],
+        [
+          888.0,
+          2328.0
+        ]
+      ],
+      "original_box": [
+        888.0,
+        2328.0,
+        1203.0,
+        2438.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0005"
+      ],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0019",
+      "region_id": "r0054",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        528.0,
+        2278.0,
+        688.0,
+        2430.0
+      ],
+      "local_polygon": [
+        [
+          555.0,
+          2278.0
+        ],
+        [
+          688.0,
+          2306.0
+        ],
+        [
+          661.0,
+          2430.0
+        ],
+        [
+          528.0,
+          2402.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          782.0,
+          555.0
+        ],
+        [
+          754.0,
+          688.0
+        ],
+        [
+          630.0,
+          661.0
+        ],
+        [
+          658.0,
+          528.0
+        ]
+      ],
+      "original_box": [
+        630.0,
+        528.0,
+        782.0,
+        688.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    },
+    {
+      "observation_id": "p008:o0020",
+      "region_id": "r0055",
+      "pass_id": "p008",
+      "source": "paddle-mobile",
+      "variant": "rot270",
+      "text": "",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": null,
+      "local_box": [
+        2262.0,
+        2824.0,
+        2427.0,
+        2956.0
+      ],
+      "local_polygon": [
+        [
+          2296.0,
+          2824.0
+        ],
+        [
+          2427.0,
+          2883.0
+        ],
+        [
+          2393.0,
+          2956.0
+        ],
+        [
+          2262.0,
+          2897.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          236.0,
+          2296.0
+        ],
+        [
+          177.0,
+          2427.0
+        ],
+        [
+          104.0,
+          2393.0
+        ],
+        [
+          163.0,
+          2262.0
+        ]
+      ],
+      "original_box": [
+        104.0,
+        2262.0,
+        236.0,
+        2427.0
+      ],
+      "geometry_source": "detector_polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "detected_without_text",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "no_text"
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "r0001",
+      "anchor_box": [
+        1560.0,
+        2168.0,
+        1756.0,
+        2252.0
+      ],
+      "observation_ids": [
+        "p001:o0001",
+        "p002:o0001",
+        "p004:o0003",
+        "p005:o0003",
+        "p006:o0005",
+        "p007:o0011",
+        "p008:o0003"
+      ]
+    },
+    {
+      "region_id": "r0002",
+      "anchor_box": [
+        882.0,
+        2187.0,
+        1108.0,
+        2288.0
+      ],
+      "observation_ids": [
+        "p001:o0002",
+        "p004:o0004"
+      ]
+    },
+    {
+      "region_id": "r0003",
+      "anchor_box": [
+        385.0,
+        2219.0,
+        730.0,
+        2510.0
+      ],
+      "observation_ids": [
+        "p001:o0003"
+      ]
+    },
+    {
+      "region_id": "r0004",
+      "anchor_box": [
+        883.0,
+        2252.0,
+        1180.0,
+        2351.0
+      ],
+      "observation_ids": [
+        "p001:o0004",
+        "p004:o0005",
+        "p005:o0006",
+        "p006:o0011"
+      ]
+    },
+    {
+      "region_id": "r0005",
+      "anchor_box": [
+        886.0,
+        2336.0,
+        1195.0,
+        2428.0
+      ],
+      "observation_ids": [
+        "p001:o0005",
+        "p004:o0006",
+        "p005:o0007",
+        "p006:o0003",
+        "p007:o0005",
+        "p008:o0018"
+      ]
+    },
+    {
+      "region_id": "r0006",
+      "anchor_box": [
+        56.0,
+        2293.0,
+        235.0,
+        2466.0
+      ],
+      "observation_ids": [
+        "p001:o0006"
+      ]
+    },
+    {
+      "region_id": "r0007",
+      "anchor_box": [
+        881.0,
+        2392.0,
+        1150.0,
+        2545.0
+      ],
+      "observation_ids": [
+        "p001:o0007",
+        "p004:o0007",
+        "p005:o0008",
+        "p006:o0001",
+        "p007:o0004",
+        "p008:o0006"
+      ]
+    },
+    {
+      "region_id": "r0008",
+      "anchor_box": [
+        1574.0,
+        2340.0,
+        2291.0,
+        2454.0
+      ],
+      "observation_ids": [
+        "p001:o0008",
+        "p004:o0009",
+        "p005:o0010",
+        "p006:o0010",
+        "p008:o0012"
+      ]
+    },
+    {
+      "region_id": "r0009",
+      "anchor_box": [
+        1084.0,
+        2850.0,
+        1413.0,
+        3127.0
+      ],
+      "observation_ids": [
+        "p001:o0009"
+      ]
+    },
+    {
+      "region_id": "r0010",
+      "anchor_box": [
+        889.5,
+        2200.5,
+        1101.0,
+        2278.5
+      ],
+      "observation_ids": [
+        "p002:o0002"
+      ]
+    },
+    {
+      "region_id": "r0011",
+      "anchor_box": [
+        890.5,
+        2262.5,
+        1168.0,
+        2336.0
+      ],
+      "observation_ids": [
+        "p002:o0003"
+      ]
+    },
+    {
+      "region_id": "r0012",
+      "anchor_box": [
+        1811.0,
+        527.0,
+        2412.0,
+        916.0
+      ],
+      "observation_ids": [
+        "p004:o0001"
+      ]
+    },
+    {
+      "region_id": "r0013",
+      "anchor_box": [
+        2645.0,
+        622.0,
+        3052.0,
+        900.0
+      ],
+      "observation_ids": [
+        "p004:o0002",
+        "p006:o0006"
+      ]
+    },
+    {
+      "region_id": "r0014",
+      "anchor_box": [
+        0.0,
+        2240.0,
+        269.0,
+        2584.0
+      ],
+      "observation_ids": [
+        "p004:o0008"
+      ]
+    },
+    {
+      "region_id": "r0015",
+      "anchor_box": [
+        2546.0,
+        43.0,
+        2739.0,
+        103.0
+      ],
+      "observation_ids": [
+        "p005:o0001"
+      ]
+    },
+    {
+      "region_id": "r0016",
+      "anchor_box": [
+        2516.0,
+        551.0,
+        3060.0,
+        1012.0
+      ],
+      "observation_ids": [
+        "p005:o0002"
+      ]
+    },
+    {
+      "region_id": "r0017",
+      "anchor_box": [
+        359.0,
+        2182.0,
+        764.0,
+        2538.0
+      ],
+      "observation_ids": [
+        "p005:o0004"
+      ]
+    },
+    {
+      "region_id": "r0018",
+      "anchor_box": [
+        881.0,
+        2188.0,
+        1107.0,
+        2282.0
+      ],
+      "observation_ids": [
+        "p005:o0005"
+      ]
+    },
+    {
+      "region_id": "r0019",
+      "anchor_box": [
+        0.0,
+        2175.0,
+        337.0,
+        2639.0
+      ],
+      "observation_ids": [
+        "p005:o0009",
+        "p007:o0001"
+      ]
+    },
+    {
+      "region_id": "r0020",
+      "anchor_box": [
+        386.0,
+        2214.0,
+        747.0,
+        2526.0
+      ],
+      "observation_ids": [
+        "p006:o0002"
+      ]
+    },
+    {
+      "region_id": "r0021",
+      "anchor_box": [
+        888.0,
+        2198.0,
+        1105.0,
+        2285.0
+      ],
+      "observation_ids": [
+        "p006:o0004"
+      ]
+    },
+    {
+      "region_id": "r0022",
+      "anchor_box": [
+        1847.0,
+        625.0,
+        2257.0,
+        847.0
+      ],
+      "observation_ids": [
+        "p006:o0007"
+      ]
+    },
+    {
+      "region_id": "r0023",
+      "anchor_box": [
+        2411.0,
+        3718.0,
+        2501.0,
+        3784.0
+      ],
+      "observation_ids": [
+        "p006:o0008"
+      ]
+    },
+    {
+      "region_id": "r0024",
+      "anchor_box": [
+        907.0,
+        2646.0,
+        1818.0,
+        3448.0
+      ],
+      "observation_ids": [
+        "p006:o0009",
+        "p007:o0017"
+      ]
+    },
+    {
+      "region_id": "r0025",
+      "anchor_box": [
+        48.0,
+        2270.0,
+        264.0,
+        2504.0
+      ],
+      "observation_ids": [
+        "p006:o0012"
+      ]
+    },
+    {
+      "region_id": "r0026",
+      "anchor_box": [
+        390.0,
+        2224.0,
+        727.0,
+        2514.0
+      ],
+      "observation_ids": [
+        "p007:o0002"
+      ]
+    },
+    {
+      "region_id": "r0027",
+      "anchor_box": [
+        559.0,
+        3137.0,
+        1175.0,
+        3718.0
+      ],
+      "observation_ids": [
+        "p007:o0003"
+      ]
+    },
+    {
+      "region_id": "r0028",
+      "anchor_box": [
+        888.0,
+        2259.0,
+        1170.0,
+        2343.0
+      ],
+      "observation_ids": [
+        "p007:o0006"
+      ]
+    },
+    {
+      "region_id": "r0029",
+      "anchor_box": [
+        906.0,
+        2219.0,
+        946.0,
+        2264.0
+      ],
+      "observation_ids": [
+        "p007:o0007"
+      ]
+    },
+    {
+      "region_id": "r0030",
+      "anchor_box": [
+        929.0,
+        2206.0,
+        1087.0,
+        2285.0
+      ],
+      "observation_ids": [
+        "p007:o0008"
+      ]
+    },
+    {
+      "region_id": "r0031",
+      "anchor_box": [
+        949.0,
+        3442.0,
+        969.0,
+        3460.0
+      ],
+      "observation_ids": [
+        "p007:o0009"
+      ]
+    },
+    {
+      "region_id": "r0032",
+      "anchor_box": [
+        1427.0,
+        2262.0,
+        1460.0,
+        2336.0
+      ],
+      "observation_ids": [
+        "p007:o0010"
+      ]
+    },
+    {
+      "region_id": "r0033",
+      "anchor_box": [
+        1920.0,
+        760.0,
+        2066.0,
+        864.0
+      ],
+      "observation_ids": [
+        "p007:o0012"
+      ]
+    },
+    {
+      "region_id": "r0034",
+      "anchor_box": [
+        1912.0,
+        645.0,
+        2033.0,
+        778.0
+      ],
+      "observation_ids": [
+        "p007:o0013"
+      ]
+    },
+    {
+      "region_id": "r0035",
+      "anchor_box": [
+        2035.0,
+        605.0,
+        2223.0,
+        801.0
+      ],
+      "observation_ids": [
+        "p007:o0014",
+        "p008:o0013"
+      ]
+    },
+    {
+      "region_id": "r0036",
+      "anchor_box": [
+        2242.0,
+        2372.0,
+        2262.0,
+        2389.0
+      ],
+      "observation_ids": [
+        "p007:o0015"
+      ]
+    },
+    {
+      "region_id": "r0037",
+      "anchor_box": [
+        2610.0,
+        69.0,
+        2670.0,
+        94.0
+      ],
+      "observation_ids": [
+        "p007:o0016"
+      ]
+    },
+    {
+      "region_id": "r0038",
+      "anchor_box": [
+        1437.0,
+        1774.0,
+        1609.0,
+        1948.0
+      ],
+      "observation_ids": [
+        "p007:o0018"
+      ]
+    },
+    {
+      "region_id": "r0039",
+      "anchor_box": [
+        1565.0,
+        2348.0,
+        2124.0,
+        2464.0
+      ],
+      "observation_ids": [
+        "p007:o0019"
+      ]
+    },
+    {
+      "region_id": "r0040",
+      "anchor_box": [
+        2139.0,
+        2369.0,
+        2217.0,
+        2425.0
+      ],
+      "observation_ids": [
+        "p007:o0020"
+      ]
+    },
+    {
+      "region_id": "r0041",
+      "anchor_box": [
+        2647.0,
+        648.0,
+        2798.0,
+        908.0
+      ],
+      "observation_ids": [
+        "p008:o0001"
+      ]
+    },
+    {
+      "region_id": "r0042",
+      "anchor_box": [
+        1817.0,
+        534.0,
+        2133.0,
+        943.0
+      ],
+      "observation_ids": [
+        "p008:o0002"
+      ]
+    },
+    {
+      "region_id": "r0043",
+      "anchor_box": [
+        1341.0,
+        3253.0,
+        1366.0,
+        3278.0
+      ],
+      "observation_ids": [
+        "p008:o0004"
+      ]
+    },
+    {
+      "region_id": "r0044",
+      "anchor_box": [
+        1344.0,
+        3267.0,
+        1366.0,
+        3289.0
+      ],
+      "observation_ids": [
+        "p008:o0005"
+      ]
+    },
+    {
+      "region_id": "r0045",
+      "anchor_box": [
+        743.0,
+        3312.0,
+        954.0,
+        3526.0
+      ],
+      "observation_ids": [
+        "p008:o0007"
+      ]
+    },
+    {
+      "region_id": "r0046",
+      "anchor_box": [
+        391.0,
+        2216.0,
+        729.0,
+        2514.0
+      ],
+      "observation_ids": [
+        "p008:o0008"
+      ]
+    },
+    {
+      "region_id": "r0047",
+      "anchor_box": [
+        2829.0,
+        676.0,
+        2958.0,
+        803.0
+      ],
+      "observation_ids": [
+        "p008:o0009"
+      ]
+    },
+    {
+      "region_id": "r0048",
+      "anchor_box": [
+        2715.0,
+        801.0,
+        2735.0,
+        831.0
+      ],
+      "observation_ids": [
+        "p008:o0010"
+      ]
+    },
+    {
+      "region_id": "r0049",
+      "anchor_box": [
+        2713.0,
+        816.0,
+        2743.0,
+        854.0
+      ],
+      "observation_ids": [
+        "p008:o0011"
+      ]
+    },
+    {
+      "region_id": "r0050",
+      "anchor_box": [
+        1120.0,
+        2798.0,
+        1896.0,
+        3597.0
+      ],
+      "observation_ids": [
+        "p008:o0014"
+      ]
+    },
+    {
+      "region_id": "r0051",
+      "anchor_box": [
+        970.0,
+        2762.0,
+        1534.0,
+        3205.0
+      ],
+      "observation_ids": [
+        "p008:o0015"
+      ]
+    },
+    {
+      "region_id": "r0052",
+      "anchor_box": [
+        943.0,
+        3220.0,
+        1468.0,
+        3813.0
+      ],
+      "observation_ids": [
+        "p008:o0016"
+      ]
+    },
+    {
+      "region_id": "r0053",
+      "anchor_box": [
+        853.0,
+        2157.0,
+        1210.0,
+        2384.0
+      ],
+      "observation_ids": [
+        "p008:o0017"
+      ]
+    },
+    {
+      "region_id": "r0054",
+      "anchor_box": [
+        630.0,
+        528.0,
+        782.0,
+        688.0
+      ],
+      "observation_ids": [
+        "p008:o0019"
+      ]
+    },
+    {
+      "region_id": "r0055",
+      "anchor_box": [
+        104.0,
+        2262.0,
+        236.0,
+        2427.0
+      ],
+      "observation_ids": [
+        "p008:o0020"
+      ]
+    }
+  ],
+  "outcomes": [
+    {
+      "pass_id": "p001",
+      "ocr_seconds": 1.049266100017121,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p002",
+      "ocr_seconds": 0.747206100000767,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p003",
+      "ocr_seconds": 0.0,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p004",
+      "ocr_seconds": 1.1703052000084426,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p005",
+      "ocr_seconds": 1.3040505000099074,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p006",
+      "ocr_seconds": 1.2317461000056937,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p007",
+      "ocr_seconds": 1.4035616999899503,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p008",
+      "ocr_seconds": 1.4827918000228237,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    }
+  ],
+  "recovery_decisions": [],
+  "summary": {
+    "passes": 8,
+    "regions": 55,
+    "observations": 83,
+    "unparsed_date_like": 5,
+    "detected_without_text": 25,
+    "unknown_geometry": 0,
+    "geometric_associations": 28,
+    "failed_passes": 0,
+    "line_recovery_changes": 0,
+    "ocr_seconds": 8.388927500054706
+  }
+}

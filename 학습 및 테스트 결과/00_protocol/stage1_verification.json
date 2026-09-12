@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "regression_tests": {
+    "python": ".labeling_paddle_env/Scripts/python.exe",
+    "command": "python -m unittest discover -s tests -q",
+    "tests_run": 251,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 13.134,
+    "log": "학습 및 테스트 결과/tmp/stage1/regression_tests.log",
+    "initial_environment_note": ".venv lacks paddlex; repeated the suite in the existing OCR environment without installing packages."
+  },
+  "xlsx_verification": {
+    "workbooks": 4,
+    "none_sentinel_cells_corrected": 38,
+    "source_000157_date_cells_corrected": 3,
+    "expected_157": "2027-07-08",
+    "author": "artifact-tool",
+    "independent_value_and_formula_verification": "openpyxl read-only comparison with original backups",
+    "formula_error_matches": 0,
+    "preserved": ["sheet names", "unrelated values and formulas", "number formats", "tables", "freeze panes", "merged cells", "conditional format counts", "data validation counts"],
+    "visual_review": "Before and after on all four sheets; E:H text wrapping and affected row heights fitted."
+  },
+  "source_annotations": {
+    "images": 364,
+    "date_line_candidates": 404,
+    "bbox_and_linkage_checks_passed": 404,
+    "transcriptions_without_digits": 0,
+    "maximum_transcription_length": 11,
+    "human_approved": 0
+  },
+  "data_gate": "stage1_readiness.json",
+  "next_stage": "2: OCR date-line transcription and polygon construction with human review",
+  "actual_model_training_started": false
+}

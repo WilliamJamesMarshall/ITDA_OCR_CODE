@@ -18,7 +18,7 @@ from scripts.validation_runner import HARD_TIMEOUT_SECONDS, run_timed_pipeline
 REFERENCE_IMAGES = 500
 TIMEOUT_SECONDS_500 = HARD_TIMEOUT_SECONDS
 DEFAULT_TARGET_SECONDS_500 = 1500.0
-MISSING_DATE = 'NONE-NONE-NONE'
+MISSING_DATE = 'NONE'
 DATE_FIELDS = ('year', 'month', 'day')
 
 
@@ -178,7 +178,7 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
         if label is None:
             skipped['unlabelled_predictions'] += 1
             continue
-        if not all_label_statuses and label['라벨 상태'] != 'manual':
+        if not all_label_statuses and label['라벨 상태'] not in ('manual', 'approved'):
             skipped['unconfirmed_labels'] += 1
             continue
         expected = label['정답 날짜'].strip()
@@ -199,7 +199,7 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
             errors.append({'image_id':image_id,'expected':expected,'actual':raw_actual,
                            'label_status':label['라벨 상태'], 'difficulty':label.get('난이도',''),
                            'error_types':label.get('오류 유형',''), 'failure_type':error_type})
-    eligible = {key for key,row in labels.items() if all_label_statuses or row['라벨 상태']=='manual'}
+    eligible = {key for key,row in labels.items() if all_label_statuses or row['라벨 상태'] in ('manual', 'approved')}
     missing = sorted(eligible-seen)
     for image_id in missing:
         expected = labels[image_id]['정답 날짜'].strip()
@@ -232,7 +232,7 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
             'submission_format':format_counts,
             'official_partial_score':None,
             'metric_scope':'Internal exact match target is 95%; field metrics are diagnostics, not official points. '
-                           'Official field weights and NONE scoring are unknown. Legacy NONE is normalized only for semantic comparison. '
+                           'Official field weights and NONE scoring are unknown. Legacy NONE-NONE-NONE is normalized only for semantic comparison. '
                            'Field denominators include all eligible labels; unavailable means failure, invalid output or missing row. '
                            'Submission format and prediction categories cover all returned rows.',
             'categories':categories, 'errors':errors, 'error_type_counts':dict(counts),

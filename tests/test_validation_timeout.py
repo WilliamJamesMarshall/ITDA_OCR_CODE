@@ -123,7 +123,7 @@ class ValidationTimeoutTest(unittest.TestCase):
             output = Path(directory) / 'predictions.csv'
             runtime = run_timed_pipeline(directory, output, config=None,
                                          expected_images=[Path('000001.jpg'), Path('000002.jpg')])
-            self.assertIn('NONE-NONE-NONE', output.read_text(encoding='utf-8'))
+            self.assertIn('NONE,NONE,NONE,NONE', output.read_text(encoding='utf-8'))
             self.assertNotIn('000002', output.read_text(encoding='utf-8'))
             self.assertEqual(runtime['failures'], [{'image_id': '000001', 'error': 'OCR error'}])
 

@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "image_id": "AMLC000428",
+  "source_image_id": "000428",
+  "image_path": "학습대상데이터/AMLC000428.jpg",
+  "image_sha256": "b866d9f1cfa0e7f6e947b020a0fb56100144eb8b26b3e09ef1a5a162acef05be",
+  "width": 3060,
+  "height": 4080,
+  "source_dataset": "product",
+  "final_date": "2026-04-23",
+  "final_date_review": {
+    "status": "approved",
+    "scope": "normalized_final_date_only",
+    "reviewer": "user",
+    "method": "user_approved_workbook",
+    "source": {
+      "path": "상품사진_정답지/answer_000001_003352_manual.xlsx",
+      "sha256": "df1149e5032370d86494f5d1a1ea6865bf6402d15072bb6135f33e036c432b8c",
+      "rows": 3352,
+      "sheet": "검수 정답지",
+      "cell": "C429"
+    }
+  },
+  "seen_in_development": false,
+  "legacy_metadata": {
+    "difficulty": "hard",
+    "condition_tags": [
+      "두 자리 연도",
+      "다양한 구분자",
+      "반사·흐림·저대비",
+      "full_date"
+    ]
+  },
+  "group_id": "sha256:b866d9f1cfa0e7f6e947b020a0fb56100144eb8b26b3e09ef1a5a162acef05be",
+  "group_evidence": "초안: SHA-256 파일 동일성 기준. 동일 상품·연속 촬영 관계는 아직 미확정.",
+  "difficulty": "hard",
+  "quality_tags": [],
+  "notes": "",
+  "regions": [
+    {
+      "region_id": "deep_000",
+      "kind": "date_line",
+      "polygon": [
+        [
+          1217.0,
+          2171.0
+        ],
+        [
+          1903.0,
+          2159.0
+        ],
+        [
+          1906.0,
+          2322.0
+        ],
+        [
+          1220.0,
+          2334.0
+        ]
+      ],
+      "transcription": "042311",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 역할을 특정할 표제 근거 없음",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "method": "full_pipeline_recovery",
+        "score": 0.7301579117774963,
+        "trace": "학습 및 테스트 결과/02_annotations/remaining_565/traces/AMLC000428.json",
+        "observation_id": "p004:o0001"
+      },
+      "draft": {
+        "legibility_basis": "기존 OCR 원문 후보 있음; 시각 검수 전 임시 판독 상태"
+      }
+    }
+  ],
+  "revision": 10,
+  "review": {
+    "status": "pending",
+    "reviewer": "user",
+    "approved_at": null,
+    "date_regions_complete": false,
+    "header_regions_complete": false,
+    "quality_reviewed": false,
+    "group_reviewed": false,
+    "no_date_regions": false
+  },
+  "draft": {
+    "method": "candidate_only_v1",
+    "human_verified": false,
+    "issues": [
+      "상품 그룹은 파일 동일성만 확인됨: 같은 상품·연속 촬영 확인 필요",
+      "반사·곡면·번짐 등 품질은 사진 대조 필요",
+      "날짜 영역 후보 없음: 참고 OCR 및 원본에서 날짜 줄 탐색 필요"
+    ],
+    "quality_basis": "기존 진단 태그 재사용; 태그 없음은 결함 없음이 아님",
+    "version": 2
+  },
+  "ocr_context": [
+    {
+      "region_id": "ocr_000",
+      "kind": "other",
+      "polygon": [
+        [
+          971.0,
+          2173.0
+        ],
+        [
+          1902.0,
+          2173.0
+        ],
+        [
+          1902.0,
+          2318.0
+        ],
+        [
+          971.0,
+          2318.0
+        ]
+      ],
+      "transcription": "2 04 23",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.5960569977760315,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:24:33.316691+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_001",
+      "kind": "other",
+      "polygon": [
+        [
+          1817.0,
+          2322.0
+        ],
+        [
+          1884.0,
+          2329.0
+        ],
+        [
+          1880.0,
+          2365.0
+        ],
+        [
+          1813.0,
+          2357.0
+        ]
+      ],
+      "transcription": ".",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.4485558569431305,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:24:33.316691+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_002",
+      "kind": "other",
+      "polygon": [
+        [
+          1882.0,
+          2343.0
+        ],
+        [
+          1940.0,
+          2343.0
+        ],
+        [
+          1940.0,
+          2392.0
+        ],
+        [
+          1882.0,
+          2392.0
+        ]
+      ],
+      "transcription": ".",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.47116270661354065,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:24:33.316691+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_003",
+      "kind": "other",
+      "polygon": [
+        [
+          1085.0,
+          2907.0
+        ],
+        [
+          1135.0,
+          2907.0
+        ],
+        [
+          1135.0,
+          2945.0
+        ],
+        [
+          1085.0,
+          2945.0
+        ]
+      ],
+      "transcription": "1",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.18187159299850464,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:24:33.316691+00:00"
+      }
+    }
+  ],
+  "ocr_draft_pass": {
+    "status": "completed",
+    "created_at": "2026-09-11T16:24:33.316691+00:00",
+    "cpu_threads": 4
+  },
+  "cache_supplement": {
+    "created_at": "2026-09-11T16:44:44.587290+00:00",
+    "cache_sha256": "81a6b2e904435529a7112967da9a43ad0f75f65ed6a5fd26e08469f65f933ce8"
+  },
+  "quality_draft_measurements": {
+    "method": "raw_date_crop_pixel_heuristics_v1",
+    "regions": [],
+    "unmeasured": [
+      "reflection",
+      "curved",
+      "bleed",
+      "dot_print",
+      "occlusion"
+    ],
+    "warning": "미검수 픽셀 기반 후보이며, 태그가 없다고 결함이 없는 것은 아님"
+  },
+  "line_proposal_pass": {
+    "created_at": "2026-09-11T16:48:56.560043+00:00",
+    "proposals": 6,
+    "date_candidates": 0
+  },
+  "user_draft_approval": {
+    "status": "approved",
+    "method": "explicit_user_bulk_approval",
+    "decision": "주석은 전부 초안 그대로 승인한다. 남은 작업 시작해",
+    "reviewer": "user",
+    "approved_at": "2026-09-11T17:31:11.683951+00:00",
+    "approved_revision": 7,
+    "approved_snapshot_sha256": "1d9b0e1e36add481630cb9aedf92dc2e28eef5f6213686864f78017356edfcab",
+    "individual_visual_inspection_claimed": false
+  },
+  "training_readiness": {
+    "status": "blocked_missing_annotation",
+    "blockers": [
+      "Confirm no date regions, or annotate date lines",
+      "Approved final date requires a date-line region; explain/correct annotation"
+    ]
+  },
+  "user_acceptance": {
+    "status": "superseded_by_edit",
+    "method": "explicit_user_chat_bulk_as_is",
+    "decision_id": "user-as-is-approval-20260912",
+    "accepted_source_sha256": "0556989c52ce0a693c2bb171edf0ab96c0dde826419452171f359ec747ecf564",
+    "individually_visually_verified": false,
+    "scope": "existing_draft_as_is_not_missing_annotations"
+  },
+  "deep_draft_pass": {
+    "created_at": "2026-09-11T18:21:35.287428+00:00",
+    "candidates": 1,
+    "elapsed_seconds": 12.001203399995575
+  }
+}

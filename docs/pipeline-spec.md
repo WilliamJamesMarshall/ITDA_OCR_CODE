@@ -51,7 +51,7 @@ PaddleOCR 공식 표의 수치는 서로 다른 평가셋 간 직접 비교가 �
   → PP-OCRv6 small 조건부 복구
   → 날짜가 없거나 부분 날짜만 남고 원본 OCR가 희소하거나 날짜 조각이 보이면 겹치는 4개 타일 추론
   → 후보 병합·달력 검증·문맥 점수화
-  → YYYY-MM-DD, NONE-MM-DD, YYYY-MM-NONE 또는 NONE-NONE-NONE
+  → YYYY-MM-DD, NONE-MM-DD, YYYY-MM-NONE 또는 NONE
   → submission.csv 생성
 ```
 
@@ -122,9 +122,9 @@ PaddleOCR 공식 표의 수치는 서로 다른 평가셋 간 직접 비교가 �
 
 2026-09-11 추가된 계측은 날짜 파싱 전에 원문·검출 다각형·영역 ID·원본 역변환을 별도로 보존한다. 인식 결과에서 빠진 검출도 저장하지만 기존 후보/확대 입력에는 섞지 않는다. 기하학적 대응 가설과 역할 어휘 단서는 아직 날짜 선택에 사용하지 않는다. CSV와 별도의 `.trace.jsonl`에 패스 시작/완료·오류를 저장하며 자세한 범위는 [계측 구현 결과](ocr-region-trace-20260911.md)를 참조한다. 이 절 이전의 후보 점수/기간 선택 설명은 그대로 동작한다.
 
-`DateSelection.digits_confident`(숫자 판독), `order_resolved`(순서 근거), `stop_ocr`(실행 중단)를 구분한다. 명확한 숫자의 순서가 미확정이면 추가 OCR 없이 REVIEW로 종료할 수 있다. 기존 `confident`는 `stop_ocr`의 호환 이름이며, 정답 확률을 뜻하지 않는다. `policy_details`에는 정책 버전, 원문, 시장/선택 근거, 날짜 순서, 시각/코드, 명시 제조일, `SELECTED`/`REVIEW_REQUIRED`/`NOT_FOUND` 상태를 기록한다. CSV 열을 추가하지 않고 trace에 보존하며 REVIEW의 최종 날짜는 `NONE-NONE-NONE`이다. 저수준 `select_date(..., context=None)` 및 `PipelineConfig(date_context=None)`는 이전 DMY 동작의 재현/비교용이다. 기본 `PipelineConfig()`는 새 `DateContext()`를 사용한다.
+`DateSelection.digits_confident`(숫자 판독), `order_resolved`(순서 근거), `stop_ocr`(실행 중단)를 구분한다. 명확한 숫자의 순서가 미확정이면 추가 OCR 없이 REVIEW로 종료할 수 있다. 기존 `confident`는 `stop_ocr`의 호환 이름이며, 정답 확률을 뜻하지 않는다. `policy_details`에는 정책 버전, 원문, 시장/선택 근거, 날짜 순서, 시각/코드, 명시 제조일, `SELECTED`/`REVIEW_REQUIRED`/`NOT_FOUND` 상태를 기록한다. CSV 열을 추가하지 않고 trace에 보존하며 REVIEW의 최종 날짜는 `NONE`이다. 저수준 `select_date(..., context=None)` 및 `PipelineConfig(date_context=None)`는 이전 DMY 동작의 재현/비교용이다. 기본 `PipelineConfig()`는 새 `DateContext()`를 사용한다.
 
-- 이미지 열기나 OCR 예외: `year,month,day`는 각각 `NONE`, `final_date`는 `NONE-NONE-NONE`으로 기록하고 계속 실행. 내부 실패 원인은 보존
+- 이미지 열기나 OCR 예외: `year,month,day`는 각각 `NONE`, `final_date`는 `NONE`으로 기록하고 계속 실행. 내부 실패 원인은 보존
 - 입력 폴더 없음, 지원 이미지 0개, 중복 stem: 전체 입력 계약 오류로 즉시 중단
 - 출력 열 순서: `image_id, year, month, day, final_date`
 - 완전·부분·전체 누락 모두 `final_date == year + '-' + month + '-' + day`를 만족하도록 저장. 내부 `None`과 과거 단독 `NONE`은 저장 경계에서만 전체 누락 문자열로 변환
@@ -133,7 +133,7 @@ PaddleOCR 공식 표의 수치는 서로 다른 평가셋 간 직접 비교가 �
 
 `evaluate_pipeline.py`는 평가 입력 목록을 기준으로 누락된 출력도 오답에 포함하고, 실행 실패가 정답 NONE과 겹쳐도 정답으로 인정하지 않는다. 정확도 목표와 통과 여부는 `accuracy_target`, `accuracy_target_met`로 보고한다. 파일명 조회 정답이나 고정 OCR 문자열 평가를 전체 OCR 정확도로 표시하지 않는다.
 
-내부 95% 목표는 날짜 전체 일치율이다. 공식 부분점수 배점은 미확정이므로 `field_metrics`의 연·월·일별 진단 지표를 공식 점수로 표시하지 않는다. 단독 `NONE`과 `NONE-NONE-NONE`은 의미 비교에서만 동일하게 취급한다. 새 형식 준수율은 별도 `submission_format`으로 검사하며, 열 순서/필드 일관성/전체 누락 형식을 충족해야 결합 합격으로 처리한다. 과거 기록은 소급 수정하지 않는다. 상세 지표와 검증 범위는 [제출·평가 계약 정비](submission-contract-20260910.md)를 참조한다.
+내부 95% 목표는 날짜 전체 일치율이다. 공식 부분점수 배점은 미확정이므로 `field_metrics`의 연·월·일별 진단 지표를 공식 점수로 표시하지 않는다. 과거 `NONE-NONE-NONE`과 현재 `NONE`은 의미 비교에서만 동일하게 취급한다. 새 형식 준수율은 별도 `submission_format`으로 검사하며, 열 순서/필드 일관성/전체 누락 형식을 충족해야 결합 합격으로 처리한다. 과거 기록은 소급 수정하지 않는다. 상세 지표와 검증 범위는 [제출·평가 계약 정비](submission-contract-20260910.md)를 참조한다.
 
 `run_pipeline`의 기존 `elapsed_seconds`는 이미지 처리·저장 구간이다. 추가한 `total_elapsed_seconds`는 함수 진입부터 모델 초기화·탐색·처리·저장까지 포함하지만 호출자와 Python import 시작 시간은 제외한다. 공식 500장 타이밍은 실행을 감싸는 외부 벽시계 측정으로 이를 포함해야 한다. OCR 호출 수와 `selection_reasons`를 함께 보고해 기본값 사용률과 복구 비용을 추적한다.
 - 날짜 직렬화 예외도 이미지 단위 실패로 기록하고 다음 이미지를 계속 처리

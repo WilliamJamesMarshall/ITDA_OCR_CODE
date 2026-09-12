@@ -1,0 +1,66 @@
+{
+  "created_at": "2026-09-11T19:42:52.677016+00:00",
+  "status": "blocked_pending_group_review_and_scorer_custody",
+  "physical_lock_complete": false,
+  "scorer_only_access_verified": false,
+  "training_allowed": false,
+  "draft_split_sha256": "26537f526219e918a845255c8c2bce316207a95eab93ca453409d70e96c06cef",
+  "final_holdout_hash": null,
+  "final_holdout_created_at": null,
+  "existing_plaintext_sources": [
+    {
+      "path": "C:\\ITDA_OCR_CODE\\상품사진_정답지\\answer_000001_003352_manual.xlsx",
+      "sha256": "df1149e5032370d86494f5d1a1ea6865bf6402d15072bb6135f33e036c432b8c",
+      "risk": "full answer workbook readable by current account"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\상품사진_정답지\\validation_000001_003352_manual.xlsx",
+      "sha256": "c6e380123b41fd71a5946b535d05c119eb69afad0361923b1d8365e1659cc284",
+      "risk": "full answer workbook readable by current account"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\추가수집_정답지\\answer_003353_003716_manual.xlsx",
+      "sha256": "75ca696f0973d3a195aba46fcc862420f75b9bb2fdfb5db919ea3da1fa3adcd3",
+      "risk": "full answer workbook readable by current account"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\추가수집_정답지\\validation_003353_003716_manual.xlsx",
+      "sha256": "3f92f52a1a9d44ae73979850e42520824ec4b0218478819920ebfa604ea9ff21",
+      "risk": "full answer workbook readable by current account"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\테스트용_정답지\\answer_000001_003716_manual.xlsx",
+      "sha256": "0dc9b804d041f5aa698125ad536ac1a67741ae1debd338f53d58db58eb268406",
+      "risk": "full answer workbook readable by current account"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\학습대상_정답지\\answer_000001_002610_manual.xlsx",
+      "sha256": "2774693b68a3823c418684aaf8bef484c97d9f8117e273db80bd58f8dc384b13",
+      "risk": "full answer workbook readable by current account"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\학습 및 테스트 결과\\00_protocol",
+      "label_or_trace_candidate_files": 32,
+      "risk": "records, exports, histories, snapshots or traces can expose holdout answers; requires custody audit"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\학습 및 테스트 결과\\02_annotations",
+      "label_or_trace_candidate_files": 35354,
+      "risk": "records, exports, histories, snapshots or traces can expose holdout answers; requires custody audit"
+    },
+    {
+      "path": "C:\\ITDA_OCR_CODE\\artifacts",
+      "label_or_trace_candidate_files": 788,
+      "risk": "records, exports, histories, snapshots or traces can expose holdout answers; requires custody audit"
+    }
+  ],
+  "required_decisions": [
+    "Separate scorer account or external custodian; training identity must not read answer archives.",
+    "Approved final product groups and fold sizes before final holdout commitment."
+  ],
+  "actions_not_taken": [
+    "No workbooks, annotations or backups deleted/moved.",
+    "No account/ACL changes or keys stored alongside ciphertext.",
+    "No claim that previously viewed labels have become unseen."
+  ]
+}

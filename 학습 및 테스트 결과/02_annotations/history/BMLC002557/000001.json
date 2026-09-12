@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "image_id": "BMLC002557",
+  "source_image_id": "003663",
+  "image_path": "학습대상데이터/BMLC002557.jpg",
+  "image_sha256": "06a59ce29fd6b7cbac705be0d86e3056b0d532afcf43ebcb7e18b6e050e926ee",
+  "width": 2048,
+  "height": 1535,
+  "source_dataset": "additional",
+  "final_date": "2022-11-18",
+  "final_date_review": {
+    "status": "approved",
+    "scope": "normalized_final_date_only",
+    "reviewer": "user",
+    "method": "human_visual_review_of_all_364_images",
+    "source": {
+      "path": "추가수집_정답지/answer_003353_003716_manual.xlsx",
+      "sha256": "75ca696f0973d3a195aba46fcc862420f75b9bb2fdfb5db919ea3da1fa3adcd3",
+      "rows": 364,
+      "sheet": "검수 정답지",
+      "cell": "C312"
+    }
+  },
+  "seen_in_development": true,
+  "legacy_metadata": {
+    "difficulty": "unassessed",
+    "condition_tags": [
+      "full_date",
+      "multiple_date_lines"
+    ]
+  },
+  "group_id": "sha256:06a59ce29fd6b7cbac705be0d86e3056b0d532afcf43ebcb7e18b6e050e926ee",
+  "group_evidence": "",
+  "difficulty": "unassessed",
+  "quality_tags": [],
+  "notes": "",
+  "regions": [
+    {
+      "region_id": "source_000",
+      "kind": "date_line",
+      "polygon": [
+        [
+          540,
+          1004
+        ],
+        [
+          985,
+          1004
+        ],
+        [
+          985,
+          1051
+        ],
+        [
+          540,
+          1051
+        ]
+      ],
+      "transcription": "18/11/2022",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "external_source_candidate",
+        "source_class": "exp",
+        "path": "추가수집데이터/metadata/annotations.json",
+        "key": "003663.jpg",
+        "index": 0
+      }
+    },
+    {
+      "region_id": "source_001",
+      "kind": "date_line",
+      "polygon": [
+        [
+          557,
+          898
+        ],
+        [
+          1009,
+          898
+        ],
+        [
+          1009,
+          961
+        ],
+        [
+          557,
+          961
+        ]
+      ],
+      "transcription": "18/11/2020",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "external_source_candidate",
+        "source_class": "date",
+        "path": "추가수집데이터/metadata/annotations.json",
+        "key": "003663.jpg",
+        "index": 1
+      }
+    },
+    {
+      "region_id": "source_002",
+      "kind": "header",
+      "polygon": [
+        [
+          798,
+          875
+        ],
+        [
+          867,
+          875
+        ],
+        [
+          867,
+          902
+        ],
+        [
+          798,
+          902
+        ]
+      ],
+      "transcription": "before",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "external_source_candidate",
+        "source_class": "due",
+        "path": "추가수집데이터/metadata/annotations.json",
+        "key": "003663.jpg",
+        "index": 2,
+        "text_candidate": {
+          "type": "automatic_ocr_candidate",
+          "model": "korean_PP-OCRv5_mobile_rec",
+          "score": 0.9998674392700195,
+          "created_at": "2026-09-11T15:02:48.160657+00:00"
+        }
+      }
+    }
+  ],
+  "revision": 1,
+  "review": {
+    "status": "pending",
+    "reviewer": "",
+    "approved_at": null,
+    "date_regions_complete": false,
+    "header_regions_complete": false,
+    "quality_reviewed": false,
+    "group_reviewed": false,
+    "no_date_regions": false
+  }
+}

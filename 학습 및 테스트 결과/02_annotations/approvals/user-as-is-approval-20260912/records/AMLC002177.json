@@ -1,0 +1,1354 @@
+{
+  "schema_version": 1,
+  "image_id": "AMLC002177",
+  "source_image_id": "003239",
+  "image_path": "학습대상데이터/AMLC002177.jpg",
+  "image_sha256": "457d7dfb6364d62943fdc44894ac7d54a04ea5f0fecebec3ceff2d93b64594c4",
+  "width": 1327,
+  "height": 1771,
+  "source_dataset": "product",
+  "final_date": "2021-11-06",
+  "final_date_review": {
+    "status": "approved",
+    "scope": "normalized_final_date_only",
+    "reviewer": "user",
+    "method": "user_approved_workbook",
+    "source": {
+      "path": "상품사진_정답지/answer_000001_003352_manual.xlsx",
+      "sha256": "df1149e5032370d86494f5d1a1ea6865bf6402d15072bb6135f33e036c432b8c",
+      "rows": 3352,
+      "sheet": "검수 정답지",
+      "cell": "C3240"
+    }
+  },
+  "seen_in_development": false,
+  "legacy_metadata": {
+    "difficulty": "hard",
+    "condition_tags": [
+      "제조일자·소비기한 동시",
+      "full_date"
+    ]
+  },
+  "group_id": "sha256:457d7dfb6364d62943fdc44894ac7d54a04ea5f0fecebec3ceff2d93b64594c4",
+  "group_evidence": "초안: SHA-256 파일 동일성 기준. 동일 상품·연속 촬영 관계는 아직 미확정.",
+  "difficulty": "hard",
+  "quality_tags": [],
+  "notes": "",
+  "regions": [
+    {
+      "region_id": "ocr_022",
+      "kind": "header",
+      "polygon": [
+        [
+          383.0,
+          1102.0
+        ],
+        [
+          740.0,
+          1122.0
+        ],
+        [
+          738.0,
+          1154.0
+        ],
+        [
+          382.0,
+          1134.0
+        ]
+      ],
+      "transcription": "Producion date PRD: DD.MM.Y or YYYMM.DD",
+      "role": "manufacture",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 원문 표제 단서 Producion date PRD: DD.MM.Y or YYYMM.DD",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "checked",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9542382955551147,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "ocr_023",
+      "kind": "header",
+      "polygon": [
+        [
+          400.0,
+          1129.0
+        ],
+        [
+          725.0,
+          1148.0
+        ],
+        [
+          723.0,
+          1181.0
+        ],
+        [
+          398.0,
+          1162.0
+        ]
+      ],
+      "transcription": "Best Before EXD: DD.M.YY or YY.MM.DD",
+      "role": "expiry",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 원문 표제 단서 Best Before EXD: DD.M.YY or YY.MM.DD",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "checked",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9443680644035339,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "ocr_024",
+      "kind": "date_line",
+      "polygon": [
+        [
+          393.0,
+          1247.0
+        ],
+        [
+          696.0,
+          1252.0
+        ],
+        [
+          696.0,
+          1295.0
+        ],
+        [
+          392.0,
+          1290.0
+        ]
+      ],
+      "transcription": "PRD: 04.11.2020",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 인쇄 표제와 역할 연결 근거가 없어 기타·불명으로 제안. 사진에서 확인 필요.",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "present",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": ".",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "checked",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9667149782180786,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "ocr_025",
+      "kind": "date_line",
+      "polygon": [
+        [
+          392.0,
+          1292.0
+        ],
+        [
+          700.0,
+          1292.0
+        ],
+        [
+          700.0,
+          1334.0
+        ],
+        [
+          392.0,
+          1334.0
+        ]
+      ],
+      "transcription": "EXD:06.11.2021",
+      "role": "other",
+      "role_basis": "undetermined",
+      "role_evidence": "초안: 인쇄 표제와 역할 연결 근거가 없어 기타·불명으로 제안. 사진에서 확인 필요.",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "present",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": ".",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "checked",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9984287023544312,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    }
+  ],
+  "revision": 6,
+  "review": {
+    "status": "approved",
+    "reviewer": "user",
+    "approved_at": "2026-09-11T17:31:27.520931+00:00",
+    "date_regions_complete": true,
+    "header_regions_complete": true,
+    "quality_reviewed": true,
+    "group_reviewed": true,
+    "no_date_regions": false,
+    "method": "explicit_user_bulk_approval"
+  },
+  "draft": {
+    "method": "candidate_only_v1",
+    "human_verified": false,
+    "issues": [
+      "상품 그룹은 파일 동일성만 확인됨: 같은 상품·연속 촬영 확인 필요",
+      "반사·곡면·번짐 등 품질은 사진 대조 필요"
+    ],
+    "quality_basis": "기존 진단 태그 재사용; 태그 없음은 결함 없음이 아님",
+    "version": 2
+  },
+  "ocr_context": [
+    {
+      "region_id": "ocr_000",
+      "kind": "other",
+      "polygon": [
+        [
+          966.0,
+          327.0
+        ],
+        [
+          1018.0,
+          321.0
+        ],
+        [
+          1039.0,
+          528.0
+        ],
+        [
+          987.0,
+          533.0
+        ]
+      ],
+      "transcription": "EE",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.44307512044906616,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.786985+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_001",
+      "kind": "other",
+      "polygon": [
+        [
+          502.0,
+          384.0
+        ],
+        [
+          732.0,
+          369.0
+        ],
+        [
+          736.0,
+          422.0
+        ],
+        [
+          506.0,
+          437.0
+        ]
+      ],
+      "transcription": "Monufo Biscuits",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.6282151937484741,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.786985+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_002",
+      "kind": "other",
+      "polygon": [
+        [
+          484.0,
+          408.0
+        ],
+        [
+          819.0,
+          408.0
+        ],
+        [
+          819.0,
+          476.0
+        ],
+        [
+          484.0,
+          476.0
+        ]
+      ],
+      "transcription": "Sndustrie - Contres",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.6372072100639343,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.786985+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_003",
+      "kind": "other",
+      "polygon": [
+        [
+          323.0,
+          433.0
+        ],
+        [
+          858.0,
+          424.0
+        ],
+        [
+          860.0,
+          546.0
+        ],
+        [
+          325.0,
+          555.0
+        ]
+      ],
+      "transcription": "1CONROI-EN-SOO",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.47091299295425415,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_004",
+      "kind": "other",
+      "polygon": [
+        [
+          519.0,
+          503.0
+        ],
+        [
+          651.0,
+          510.0
+        ],
+        [
+          648.0,
+          567.0
+        ],
+        [
+          515.0,
+          559.0
+        ]
+      ],
+      "transcription": "FRANCE",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9877300262451172,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_005",
+      "kind": "other",
+      "polygon": [
+        [
+          988.0,
+          516.0
+        ],
+        [
+          1051.0,
+          533.0
+        ],
+        [
+          1041.0,
+          570.0
+        ],
+        [
+          978.0,
+          552.0
+        ]
+      ],
+      "transcription": "emustes.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.6935988068580627,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_006",
+      "kind": "other",
+      "polygon": [
+        [
+          974.0,
+          548.0
+        ],
+        [
+          1058.0,
+          562.0
+        ],
+        [
+          1050.0,
+          608.0
+        ],
+        [
+          966.0,
+          593.0
+        ]
+      ],
+      "transcription": "ogens dip",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.7153503894805908,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_007",
+      "kind": "other",
+      "polygon": [
+        [
+          968.0,
+          583.0
+        ],
+        [
+          1063.0,
+          596.0
+        ],
+        [
+          1057.0,
+          638.0
+        ],
+        [
+          962.0,
+          625.0
+        ]
+      ],
+      "transcription": "sorch,ot, Hom",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.5493180155754089,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_008",
+      "kind": "other",
+      "polygon": [
+        [
+          965.0,
+          616.0
+        ],
+        [
+          1069.0,
+          633.0
+        ],
+        [
+          1063.0,
+          673.0
+        ],
+        [
+          958.0,
+          655.0
+        ]
+      ],
+      "transcription": "soy, mil nd ous",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.6868724226951599,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_009",
+      "kind": "other",
+      "polygon": [
+        [
+          964.0,
+          649.0
+        ],
+        [
+          1073.0,
+          663.0
+        ],
+        [
+          1068.0,
+          705.0
+        ],
+        [
+          959.0,
+          690.0
+        ]
+      ],
+      "transcription": "light Manen fonme",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.5858692526817322,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_010",
+      "kind": "other",
+      "polygon": [
+        [
+          776.0,
+          670.0
+        ],
+        [
+          820.0,
+          673.0
+        ],
+        [
+          810.0,
+          793.0
+        ],
+        [
+          765.0,
+          789.0
+        ]
+      ],
+      "transcription": "999908",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.7500576376914978,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_011",
+      "kind": "other",
+      "polygon": [
+        [
+          965.0,
+          700.0
+        ],
+        [
+          1073.0,
+          713.0
+        ],
+        [
+          1069.0,
+          750.0
+        ],
+        [
+          960.0,
+          737.0
+        ]
+      ],
+      "transcription": "NL Madeleines",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.8897870779037476,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_012",
+      "kind": "other",
+      "polygon": [
+        [
+          965.0,
+          733.0
+        ],
+        [
+          1063.0,
+          742.0
+        ],
+        [
+          1059.0,
+          783.0
+        ],
+        [
+          962.0,
+          774.0
+        ]
+      ],
+      "transcription": "vie uiloop.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.7622489929199219,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_013",
+      "kind": "other",
+      "polygon": [
+        [
+          972.0,
+          768.0
+        ],
+        [
+          1063.0,
+          777.0
+        ],
+        [
+          1059.0,
+          810.0
+        ],
+        [
+          968.0,
+          802.0
+        ]
+      ],
+      "transcription": "lie, eieren im",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.7137412428855896,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_014",
+      "kind": "other",
+      "polygon": [
+        [
+          978.0,
+          797.0
+        ],
+        [
+          1076.0,
+          808.0
+        ],
+        [
+          1072.0,
+          846.0
+        ],
+        [
+          974.0,
+          834.0
+        ]
+      ],
+      "transcription": "sibistour, gel",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.4129513204097748,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_015",
+      "kind": "other",
+      "polygon": [
+        [
+          1048.0,
+          797.0
+        ],
+        [
+          1059.0,
+          786.0
+        ],
+        [
+          1067.0,
+          795.0
+        ],
+        [
+          1056.0,
+          805.0
+        ]
+      ],
+      "transcription": "4",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.4142152667045593,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_016",
+      "kind": "other",
+      "polygon": [
+        [
+          977.0,
+          835.0
+        ],
+        [
+          1076.0,
+          843.0
+        ],
+        [
+          1073.0,
+          876.0
+        ],
+        [
+          974.0,
+          868.0
+        ]
+      ],
+      "transcription": "mono-en gtia",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.7198607921600342,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_017",
+      "kind": "other",
+      "polygon": [
+        [
+          968.0,
+          870.0
+        ],
+        [
+          1073.0,
+          870.0
+        ],
+        [
+          1073.0,
+          902.0
+        ],
+        [
+          968.0,
+          902.0
+        ]
+      ],
+      "transcription": "en nahriumcanm",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.7122482657432556,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_018",
+      "kind": "other",
+      "polygon": [
+        [
+          963.0,
+          897.0
+        ],
+        [
+          1075.0,
+          900.0
+        ],
+        [
+          1074.0,
+          937.0
+        ],
+        [
+          962.0,
+          934.0
+        ]
+      ],
+      "transcription": "farwe, eiere u",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.8010501861572266,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_019",
+      "kind": "other",
+      "polygon": [
+        [
+          368.0,
+          930.0
+        ],
+        [
+          720.0,
+          934.0
+        ],
+        [
+          719.0,
+          978.0
+        ],
+        [
+          367.0,
+          973.0
+        ]
+      ],
+      "transcription": "3117853014157351",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.945063591003418,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_020",
+      "kind": "other",
+      "polygon": [
+        [
+          961.0,
+          929.0
+        ],
+        [
+          1070.0,
+          926.0
+        ],
+        [
+          1071.0,
+          966.0
+        ],
+        [
+          962.0,
+          969.0
+        ]
+      ],
+      "transcription": "beoten  oel one",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.6817824244499207,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_021",
+      "kind": "other",
+      "polygon": [
+        [
+          962.0,
+          961.0
+        ],
+        [
+          1070.0,
+          957.0
+        ],
+        [
+          1072.0,
+          998.0
+        ],
+        [
+          964.0,
+          1002.0
+        ]
+      ],
+      "transcription": "Fronkikenm miste",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.6963608860969543,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_026",
+      "kind": "other",
+      "polygon": [
+        [
+          389.0,
+          1338.0
+        ],
+        [
+          740.0,
+          1341.0
+        ],
+        [
+          740.0,
+          1383.0
+        ],
+        [
+          389.0,
+          1380.0
+        ]
+      ],
+      "transcription": "13:41L101V2309/1",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "/",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9681798815727234,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:38:45.788991+00:00"
+      },
+      "draft": {
+        "method": "literal_text_and_source_hints_v1",
+        "issues": [
+          "날짜 순서·부분 날짜·가려짐 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    }
+  ],
+  "ocr_draft_pass": {
+    "status": "completed",
+    "created_at": "2026-09-11T16:38:45.788991+00:00",
+    "cpu_threads": 4
+  },
+  "quality_draft_measurements": {
+    "method": "raw_date_crop_pixel_heuristics_v1",
+    "regions": [
+      {
+        "region_id": "ocr_024",
+        "height": 48,
+        "contrast": 59.6,
+        "laplacian_variance": 1188.82
+      },
+      {
+        "region_id": "ocr_025",
+        "height": 42,
+        "contrast": 59.88,
+        "laplacian_variance": 1082.02
+      }
+    ],
+    "unmeasured": [
+      "reflection",
+      "curved",
+      "bleed",
+      "dot_print",
+      "occlusion"
+    ],
+    "warning": "미검수 픽셀 기반 후보이며, 태그가 없다고 결함이 없는 것은 아님"
+  },
+  "user_draft_approval": {
+    "status": "approved",
+    "method": "explicit_user_bulk_approval",
+    "decision": "주석은 전부 초안 그대로 승인한다. 남은 작업 시작해",
+    "reviewer": "user",
+    "approved_at": "2026-09-11T17:31:27.519110+00:00",
+    "approved_revision": 5,
+    "approved_snapshot_sha256": "f82d33a4ff529ae972daf92096169f67fe3ccdafd4baf3fa92c9cf160488805f",
+    "individual_visual_inspection_claimed": false
+  },
+  "training_readiness": {
+    "status": "eligible",
+    "blockers": []
+  }
+}

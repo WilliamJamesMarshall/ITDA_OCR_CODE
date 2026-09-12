@@ -1,0 +1,1359 @@
+{
+  "schema_version": 1,
+  "original_size": [
+    3024,
+    4032
+  ],
+  "coordinate_space": "exif_oriented_image_edges",
+  "frames": [
+    {
+      "pass_id": "p001",
+      "detector": "mobile",
+      "variant": "original",
+      "geometry": {
+        "width": 3024,
+        "height": 4032,
+        "to_original": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "pass_id": "p002",
+      "detector": "recognition-only",
+      "variant": "date-lines",
+      "geometry": {
+        "width": 3024,
+        "height": 4032,
+        "to_original": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "pass_id": "p003",
+      "detector": "mobile",
+      "variant": "roi-1",
+      "geometry": {
+        "width": 3024,
+        "height": 2226,
+        "to_original": [
+          1.0,
+          0.0,
+          0,
+          0.0,
+          1.0,
+          978
+        ]
+      }
+    },
+    {
+      "pass_id": "p004",
+      "detector": "mobile",
+      "variant": "roi-2",
+      "geometry": {
+        "width": 1994,
+        "height": 1608,
+        "to_original": [
+          1.0,
+          0.0,
+          516,
+          0.0,
+          1.0,
+          1450
+        ]
+      }
+    },
+    {
+      "pass_id": "p005",
+      "detector": "mobile",
+      "variant": "clahe",
+      "geometry": {
+        "width": 3024,
+        "height": 4032,
+        "to_original": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "p001:o0001",
+      "region_id": "r0001",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "BED: 20052026 VT 05",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7928903698921204,
+      "local_box": [
+        817.0,
+        1906.0,
+        2501.0,
+        2277.0
+      ],
+      "local_polygon": [
+        [
+          817.0,
+          2093.0
+        ],
+        [
+          2481.0,
+          1906.0
+        ],
+        [
+          2501.0,
+          2090.0
+        ],
+        [
+          837.0,
+          2277.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          817.0,
+          2093.0
+        ],
+        [
+          2481.0,
+          1906.0
+        ],
+        [
+          2501.0,
+          2090.0
+        ],
+        [
+          837.0,
+          2277.0
+        ]
+      ],
+      "original_box": [
+        817.0,
+        1906.0,
+        2501.0,
+        2277.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [
+        {
+          "value": "2026-05-20",
+          "raw": "20052026",
+          "span": [
+            5,
+            13
+          ],
+          "order": "dmy",
+          "order_reason": "calendar_unique",
+          "repaired": false
+        }
+      ],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "full"
+    },
+    {
+      "observation_id": "p001:o0002",
+      "region_id": "r0002",
+      "pass_id": "p001",
+      "source": "paddle-mobile",
+      "variant": "original",
+      "text": "HED 19:25",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.773668110370636,
+      "local_box": [
+        1130.0,
+        2120.0,
+        1897.0,
+        2388.0
+      ],
+      "local_polygon": [
+        [
+          1130.0,
+          2209.0
+        ],
+        [
+          1876.0,
+          2120.0
+        ],
+        [
+          1897.0,
+          2299.0
+        ],
+        [
+          1151.0,
+          2388.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1130.0,
+          2209.0
+        ],
+        [
+          1876.0,
+          2120.0
+        ],
+        [
+          1897.0,
+          2299.0
+        ],
+        [
+          1151.0,
+          2388.0
+        ]
+      ],
+      "original_box": [
+        1130.0,
+        2120.0,
+        1897.0,
+        2388.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p002:o0001",
+      "region_id": "r0001",
+      "pass_id": "p002",
+      "source": "paddle-mobile",
+      "variant": "line-0-contrast",
+      "text": "BE0:20-15-2035 WT B5",
+      "character_scores": [
+        0.9603677988052368,
+        0.7758886218070984,
+        0.538979709148407,
+        0.890792965888977,
+        0.905726432800293,
+        0.9260587692260742,
+        0.9053447246551514,
+        0.397247314453125,
+        0.8883516788482666,
+        0.5017879009246826,
+        0.9879117012023926,
+        0.5101392269134521,
+        0.5360864996910095,
+        0.44108498096466064,
+        0.926122784614563,
+        0.808929443359375,
+        0.9035585522651672,
+        0.89377361536026,
+        0.46281230449676514,
+        0.811174213886261
+      ],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7486070394515991,
+      "local_box": [
+        817,
+        1906,
+        2501,
+        2277
+      ],
+      "local_polygon": [
+        [
+          817,
+          1906
+        ],
+        [
+          2501,
+          1906
+        ],
+        [
+          2501,
+          2277
+        ],
+        [
+          817,
+          2277
+        ]
+      ],
+      "original_polygon": [
+        [
+          817.0,
+          1906.0
+        ],
+        [
+          2501.0,
+          1906.0
+        ],
+        [
+          2501.0,
+          2277.0
+        ],
+        [
+          817.0,
+          2277.0
+        ]
+      ],
+      "original_box": [
+        817.0,
+        1906.0,
+        2501.0,
+        2277.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p002:o0002",
+      "region_id": "r0003",
+      "pass_id": "p002",
+      "source": "paddle-mobile",
+      "variant": "line-0-padded",
+      "text": "BE0:20-052026 T 05",
+      "character_scores": [
+        0.7154623866081238,
+        0.4616281986236572,
+        0.7192807197570801,
+        0.7802549600601196,
+        0.4965212941169739,
+        0.9052001237869263,
+        0.531199038028717,
+        0.8252101540565491,
+        0.7855535745620728,
+        0.8206494450569153,
+        0.9697560667991638,
+        0.6665149331092834,
+        0.7875857949256897,
+        0.539843738079071,
+        0.9254043102264404,
+        0.8259738087654114,
+        0.5248550176620483,
+        0.3686751127243042
+      ],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7027537822723389,
+      "local_box": [
+        805,
+        1894,
+        2513,
+        2289
+      ],
+      "local_polygon": [
+        [
+          805,
+          1894
+        ],
+        [
+          2513,
+          1894
+        ],
+        [
+          2513,
+          2289
+        ],
+        [
+          805,
+          2289
+        ]
+      ],
+      "original_polygon": [
+        [
+          805.0,
+          1894.0
+        ],
+        [
+          2513.0,
+          1894.0
+        ],
+        [
+          2513.0,
+          2289.0
+        ],
+        [
+          805.0,
+          2289.0
+        ]
+      ],
+      "original_box": [
+        805.0,
+        1894.0,
+        2513.0,
+        2289.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0001"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p002:o0003",
+      "region_id": "r0004",
+      "pass_id": "p002",
+      "source": "paddle-mobile",
+      "variant": "line-0-padded-contrast",
+      "text": "BE0:20-052026 WT 05",
+      "character_scores": [
+        0.5118283629417419,
+        0.5712451338768005,
+        0.7700555920600891,
+        0.718643069267273,
+        0.5986058115959167,
+        0.9665932059288025,
+        0.4180813431739807,
+        0.9156292676925659,
+        0.9339805841445923,
+        0.5376409292221069,
+        0.9658063054084778,
+        0.7723244428634644,
+        0.6555228233337402,
+        0.5928444862365723,
+        0.7356478571891785,
+        0.9628450870513916,
+        0.9189230799674988,
+        0.3751315176486969,
+        0.3635837733745575
+      ],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.6992070078849792,
+      "local_box": [
+        805,
+        1894,
+        2513,
+        2289
+      ],
+      "local_polygon": [
+        [
+          805,
+          1894
+        ],
+        [
+          2513,
+          1894
+        ],
+        [
+          2513,
+          2289
+        ],
+        [
+          805,
+          2289
+        ]
+      ],
+      "original_polygon": [
+        [
+          805.0,
+          1894.0
+        ],
+        [
+          2513.0,
+          1894.0
+        ],
+        [
+          2513.0,
+          2289.0
+        ],
+        [
+          805.0,
+          2289.0
+        ]
+      ],
+      "original_box": [
+        805.0,
+        1894.0,
+        2513.0,
+        2289.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0001",
+        "r0003"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p003:o0001",
+      "region_id": "r0005",
+      "pass_id": "p003",
+      "source": "paddle-mobile",
+      "variant": "roi-1",
+      "text": "BED: 20052026 9T 05",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8276374340057373,
+      "local_box": [
+        819.0,
+        932.0,
+        2509.0,
+        1298.0
+      ],
+      "local_polygon": [
+        [
+          819.0,
+          1116.0
+        ],
+        [
+          2489.0,
+          932.0
+        ],
+        [
+          2509.0,
+          1114.0
+        ],
+        [
+          840.0,
+          1298.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          819.0,
+          2094.0
+        ],
+        [
+          2489.0,
+          1910.0
+        ],
+        [
+          2509.0,
+          2092.0
+        ],
+        [
+          840.0,
+          2276.0
+        ]
+      ],
+      "original_box": [
+        819.0,
+        1910.0,
+        2509.0,
+        2276.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0001",
+        "r0003",
+        "r0004"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [
+        {
+          "value": "2026-05-20",
+          "raw": "20052026",
+          "span": [
+            5,
+            13
+          ],
+          "order": "dmy",
+          "order_reason": "calendar_unique",
+          "repaired": false
+        }
+      ],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "full"
+    },
+    {
+      "observation_id": "p003:o0002",
+      "region_id": "r0002",
+      "pass_id": "p003",
+      "source": "paddle-mobile",
+      "variant": "roi-1",
+      "text": "HED 19:25",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8167679905891418,
+      "local_box": [
+        1132.0,
+        1147.0,
+        1890.0,
+        1405.0
+      ],
+      "local_polygon": [
+        [
+          1132.0,
+          1224.0
+        ],
+        [
+          1871.0,
+          1147.0
+        ],
+        [
+          1890.0,
+          1327.0
+        ],
+        [
+          1151.0,
+          1405.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1132.0,
+          2202.0
+        ],
+        [
+          1871.0,
+          2125.0
+        ],
+        [
+          1890.0,
+          2305.0
+        ],
+        [
+          1151.0,
+          2383.0
+        ]
+      ],
+      "original_box": [
+        1132.0,
+        2125.0,
+        1890.0,
+        2383.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0002"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0001",
+      "region_id": "r0006",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "roi-2",
+      "text": "MTIS",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.4686078429222107,
+      "local_box": [
+        1410.0,
+        463.0,
+        1987.0,
+        699.0
+      ],
+      "local_polygon": [
+        [
+          1410.0,
+          517.0
+        ],
+        [
+          1970.0,
+          463.0
+        ],
+        [
+          1987.0,
+          645.0
+        ],
+        [
+          1427.0,
+          699.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1926.0,
+          1967.0
+        ],
+        [
+          2486.0,
+          1913.0
+        ],
+        [
+          2503.0,
+          2095.0
+        ],
+        [
+          1943.0,
+          2149.0
+        ]
+      ],
+      "original_box": [
+        1926.0,
+        1913.0,
+        2503.0,
+        2149.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0002",
+      "region_id": "r0007",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "roi-2",
+      "text": "BED: 20L52026",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.8479481935501099,
+      "local_box": [
+        307.0,
+        525.0,
+        1455.0,
+        825.0
+      ],
+      "local_polygon": [
+        [
+          307.0,
+          653.0
+        ],
+        [
+          1436.0,
+          525.0
+        ],
+        [
+          1455.0,
+          697.0
+        ],
+        [
+          326.0,
+          825.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          823.0,
+          2103.0
+        ],
+        [
+          1952.0,
+          1975.0
+        ],
+        [
+          1971.0,
+          2147.0
+        ],
+        [
+          842.0,
+          2275.0
+        ]
+      ],
+      "original_box": [
+        823.0,
+        1975.0,
+        1971.0,
+        2275.0
+      ],
+      "geometry_source": "polygon",
+      "association": "new",
+      "possible_region_ids": [],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p004:o0003",
+      "region_id": "r0002",
+      "pass_id": "p004",
+      "source": "paddle-mobile",
+      "variant": "roi-2",
+      "text": "HED 19:25",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7994472980499268,
+      "local_box": [
+        610.0,
+        678.0,
+        1382.0,
+        940.0
+      ],
+      "local_polygon": [
+        [
+          610.0,
+          749.0
+        ],
+        [
+          1364.0,
+          678.0
+        ],
+        [
+          1382.0,
+          869.0
+        ],
+        [
+          628.0,
+          940.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1126.0,
+          2199.0
+        ],
+        [
+          1880.0,
+          2128.0
+        ],
+        [
+          1898.0,
+          2319.0
+        ],
+        [
+          1144.0,
+          2390.0
+        ]
+      ],
+      "original_box": [
+        1126.0,
+        2128.0,
+        1898.0,
+        2390.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0002"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    },
+    {
+      "observation_id": "p005:o0001",
+      "region_id": "r0008",
+      "pass_id": "p005",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "BBD:20/05 2026 VWT 05",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.7832823991775513,
+      "local_box": [
+        805.0,
+        1893.0,
+        2511.0,
+        2285.0
+      ],
+      "local_polygon": [
+        [
+          805.0,
+          2078.0
+        ],
+        [
+          2489.0,
+          1893.0
+        ],
+        [
+          2511.0,
+          2100.0
+        ],
+        [
+          828.0,
+          2285.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          805.0,
+          2078.0
+        ],
+        [
+          2489.0,
+          1893.0
+        ],
+        [
+          2511.0,
+          2100.0
+        ],
+        [
+          828.0,
+          2285.0
+        ]
+      ],
+      "original_box": [
+        805.0,
+        1893.0,
+        2511.0,
+        2285.0
+      ],
+      "geometry_source": "polygon",
+      "association": "ambiguous_new",
+      "possible_region_ids": [
+        "r0001",
+        "r0003",
+        "r0004",
+        "r0005"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [
+        {
+          "role": "expiry",
+          "text": "BBD",
+          "span": [
+            0,
+            3
+          ],
+          "basis": "lexical_only"
+        },
+        {
+          "role": "quality",
+          "text": "BBD",
+          "span": [
+            0,
+            3
+          ],
+          "basis": "lexical_only"
+        }
+      ],
+      "full_parses": [
+        {
+          "value": "2026-05-20",
+          "raw": "20/05 2026",
+          "span": [
+            4,
+            14
+          ],
+          "order": "dmy",
+          "order_reason": "calendar_unique",
+          "repaired": false
+        }
+      ],
+      "partial_parses": [],
+      "date_like": true,
+      "parse_status": "full"
+    },
+    {
+      "observation_id": "p005:o0002",
+      "region_id": "r0002",
+      "pass_id": "p005",
+      "source": "paddle-mobile",
+      "variant": "clahe",
+      "text": "HB0 19:25",
+      "character_scores": [],
+      "date_digit_score": null,
+      "date_digit_min_score": null,
+      "score": 0.808983325958252,
+      "local_box": [
+        1127.0,
+        2120.0,
+        1896.0,
+        2388.0
+      ],
+      "local_polygon": [
+        [
+          1127.0,
+          2206.0
+        ],
+        [
+          1876.0,
+          2120.0
+        ],
+        [
+          1896.0,
+          2302.0
+        ],
+        [
+          1148.0,
+          2388.0
+        ]
+      ],
+      "original_polygon": [
+        [
+          1127.0,
+          2206.0
+        ],
+        [
+          1876.0,
+          2120.0
+        ],
+        [
+          1896.0,
+          2302.0
+        ],
+        [
+          1148.0,
+          2388.0
+        ]
+      ],
+      "original_box": [
+        1127.0,
+        2120.0,
+        1896.0,
+        2388.0
+      ],
+      "geometry_source": "polygon",
+      "association": "geometric_overlap_hypothesis",
+      "possible_region_ids": [
+        "r0002"
+      ],
+      "recognition_state": "recognized",
+      "role_hints": [],
+      "full_parses": [],
+      "partial_parses": [],
+      "date_like": false,
+      "parse_status": "unparsed"
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "r0001",
+      "anchor_box": [
+        817.0,
+        1906.0,
+        2501.0,
+        2277.0
+      ],
+      "observation_ids": [
+        "p001:o0001",
+        "p002:o0001"
+      ]
+    },
+    {
+      "region_id": "r0002",
+      "anchor_box": [
+        1130.0,
+        2120.0,
+        1897.0,
+        2388.0
+      ],
+      "observation_ids": [
+        "p001:o0002",
+        "p003:o0002",
+        "p004:o0003",
+        "p005:o0002"
+      ]
+    },
+    {
+      "region_id": "r0003",
+      "anchor_box": [
+        805.0,
+        1894.0,
+        2513.0,
+        2289.0
+      ],
+      "observation_ids": [
+        "p002:o0002"
+      ]
+    },
+    {
+      "region_id": "r0004",
+      "anchor_box": [
+        805.0,
+        1894.0,
+        2513.0,
+        2289.0
+      ],
+      "observation_ids": [
+        "p002:o0003"
+      ]
+    },
+    {
+      "region_id": "r0005",
+      "anchor_box": [
+        819.0,
+        1910.0,
+        2509.0,
+        2276.0
+      ],
+      "observation_ids": [
+        "p003:o0001"
+      ]
+    },
+    {
+      "region_id": "r0006",
+      "anchor_box": [
+        1926.0,
+        1913.0,
+        2503.0,
+        2149.0
+      ],
+      "observation_ids": [
+        "p004:o0001"
+      ]
+    },
+    {
+      "region_id": "r0007",
+      "anchor_box": [
+        823.0,
+        1975.0,
+        1971.0,
+        2275.0
+      ],
+      "observation_ids": [
+        "p004:o0002"
+      ]
+    },
+    {
+      "region_id": "r0008",
+      "anchor_box": [
+        805.0,
+        1893.0,
+        2511.0,
+        2285.0
+      ],
+      "observation_ids": [
+        "p005:o0001"
+      ]
+    }
+  ],
+  "outcomes": [
+    {
+      "pass_id": "p001",
+      "ocr_seconds": 0.9708161999878939,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p002",
+      "ocr_seconds": 0.2649575999821536,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p003",
+      "ocr_seconds": 1.056507800007239,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p004",
+      "ocr_seconds": 0.8848141999915242,
+      "error": null,
+      "selection": {
+        "final_date": null,
+        "reason": "no-valid-date",
+        "stop_ocr": false,
+        "digits_confident": false,
+        "order_resolved": false,
+        "candidates": [],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "NOT_FOUND",
+          "market": null,
+          "raw_text": null,
+          "expiration_date": null,
+          "manufactured_date": null,
+          "date_format": null,
+          "auxiliary_time": null,
+          "lot_code": null,
+          "confidence_level": "REVIEW",
+          "reason": [
+            "no-valid-date"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    },
+    {
+      "pass_id": "p005",
+      "ocr_seconds": 0.9065983000036795,
+      "error": null,
+      "selection": {
+        "final_date": "2026-05-20",
+        "reason": "accepted",
+        "stop_ocr": true,
+        "digits_confident": false,
+        "order_resolved": true,
+        "candidates": [
+          {
+            "value": "2026-05-20",
+            "raw": "20/05 2026",
+            "box": [
+              805.0,
+              1893.0,
+              2511.0,
+              2285.0
+            ],
+            "source": "paddle-mobile",
+            "variant": "clahe",
+            "observation_ids": [
+              "p005:o0001"
+            ],
+            "order_reason": "calendar_unique",
+            "explicit_expiry": true,
+            "explicit_manufacturing": false
+          }
+        ],
+        "policy_details": {
+          "policy": "market-context-20260911",
+          "status": "SELECTED",
+          "market": null,
+          "raw_text": "BBD:20/05 2026 VWT 05",
+          "expiration_date": "2026-05-20",
+          "manufactured_date": null,
+          "date_format": "DMY",
+          "auxiliary_time": null,
+          "lot_code": "VWT",
+          "confidence_level": "REVIEW",
+          "reason": [
+            "calendar_unique"
+          ],
+          "confidence_is_calibrated": false
+        }
+      }
+    }
+  ],
+  "recovery_decisions": [
+    {
+      "line_index": 0,
+      "original_text": "BED: 20052026 VT 05",
+      "original_box": [
+        817.0,
+        1906.0,
+        2501.0,
+        2277.0
+      ],
+      "role": null,
+      "role_basis": null,
+      "recognizer": "primary",
+      "accepted_text": null,
+      "reason": "keep-original"
+    }
+  ],
+  "summary": {
+    "passes": 5,
+    "regions": 8,
+    "observations": 12,
+    "unparsed_date_like": 3,
+    "detected_without_text": 0,
+    "unknown_geometry": 0,
+    "geometric_associations": 4,
+    "failed_passes": 0,
+    "line_recovery_changes": 0,
+    "ocr_seconds": 4.08369409997249
+  }
+}

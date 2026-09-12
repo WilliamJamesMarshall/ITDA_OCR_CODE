@@ -656,7 +656,7 @@ def run_pipeline(
         timings.append(prediction.elapsed_seconds)
         pass_counts.update(prediction.passes)
         reason_counts.update([prediction.selection.reason])
-        none_count += fields["final_date"] == "NONE-NONE-NONE"
+        none_count += fields["final_date"] == "NONE"
         trace_summary = trace.summary() if trace is not None else {}
         trace_totals.update(trace_summary)
         if on_image is not None:

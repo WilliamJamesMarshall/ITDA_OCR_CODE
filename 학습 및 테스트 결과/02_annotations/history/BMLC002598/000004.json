@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "image_id": "BMLC002598",
+  "source_image_id": "003704",
+  "image_path": "학습대상데이터/BMLC002598.jpg",
+  "image_sha256": "d826bdd0f79bc89504c2b82956acd0668c74cabb42fdfb908d910f03d4c66802",
+  "width": 1472,
+  "height": 1963,
+  "source_dataset": "additional",
+  "final_date": "2023-03-03",
+  "final_date_review": {
+    "status": "approved",
+    "scope": "normalized_final_date_only",
+    "reviewer": "user",
+    "method": "human_visual_review_of_all_364_images",
+    "source": {
+      "path": "추가수집_정답지/answer_003353_003716_manual.xlsx",
+      "sha256": "75ca696f0973d3a195aba46fcc862420f75b9bb2fdfb5db919ea3da1fa3adcd3",
+      "rows": 364,
+      "sheet": "검수 정답지",
+      "cell": "C353"
+    }
+  },
+  "seen_in_development": true,
+  "legacy_metadata": {
+    "difficulty": "unassessed",
+    "condition_tags": [
+      "full_date"
+    ]
+  },
+  "group_id": "sha256:d826bdd0f79bc89504c2b82956acd0668c74cabb42fdfb908d910f03d4c66802",
+  "group_evidence": "초안: SHA-256 파일 동일성 기준. 동일 상품·연속 촬영 관계는 아직 미확정.",
+  "difficulty": "medium",
+  "quality_tags": [],
+  "notes": "",
+  "regions": [
+    {
+      "region_id": "source_000",
+      "kind": "date_line",
+      "polygon": [
+        [
+          592,
+          1262
+        ],
+        [
+          953,
+          1262
+        ],
+        [
+          953,
+          1316
+        ],
+        [
+          592,
+          1316
+        ]
+      ],
+      "transcription": "2023 03 03",
+      "role": "expiry",
+      "role_basis": "undetermined",
+      "role_evidence": "미검수 초안: 외부 source_class=exp",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "present",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "external_source_candidate",
+        "source_class": "exp",
+        "path": "추가수집데이터/metadata/annotations.json",
+        "key": "003704.jpg",
+        "index": 0
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "source_001",
+      "kind": "header",
+      "polygon": [
+        [
+          776,
+          1204
+        ],
+        [
+          987,
+          1204
+        ],
+        [
+          987,
+          1269
+        ],
+        [
+          776,
+          1269
+        ]
+      ],
+      "transcription": "BEFORE",
+      "role": "expiry",
+      "role_basis": "undetermined",
+      "role_evidence": "미검수 초안: 외부 source_class=due",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "external_source_candidate",
+        "source_class": "due",
+        "path": "추가수집데이터/metadata/annotations.json",
+        "key": "003704.jpg",
+        "index": 1,
+        "text_candidate": {
+          "type": "automatic_ocr_candidate",
+          "model": "korean_PP-OCRv5_mobile_rec",
+          "score": 0.8744485378265381,
+          "created_at": "2026-09-11T15:02:50.667070+00:00"
+        }
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    }
+  ],
+  "revision": 4,
+  "review": {
+    "status": "pending",
+    "reviewer": "",
+    "approved_at": null,
+    "date_regions_complete": false,
+    "header_regions_complete": false,
+    "quality_reviewed": false,
+    "group_reviewed": false,
+    "no_date_regions": false
+  },
+  "draft": {
+    "method": "candidate_only_v1",
+    "human_verified": false,
+    "issues": [
+      "상품 그룹은 파일 동일성만 확인됨: 같은 상품·연속 촬영 확인 필요",
+      "반사·곡면·번짐 등 품질은 사진 대조 필요"
+    ],
+    "quality_basis": "기존 진단 태그 재사용; 태그 없음은 결함 없음이 아님",
+    "difficulty_basis": "OCR 신뢰도에 따른 임시 난이도; 시각 검수로 변경 가능",
+    "version": 2
+  },
+  "ocr_context": [],
+  "quality_draft_measurements": {
+    "method": "raw_date_crop_pixel_heuristics_v1",
+    "regions": [
+      {
+        "region_id": "source_000",
+        "height": 54,
+        "contrast": 41.14,
+        "laplacian_variance": 1015.31
+      }
+    ],
+    "unmeasured": [
+      "reflection",
+      "curved",
+      "bleed",
+      "dot_print",
+      "occlusion"
+    ],
+    "warning": "미검수 픽셀 기반 후보이며, 태그가 없다고 결함이 없는 것은 아님"
+  }
+}

@@ -77,7 +77,7 @@ class MarketContextPolicyTest(unittest.TestCase):
         self.assertIsNone(result.final_date)
         self.assertEqual(result.policy_details['status'],'REVIEW_REQUIRED')
         self.assertEqual(len({c.iso for c in result.candidates}),3)
-        self.assertEqual(submission_fields(result.final_date)['final_date'],'NONE-NONE-NONE')
+        self.assertEqual(submission_fields(result.final_date)['final_date'],'NONE')
         imported=choose(line('소비기한 26.04.24'),line('수입판매원 한국무역',(0,60,400,100)))
         self.assertIsNone(imported.final_date)
         self.assertEqual(imported.policy_details['status'],'REVIEW_REQUIRED')

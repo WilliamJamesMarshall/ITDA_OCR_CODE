@@ -11,7 +11,7 @@
 | 시장/순서 미확정 | 과거 마지막 DMY 기본값 대신 `REVIEW_REQUIRED`, 후보 보존, 최종 날짜 미확정 |
 | 한국 문맥의 `26.02.29` | 2026년 비윤년이므로 보류. `2029-02-26`으로 뒤집거나 28일로 고치지 않음 |
 | 두 자리 연도 | `20YY`; 기존 2035 상한을 2099로 확장. 과거 날짜를 거부하지 않음 |
-| 제출 | 기존 5열 유지. 미확정 날짜는 `NONE-NONE-NONE`, REVIEW 상태는 별도 trace |
+| 제출 | 기존 5열 유지. 미확정 날짜는 `NONE`, REVIEW 상태는 별도 trace |
 
 운영 호출은 `PipelineConfig()`에 기본 생성되는 `DateContext()`를 모든 OCR 패스·복구·최종 판정에 전달한다. 저수준 `select_date`에서 문맥을 생략하면 과거 DMY API를 유지한다. 새 정책을 직접 사용하려면 `select_date(lines, context=DateContext())`를 호출한다. `date_context=None`은 이전 동작의 비교용이며 기본값이 아니다.
 

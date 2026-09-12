@@ -29,15 +29,16 @@ class PipelineContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / 'out.csv'
             _write_submission(output, [
-                {'image_id': 'empty', 'final_date': 'NONE'},
+                {'image_id': 'empty', 'final_date': 'NONE-NONE-NONE'},
                 {'image_id': 'partial', 'final_date': 'NONE-02-14'},
                 {'image_id': 'month', 'final_date': '2026-09-NONE'},
             ])
             with output.open(encoding='utf-8', newline='') as source:
                 rows = list(csv.DictReader(source))
             self.assertEqual(list(rows[0]), OUTPUT_COLUMNS)
-            self.assertEqual(rows[0]['final_date'], 'NONE-NONE-NONE')
-            for row in rows:
+            self.assertEqual(rows[0]['final_date'], 'NONE')
+            self.assertEqual([rows[0][key] for key in ('year', 'month', 'day')], ['NONE'] * 3)
+            for row in rows[1:]:
                 self.assertEqual('-'.join(row[key] for key in ('year', 'month', 'day')), row['final_date'])
             self.assertEqual(rows[1]['year'], 'NONE')
             self.assertEqual(rows[2]['day'], 'NONE')
@@ -55,7 +56,7 @@ class PipelineContractTest(unittest.TestCase):
                                    config=PipelineConfig(progress_every=0), on_image=records.append)
             self.assertEqual(summary['failures'], [])
             self.assertEqual(summary['predicted_none'], 1)
-            self.assertEqual(records[0]['row']['final_date'], 'NONE-NONE-NONE')
+            self.assertEqual(records[0]['row']['final_date'], 'NONE')
             self.assertIsNone(records[0]['error'])
 
     def test_partial_detection_does_not_skip_recovery_or_tiles(self):
@@ -184,7 +185,7 @@ class PipelineContractTest(unittest.TestCase):
             )
             with output.open(encoding="utf-8", newline="") as source:
                 rows = {row["image_id"]: row for row in csv.DictReader(source)}
-            self.assertEqual(rows["broken"]["final_date"], "NONE-NONE-NONE")
+            self.assertEqual(rows["broken"]["final_date"], "NONE")
             self.assertEqual(rows["valid"]["final_date"], "2026-05-29")
             self.assertEqual(len(summary["failures"]), 1)
 

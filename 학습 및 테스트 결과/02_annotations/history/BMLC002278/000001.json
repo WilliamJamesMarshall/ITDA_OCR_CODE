@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "image_id": "BMLC002278",
+  "source_image_id": "003384",
+  "image_path": "학습대상데이터/BMLC002278.jpg",
+  "image_sha256": "744c4b89d727304a9d1945d732a2bfe3a0312d766339784f0ad21bd3271a97d5",
+  "width": 923,
+  "height": 1230,
+  "source_dataset": "additional",
+  "final_date": "2023-01-15",
+  "final_date_review": {
+    "status": "approved",
+    "scope": "normalized_final_date_only",
+    "reviewer": "user",
+    "method": "human_visual_review_of_all_364_images",
+    "source": {
+      "path": "추가수집_정답지/answer_003353_003716_manual.xlsx",
+      "sha256": "75ca696f0973d3a195aba46fcc862420f75b9bb2fdfb5db919ea3da1fa3adcd3",
+      "rows": 364,
+      "sheet": "검수 정답지",
+      "cell": "C33"
+    }
+  },
+  "seen_in_development": true,
+  "legacy_metadata": {
+    "difficulty": "unassessed",
+    "condition_tags": [
+      "full_date"
+    ]
+  },
+  "group_id": "sha256:744c4b89d727304a9d1945d732a2bfe3a0312d766339784f0ad21bd3271a97d5",
+  "group_evidence": "",
+  "difficulty": "unassessed",
+  "quality_tags": [],
+  "notes": "",
+  "regions": [
+    {
+      "region_id": "source_000",
+      "kind": "date_line",
+      "polygon": [
+        [
+          382,
+          794
+        ],
+        [
+          504,
+          794
+        ],
+        [
+          504,
+          820
+        ],
+        [
+          382,
+          820
+        ]
+      ],
+      "transcription": "2023.01.15",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "external_source_candidate",
+        "source_class": "date",
+        "path": "추가수집데이터/metadata/annotations.json",
+        "key": "003384.jpg",
+        "index": 0
+      }
+    },
+    {
+      "region_id": "source_001",
+      "kind": "header",
+      "polygon": [
+        [
+          358,
+          766
+        ],
+        [
+          417,
+          766
+        ],
+        [
+          417,
+          785
+        ],
+        [
+          358,
+          785
+        ]
+      ],
+      "transcription": "유통기한",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "external_source_candidate",
+        "source_class": "due",
+        "path": "추가수집데이터/metadata/annotations.json",
+        "key": "003384.jpg",
+        "index": 1,
+        "text_candidate": {
+          "type": "automatic_ocr_candidate",
+          "model": "korean_PP-OCRv5_mobile_rec",
+          "score": 0.9982337951660156,
+          "created_at": "2026-09-11T15:02:32.690359+00:00"
+        }
+      }
+    }
+  ],
+  "revision": 1,
+  "review": {
+    "status": "pending",
+    "reviewer": "",
+    "approved_at": null,
+    "date_regions_complete": false,
+    "header_regions_complete": false,
+    "quality_reviewed": false,
+    "group_reviewed": false,
+    "no_date_regions": false
+  }
+}

@@ -1,0 +1,1351 @@
+{
+  "schema_version": 1,
+  "image_id": "AMLC000562",
+  "source_image_id": "000562",
+  "image_path": "학습대상데이터/AMLC000562.jpg",
+  "image_sha256": "bd0f5ee452615a3a2a4049e524f5deb8df85445b26ec720ea44a0d63cc0a06fa",
+  "width": 1050,
+  "height": 1400,
+  "source_dataset": "product",
+  "final_date": "2025-12-30",
+  "final_date_review": {
+    "status": "approved",
+    "scope": "normalized_final_date_only",
+    "reviewer": "user",
+    "method": "user_approved_workbook",
+    "source": {
+      "path": "상품사진_정답지/answer_000001_003352_manual.xlsx",
+      "sha256": "df1149e5032370d86494f5d1a1ea6865bf6402d15072bb6135f33e036c432b8c",
+      "rows": 3352,
+      "sheet": "검수 정답지",
+      "cell": "C563"
+    }
+  },
+  "seen_in_development": false,
+  "legacy_metadata": {
+    "difficulty": "easy",
+    "condition_tags": [
+      "정상",
+      "full_date"
+    ]
+  },
+  "group_id": "sha256:bd0f5ee452615a3a2a4049e524f5deb8df85445b26ec720ea44a0d63cc0a06fa",
+  "group_evidence": "초안: SHA-256 파일 동일성 기준. 동일 상품·연속 촬영 관계는 아직 미확정.",
+  "difficulty": "easy",
+  "quality_tags": [],
+  "notes": "",
+  "regions": [
+    {
+      "region_id": "ocr_010",
+      "kind": "header",
+      "polygon": [
+        [
+          306.0,
+          439.0
+        ],
+        [
+          884.0,
+          408.0
+        ],
+        [
+          886.0,
+          446.0
+        ],
+        [
+          308.0,
+          477.0
+        ]
+      ],
+      "transcription": "2001년부터 오직 커피만을 생각해온 이디야커피,국내 커피",
+      "role": "manufacture",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 원문 표제 단서 2001년부터 오직 커피만을 생각해온 이디야커피,국내 커피",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "checked",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9757319688796997,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "ocr_021",
+      "kind": "header",
+      "polygon": [
+        [
+          802.0,
+          880.0
+        ],
+        [
+          872.0,
+          880.0
+        ],
+        [
+          872.0,
+          927.0
+        ],
+        [
+          802.0,
+          927.0
+        ]
+      ],
+      "transcription": "까지",
+      "role": "expiry",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 원문 표제 단서 까지",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "checked",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9916003942489624,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    },
+    {
+      "region_id": "ocr_022",
+      "kind": "date_line",
+      "polygon": [
+        [
+          463.0,
+          891.0
+        ],
+        [
+          723.0,
+          881.0
+        ],
+        [
+          724.0,
+          926.0
+        ],
+        [
+          465.0,
+          936.0
+        ]
+      ],
+      "transcription": "2025.12.30",
+      "role": "expiry",
+      "role_basis": "visible_header",
+      "role_evidence": "미검수 초안: 같은 높이의 표제 ocr_021 / 까지",
+      "header_region_ids": [
+        "ocr_021"
+      ],
+      "field_states": {
+        "year": "present",
+        "month": "present",
+        "day": "present"
+      },
+      "occluded_characters": [],
+      "separators": ".",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "checked",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9986483454704285,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      },
+      "draft": {
+        "method": "literal_evidence_v2",
+        "issues": [],
+        "human_verified": false
+      }
+    }
+  ],
+  "revision": 8,
+  "review": {
+    "status": "approved",
+    "reviewer": "사용자 (대화에서 초안 일괄 승인)",
+    "approved_at": "2026-09-11T19:33:19.805578+00:00",
+    "date_regions_complete": true,
+    "header_regions_complete": true,
+    "quality_reviewed": true,
+    "group_reviewed": true,
+    "no_date_regions": false,
+    "method": "explicit_user_chat_bulk_as_is",
+    "individually_visually_verified": false
+  },
+  "draft": {
+    "method": "candidate_only_v1",
+    "human_verified": false,
+    "issues": [
+      "상품 그룹은 파일 동일성만 확인됨: 같은 상품·연속 촬영 확인 필요",
+      "반사·곡면·번짐 등 품질은 사진 대조 필요"
+    ],
+    "quality_basis": "기존 진단 태그 재사용; 태그 없음은 결함 없음이 아님",
+    "version": 2
+  },
+  "ocr_context": [
+    {
+      "region_id": "ocr_000",
+      "kind": "other",
+      "polygon": [
+        [
+          402.0,
+          40.0
+        ],
+        [
+          778.0,
+          0.0
+        ],
+        [
+          784.0,
+          38.0
+        ],
+        [
+          408.0,
+          87.0
+        ]
+      ],
+      "transcription": "BRAZIL CERRADO",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9879719614982605,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_001",
+      "kind": "other",
+      "polygon": [
+        [
+          405.0,
+          98.0
+        ],
+        [
+          891.0,
+          42.0
+        ],
+        [
+          897.0,
+          98.0
+        ],
+        [
+          411.0,
+          154.0
+        ]
+      ],
+      "transcription": "브라질커피는 최대 생산국 및 수출국으로",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9382100105285645,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_002",
+      "kind": "other",
+      "polygon": [
+        [
+          403.0,
+          123.0
+        ],
+        [
+          939.0,
+          72.0
+        ],
+        [
+          946.0,
+          141.0
+        ],
+        [
+          409.0,
+          192.0
+        ]
+      ],
+      "transcription": "대가모의 놓장에서 경작되어 맛의 편차가 적고",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.8487036824226379,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_003",
+      "kind": "other",
+      "polygon": [
+        [
+          235.0,
+          159.0
+        ],
+        [
+          303.0,
+          150.0
+        ],
+        [
+          307.0,
+          178.0
+        ],
+        [
+          239.0,
+          187.0
+        ]
+      ],
+      "transcription": "BRAZIL",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9809239506721497,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_004",
+      "kind": "other",
+      "polygon": [
+        [
+          408.0,
+          165.0
+        ],
+        [
+          800.0,
+          122.0
+        ],
+        [
+          806.0,
+          180.0
+        ],
+        [
+          414.0,
+          223.0
+        ]
+      ],
+      "transcription": "고소한 너트유의 플레이버와 맛을",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.8961004018783569,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_005",
+      "kind": "other",
+      "polygon": [
+        [
+          414.0,
+          212.0
+        ],
+        [
+          637.0,
+          180.0
+        ],
+        [
+          644.0,
+          224.0
+        ],
+        [
+          421.0,
+          256.0
+        ]
+      ],
+      "transcription": "즐기실 수 있습니다",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.927535891532898,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_006",
+      "kind": "other",
+      "polygon": [
+        [
+          135.0,
+          328.0
+        ],
+        [
+          937.0,
+          288.0
+        ],
+        [
+          941.0,
+          366.0
+        ],
+        [
+          138.0,
+          406.0
+        ]
+      ],
+      "transcription": "FROM THE SPECIALIST, EDIYA COFFEE",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9762313365936279,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_007",
+      "kind": "other",
+      "polygon": [
+        [
+          305.0,
+          401.0
+        ],
+        [
+          765.0,
+          368.0
+        ],
+        [
+          768.0,
+          412.0
+        ],
+        [
+          308.0,
+          444.0
+        ]
+      ],
+      "transcription": "커피만을연구해온 이디야커피, Since 2001",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.944661021232605,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_008",
+      "kind": "other",
+      "polygon": [
+        [
+          185.0,
+          411.0
+        ],
+        [
+          248.0,
+          418.0
+        ],
+        [
+          245.0,
+          441.0
+        ],
+        [
+          182.0,
+          434.0
+        ]
+      ],
+      "transcription": "2001",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.8839237689971924,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_009",
+      "kind": "other",
+      "polygon": [
+        [
+          176.0,
+          434.0
+        ],
+        [
+          229.0,
+          440.0
+        ],
+        [
+          228.0,
+          450.0
+        ],
+        [
+          175.0,
+          444.0
+        ]
+      ],
+      "transcription": "EDIYA COI",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.7737226486206055,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_011",
+      "kind": "other",
+      "polygon": [
+        [
+          306.0,
+          468.0
+        ],
+        [
+          918.0,
+          439.0
+        ],
+        [
+          919.0,
+          477.0
+        ],
+        [
+          307.0,
+          506.0
+        ]
+      ],
+      "transcription": "전문점의 자존심,이디야커피의 노하우가 고스란히 담겨있습니다.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.940460205078125,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_012",
+      "kind": "other",
+      "polygon": [
+        [
+          304.0,
+          521.0
+        ],
+        [
+          628.0,
+          515.0
+        ],
+        [
+          629.0,
+          554.0
+        ],
+        [
+          305.0,
+          560.0
+        ]
+      ],
+      "transcription": "이디야 커피연구소의 연구개발",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9773856401443481,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_013",
+      "kind": "other",
+      "polygon": [
+        [
+          297.0,
+          556.0
+        ],
+        [
+          901.0,
+          542.0
+        ],
+        [
+          902.0,
+          585.0
+        ],
+        [
+          298.0,
+          600.0
+        ]
+      ],
+      "transcription": "자체커피연구소와로스팅센터를 보유하고있는이디야커피",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9544620513916016,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_014",
+      "kind": "other",
+      "polygon": [
+        [
+          297.0,
+          585.0
+        ],
+        [
+          861.0,
+          575.0
+        ],
+        [
+          861.0,
+          618.0
+        ],
+        [
+          298.0,
+          628.0
+        ]
+      ],
+      "transcription": "전 세계 각지의 생두를 직접 선별-소싱-로스팅-제조까지",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9812211394309998,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_015",
+      "kind": "other",
+      "polygon": [
+        [
+          298.0,
+          613.0
+        ],
+        [
+          708.0,
+          616.0
+        ],
+        [
+          708.0,
+          650.0
+        ],
+        [
+          298.0,
+          648.0
+        ]
+      ],
+      "transcription": "모든 과정을 커피연구소에서 주도합니다.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9732861518859863,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_016",
+      "kind": "other",
+      "polygon": [
+        [
+          293.0,
+          664.0
+        ],
+        [
+          619.0,
+          662.0
+        ],
+        [
+          620.0,
+          700.0
+        ],
+        [
+          293.0,
+          702.0
+        ]
+      ],
+      "transcription": "made by이디야드림팩토리",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9658257365226746,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_017",
+      "kind": "other",
+      "polygon": [
+        [
+          290.0,
+          698.0
+        ],
+        [
+          887.0,
+          695.0
+        ],
+        [
+          887.0,
+          740.0
+        ],
+        [
+          290.0,
+          743.0
+        ]
+      ],
+      "transcription": "드림팩토리는 세계적인 수준의 로스팅 설비로 4단계에걸친",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9214627742767334,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_018",
+      "kind": "other",
+      "polygon": [
+        [
+          286.0,
+          726.0
+        ],
+        [
+          911.0,
+          722.0
+        ],
+        [
+          911.0,
+          771.0
+        ],
+        [
+          287.0,
+          776.0
+        ]
+      ],
+      "transcription": "완벽한 이물선별과 로스팅 및 까다로운품질검사로 고품질 커피를",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.8703643679618835,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_019",
+      "kind": "other",
+      "polygon": [
+        [
+          289.0,
+          758.0
+        ],
+        [
+          516.0,
+          763.0
+        ],
+        [
+          516.0,
+          798.0
+        ],
+        [
+          288.0,
+          793.0
+        ]
+      ],
+      "transcription": "고객님께 제공합니다.",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9472553730010986,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_020",
+      "kind": "other",
+      "polygon": [
+        [
+          152.0,
+          878.0
+        ],
+        [
+          228.0,
+          878.0
+        ],
+        [
+          228.0,
+          929.0
+        ],
+        [
+          152.0,
+          929.0
+        ]
+      ],
+      "transcription": "속빅",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.5270195603370667,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_023",
+      "kind": "other",
+      "polygon": [
+        [
+          153.0,
+          911.0
+        ],
+        [
+          230.0,
+          911.0
+        ],
+        [
+          230.0,
+          961.0
+        ],
+        [
+          153.0,
+          961.0
+        ]
+      ],
+      "transcription": "기한",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9982089996337891,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_024",
+      "kind": "other",
+      "polygon": [
+        [
+          469.0,
+          940.0
+        ],
+        [
+          600.0,
+          932.0
+        ],
+        [
+          602.0,
+          968.0
+        ],
+        [
+          471.0,
+          976.0
+        ]
+      ],
+      "transcription": "13:36",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9994382858276367,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_025",
+      "kind": "other",
+      "polygon": [
+        [
+          476.0,
+          1139.0
+        ],
+        [
+          692.0,
+          1256.0
+        ],
+        [
+          637.0,
+          1357.0
+        ],
+        [
+          422.0,
+          1241.0
+        ]
+      ],
+      "transcription": "10,100",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "unknown",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.9991505146026611,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      }
+    },
+    {
+      "region_id": "ocr_026",
+      "kind": "other",
+      "polygon": [
+        [
+          253.0,
+          1169.0
+        ],
+        [
+          359.0,
+          1252.0
+        ],
+        [
+          341.0,
+          1276.0
+        ],
+        [
+          235.0,
+          1193.0
+        ]
+      ],
+      "transcription": "D송05원/200G",
+      "role": null,
+      "role_basis": "undetermined",
+      "role_evidence": "",
+      "header_region_ids": [],
+      "field_states": {
+        "year": "unknown",
+        "month": "unknown",
+        "day": "unknown"
+      },
+      "occluded_characters": [],
+      "separators": "/",
+      "time_text": "",
+      "lot_text": "",
+      "legibility": "readable",
+      "status": "pending",
+      "notes": "",
+      "provenance": {
+        "type": "automatic_ocr_candidate",
+        "score": 0.8159406781196594,
+        "model": "PP-OCRv5_mobile",
+        "created_at": "2026-09-11T16:31:27.453873+00:00"
+      },
+      "draft": {
+        "method": "literal_text_and_source_hints_v1",
+        "issues": [
+          "OCR 신뢰도 낮음: 원문 확인",
+          "날짜 순서·부분 날짜·가려짐 확인",
+          "역할 근거 부족: 소비기한/제조일/불명 확인"
+        ],
+        "human_verified": false
+      }
+    }
+  ],
+  "ocr_draft_pass": {
+    "status": "completed",
+    "created_at": "2026-09-11T16:31:27.453873+00:00",
+    "cpu_threads": 4
+  },
+  "quality_draft_measurements": {
+    "method": "raw_date_crop_pixel_heuristics_v1",
+    "regions": [
+      {
+        "region_id": "ocr_022",
+        "height": 55,
+        "contrast": 48.03,
+        "laplacian_variance": 854.95
+      }
+    ],
+    "unmeasured": [
+      "reflection",
+      "curved",
+      "bleed",
+      "dot_print",
+      "occlusion"
+    ],
+    "warning": "미검수 픽셀 기반 후보이며, 태그가 없다고 결함이 없는 것은 아님"
+  },
+  "user_draft_approval": {
+    "status": "approved",
+    "method": "explicit_user_bulk_approval",
+    "decision": "주석은 전부 초안 그대로 승인한다. 남은 작업 시작해",
+    "reviewer": "user",
+    "approved_at": "2026-09-11T17:31:13.465093+00:00",
+    "approved_revision": 4,
+    "approved_snapshot_sha256": "9046070a812f5b678ad00db8dd9b55b23c9e68994e9a72c92845e972760b23fe",
+    "individual_visual_inspection_claimed": false
+  },
+  "training_readiness": {
+    "status": "eligible",
+    "blockers": []
+  },
+  "user_acceptance": {
+    "status": "approved",
+    "method": "explicit_user_chat_bulk_as_is",
+    "decision_id": "user-full-2610-approval-20260912-closeout",
+    "accepted_source_sha256": "fec65953988ed25df6326e3b879377443d0bf2fce932e0a71ea480b0b2e9adcd",
+    "individually_visually_verified": false,
+    "scope": "existing_draft_as_is_not_missing_annotations"
+  }
+}

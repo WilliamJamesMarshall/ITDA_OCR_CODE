@@ -1541,7 +1541,7 @@ def select_date(lines: Sequence[OCRLine], *, final: bool = False, product_rules:
 
 def submission_fields(final_date: str | None) -> dict[str, str]:
     if final_date is None or final_date in ("NONE", "NONE-NONE-NONE"):
-        return {"year": "NONE", "month": "NONE", "day": "NONE", "final_date": "NONE-NONE-NONE"}
+        return {"year": "NONE", "month": "NONE", "day": "NONE", "final_date": "NONE"}
     if "NONE" in final_date:
         if not re.fullmatch(r"(?:NONE-\d{2}-\d{2}|\d{4}-\d{2}-NONE)", final_date):
             raise ValueError(f"Invalid partial date: {final_date}")

@@ -167,7 +167,7 @@ class DateSelectionTest(unittest.TestCase):
         )
         for value in (None, "NONE", "NONE-NONE-NONE"):
             self.assertEqual(submission_fields(value), {
-                "year": "NONE", "month": "NONE", "day": "NONE", "final_date": "NONE-NONE-NONE"})
+                "year": "NONE", "month": "NONE", "day": "NONE", "final_date": "NONE"})
 
     def test_partial_dates_and_output_contract(self):
         for raw, expected in {

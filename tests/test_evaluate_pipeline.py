@@ -12,6 +12,14 @@ def label(value):
 
 
 class EvaluationTest(unittest.TestCase):
+    def test_user_approved_date_labels_are_evaluated(self):
+        approved = {'정답 날짜': 'NONE', '라벨 상태': 'approved'}
+        report = score_predictions({'000001': approved}, [row('1', None)], [])
+        self.assertEqual(report['evaluated_labels'], 1)
+        self.assertEqual(report['exact_matches'], 1)
+        report = score_predictions({'000001': approved}, [], [])
+        self.assertEqual(report['labels_without_predictions'], ['000001'])
+
     def test_legacy_and_canonical_missing_are_semantically_equal(self):
         for expected in ('NONE', 'NONE-NONE-NONE'):
             for actual in ('NONE', 'NONE-NONE-NONE'):
@@ -20,7 +28,7 @@ class EvaluationTest(unittest.TestCase):
                 report = score_predictions({'000001': label(expected)}, [prediction], [])
                 self.assertEqual(report['exact_matches'], 1)
                 self.assertEqual(report['categories']['none'], {'total': 1, 'correct': 1})
-                self.assertEqual(report['submission_format']['all_rows_compliant'], actual != 'NONE')
+                self.assertEqual(report['submission_format']['all_rows_compliant'], actual == 'NONE')
                 self.assertEqual(report['field_metrics']['year']['absent_match_rate'], 1)
                 self.assertIsNone(report['field_metrics']['year']['known_match_rate'])
 
