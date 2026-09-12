@@ -31,6 +31,9 @@ def validate_partition(rows,train_ids,validation_ids,round_number):
         if train&val or (train|val)&held:raise ValueError(field+' leakage')
 
 def require_release(root,round_number,train_list,validation_list):
+    raise ValueError('Legacy 5-fold release disabled; use sequential_rounds.require_training_release')
+
+    # Historical implementation retained below for audit; unreachable under v2.
     base=Path(root)/'학습 및 테스트 결과'
     release_path=base/'01_splits/training_release.json'
     if not release_path.exists():

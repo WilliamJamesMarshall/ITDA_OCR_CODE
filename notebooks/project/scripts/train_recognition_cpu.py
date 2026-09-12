@@ -160,10 +160,13 @@ def main() -> int:
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--skip-model-check", action="store_true")
     parser.add_argument("--report", type=Path)
-    parser.add_argument("--round", type=int, choices=range(1, 5))
+    parser.add_argument("--round", type=int, choices=range(1, 9))
+    parser.add_argument("--workspace", type=Path, default=Path('C:/ITDA_OCR_WORKSPACE/sequential-8-rounds'))
     parser.add_argument("--train-list", type=Path)
     parser.add_argument("--validation-list", type=Path)
     parser.add_argument("--output-dir", type=Path)
+    parser.add_argument('--inference-python', type=Path,
+                        default=ROOT / '.labeling_paddle_env/Scripts/python.exe')
     args = parser.parse_args()
 
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
@@ -185,8 +188,8 @@ def main() -> int:
         parser.error("--round, --train-list, and --validation-list are required for training")
     # Standalone invocation places scripts/ rather than the repository on sys.path.
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-    from scripts.training_release_gate import require_release
-    require_release(ROOT,args.round,args.train_list.resolve(),args.validation_list.resolve())
+    from scripts.sequential_rounds import require_training_release
+    require_training_release(args.workspace,args.round,args.train_list.resolve(),args.validation_list.resolve())
     train_info = validate_label_file(args.train_list.resolve())
     validation_info = validate_label_file(args.validation_list.resolve())
     overlap = train_info["images"] & validation_info["images"]
@@ -194,7 +197,9 @@ def main() -> int:
         raise ValueError(f"optimizer_train and inner_validation overlap: {len(overlap)} images")
     del train_info["images"], validation_info["images"]
 
-    output_dir = (args.output_dir or ROOT / "학습 및 테스트 결과" / "models" / f"round_{args.round:02d}").resolve()
+    output_dir = (args.output_dir or args.workspace / "models" / f"round_{args.round:02d}").resolve()
+    if output_dir.exists() and any(output_dir.iterdir()):
+        raise ValueError('Training output is not empty; preserve previous results')
     output_dir.mkdir(parents=True, exist_ok=True)
     report.update({"round": args.round, "optimizer_train": train_info, "inner_validation": validation_info})
     report_path = report_path or output_dir / "training_preflight.json"
@@ -203,7 +208,8 @@ def main() -> int:
 
     command = [
         sys.executable,
-        str(RUNTIME / "tools" / "train.py"),
+        str(ROOT / 'notebooks/project/run.py'),
+        'scripts.train_sequential_cpu',
         "-c",
         str(CONFIG),
         "-o",
@@ -217,7 +223,12 @@ def main() -> int:
         f"Train.dataset.label_file_list=[{args.train_list.resolve()}]",
         f"Eval.dataset.label_file_list=[{args.validation_list.resolve()}]",
     ]
-    completed = subprocess.run(command, cwd=ROOT, env=os.environ.copy())
+    training_env = {**os.environ, 'ITDA_SEQUENTIAL_WORKSPACE': str(args.workspace.resolve()),
+                    'ITDA_SEQUENTIAL_ROUND': str(args.round)}
+    completed = subprocess.run(command, cwd=ROOT, env=training_env)
+    if completed.returncode == 0:
+        from scripts.sequential_rounds import complete_training
+        complete_training(args.workspace, args.round, output_dir, args.inference_python)
     return completed.returncode
 
 

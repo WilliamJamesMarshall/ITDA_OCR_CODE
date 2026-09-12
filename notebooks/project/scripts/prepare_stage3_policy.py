@@ -46,4 +46,4 @@ def main():
 
 
 if __name__=='__main__':
-    main()
+    raise SystemExit('Legacy fold policy writer disabled. Exposure history remains preserved.')

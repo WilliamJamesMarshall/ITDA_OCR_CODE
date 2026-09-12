@@ -1,6 +1,8 @@
 > 문서 열람용 사본. 계획 수정은 원본 `C:\ITDA_OCR_CODE\학습 및 테스트 결과\00_protocol\execution_policy.md`에서 수행한 뒤 이 도구로 다시 게시합니다. 승인/정답 데이터는 포함하지 않습니다.
 
-# ITDA OCR 학습·평가 실행 정책
+> 과거 5-fold 기록. 현재 정본: C:/ITDA_OCR_CODE/notebooks/docs/protocol/sequential_8_rounds.md. 기존 normalization·선정·검출 계약은 새 정본에서 유지하며 fold 접근 정책은 대체되었습니다.
+
+# ITDA OCR 학습·평가 실행 정책 (과거 기록)
 
 상태: **확정 — 0단계 완료**  
 정책 버전: `1.3`  

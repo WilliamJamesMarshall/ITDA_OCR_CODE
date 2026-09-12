@@ -29,4 +29,5 @@ def main():
     ann.write(out/'lock_readiness.json',report)
     print(dict(status=report['status'],source_locations=len(sources),physical_lock_complete=False))
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    raise SystemExit('Legacy fold-5 lock writer disabled. Use the sequential-8 policy.')

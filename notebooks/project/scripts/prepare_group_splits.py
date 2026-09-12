@@ -123,4 +123,5 @@ def main():
     ann.write(dest/'split_summary.json',summary)
     print({k:v for k,v in summary.items() if k not in ('source_annotation_hashes','strata')},flush=True)
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    raise SystemExit('Legacy fold writer disabled. Use scripts.prepare_sequential_rounds.')
