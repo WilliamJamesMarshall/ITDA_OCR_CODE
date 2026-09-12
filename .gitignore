@@ -4,6 +4,9 @@
 *.onnx
 *.safetensors
 *.bin
+*.pdparams
+*.pdiparams
+*.pdopt
 weights/*
 !weights/.gitkeep
 
@@ -35,6 +38,22 @@ env/
 
 # ===== 고정 버전 외부 학습 런타임 =====
 training_runtime/
+
+# Local protected data stays on disk; not part of the submission checkout.
+/상품사진_정답지/
+/추가수집_정답지/
+/테스트용_정답지/
+/학습대상_정답지/
+/학습 및 테스트 결과
+/artifacts
+/labels
+/.codex-tmp
+/outputs
+/docs
+/.git-session.json
+/.labeling_env/
+/.labeling_paddle_env/
+*.trace.jsonl
 
 # ===== OS =====
 .DS_Store

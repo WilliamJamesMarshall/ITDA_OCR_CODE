@@ -29,7 +29,7 @@ if ($ObservedHash -ne $ExpectedCheckpointHash) {
 if (-not (Test-Path -LiteralPath (Join-Path $EnvironmentPath 'Scripts\python.exe'))) {
     uv venv --python 3.10 $EnvironmentPath
 }
-uv pip sync --python (Join-Path $EnvironmentPath 'Scripts\python.exe') (Join-Path $ProjectRoot 'requirements-train-cpu.lock.txt')
+uv pip sync --python (Join-Path $EnvironmentPath 'Scripts\python.exe') (Join-Path $ProjectRoot 'notebooks\environment\requirements-train-cpu.lock.txt')
 
 $env:CUDA_VISIBLE_DEVICES = ''
 $env:OMP_NUM_THREADS = '4'
