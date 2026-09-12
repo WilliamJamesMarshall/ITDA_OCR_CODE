@@ -58,3 +58,13 @@ training_runtime/
 # ===== OS =====
 .DS_Store
 Thumbs.db
+
+# Submission root allowlist; local datasets and compatibility links are excluded.
+/*
+!/predict.ipynb
+!/requirements.txt
+!/README.md
+!/.gitignore
+!/download_weights.sh
+!/notebooks/
+!/weights/

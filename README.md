@@ -2,7 +2,7 @@
 
 ## 저장소와 학습 문서
 
-제출 진입점 `predict.ipynb`, `requirements.txt`, `download_weights.sh`와 추론 `src/`는 루트 기준으로 유지합니다. 학습·평가 문서는 [notebooks 안내](notebooks/README.md), 구조 변경 및 데이터 보존 결과는 [이전 보고](notebooks/reports/migration/구조_변경_완료보고.md)를 참조하세요.
+제출 진입점 `predict.ipynb`, `requirements.txt`, `download_weights.sh`는 루트에, 실행 코드·설정·테스트는 `notebooks/project/`에 있습니다. 학습·평가 문서는 [notebooks 안내](notebooks/README.md), 현재 구조는 [엄격 제출 구조 보고](notebooks/reports/migration/strict_layout.md)를 참조하세요. 이전 구조 보고서는 과거 기록입니다.
 
 지정된 8개 이미지·정답지 폴더는 로컬의 기존 경로와 내용을 보존하되 Git 제출에서는 제외합니다. 승인 이력·원시 실험 결과는 `C:/ITDA_OCR_WORKSPACE/`에 보관하고 기존 경로에는 Windows 호환 연결을 유지합니다. 이 경로는 채점 추론에 필요하지 않습니다. 학습·평가 계획 수정사항이 반영될 때까지 3단계와 학습은 실행하지 않습니다.
 
@@ -155,13 +155,13 @@ image_id,year,month,day,final_date
 빠른 계약 테스트:
 
 ```bash
-python -m unittest discover -s tests -v
+python notebooks/project/run.py unittest discover -s notebooks/project/tests -v
 ```
 
 수동 라벨 CSV가 로컬에 있을 때 검증 구간 실행:
 
 ```bash
-python scripts/evaluate_pipeline.py \
+python notebooks/project/run.py scripts.evaluate_pipeline \
   ./val_images ./labels/validation.csv ./artifacts/validation_submission.csv \
   --limit 352
 ```
