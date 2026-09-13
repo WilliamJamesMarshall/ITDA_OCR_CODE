@@ -60,7 +60,7 @@ class ROIRecoveryTest(unittest.TestCase):
         self.assertEqual(_date_fragment_lines(lines), lines[:2])
         self.assertEqual(lines, original)
 
-    def test_clear_order_ambiguity_still_uses_one_pass(self):
+    def test_clear_order_ambiguity_uses_one_context_pass(self):
         class Backend:
             def __init__(self):
                 self.calls = []
@@ -74,7 +74,7 @@ class ROIRecoveryTest(unittest.TestCase):
             prediction = predict_image(Path("unrelated.jpg"), backend, PipelineConfig())
         self.assertIsNone(prediction.final_date)
         self.assertEqual(prediction.selection.policy_details['status'], 'REVIEW_REQUIRED')
-        self.assertEqual(backend.calls, [("mobile", "original")])
+        self.assertEqual(backend.calls, [("mobile", "original"), ("recovery", "original")])
 
     def test_pipeline_crops_damaged_date_before_readable_nutrition(self):
         damaged = line("a0E1.0R0EH", .65)

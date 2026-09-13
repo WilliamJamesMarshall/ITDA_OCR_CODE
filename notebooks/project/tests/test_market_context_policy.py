@@ -106,7 +106,7 @@ class MarketContextPolicyTest(unittest.TestCase):
         self.assertEqual(result.policy_details['manufactured_date'],'2026-04-24')
         self.assertIsNone(choose(line('제조일자 26.04.24')).final_date)
 
-    def test_unknown_clear_digits_stop_without_inventing_order(self):
+    def test_unknown_clear_digits_seek_context_once_without_inventing_order(self):
         class Backend:
             calls=0
             def recognize(self,image,*,detector,variant):
@@ -115,7 +115,7 @@ class MarketContextPolicyTest(unittest.TestCase):
         backend=Backend()
         with patch('src.pipeline._load_bgr',return_value=np.zeros((100,500,3),dtype=np.uint8)):
             result=predict_image(Path('unseen.jpg'),backend,PipelineConfig())
-        self.assertEqual(backend.calls,1)
+        self.assertEqual(backend.calls,2)
         self.assertIsNone(result.final_date)
         self.assertEqual(result.selection.policy_details['status'],'REVIEW_REQUIRED')
         self.assertEqual(result.trace['outcomes'][0]['selection']['policy_details']['status'],'REVIEW_REQUIRED')

@@ -11,7 +11,9 @@ import time
 
 import cv2
 
-from .date_extraction import OCRLine, _link_roles, _printed_month_day_token, parse_dates
+from .date_extraction import (OCRLine, _link_roles, _printed_month_day_token, parse_dates,
+                              _inline_role, POSITIVE_CONTEXT, NEGATIVE_CONTEXT)
+from .date_region_recovery import rectified_crop, recognition_views
 
 
 def recovery_targets(lines):
@@ -24,8 +26,8 @@ def recovery_targets(lines):
                 or re.search(r'%|kcal|mg|ml|brix|영양|전화|고객|품목|인증|허가|등록|\b(?:TEL|LOT)\b', text, re.I)
                 or re.fullmatch(r'\d{1,2}:\d{2}(?::\d{2})?', text)):
             continue
-        if not (parse_dates(text) or sum(text.count(s) for s in './-') >= 2
-                or (digits >= 4 and any(s in text for s in './-'))):
+        if not (parse_dates(text) or sum(text.count(s) for s in './-·') >= 2
+                or (digits >= 4 and any(s in text for s in './-·'))):
             continue
         targets.append(index)
     return targets[:2]
@@ -62,18 +64,54 @@ def _stable(obs):
     return obs.score >= .85 or (obs.score >= .65 and obs.date_digit_score is not None and obs.date_digit_score >= .90)
 
 
+def _supported_role(obs):
+    """Require aligned evidence for the role glyphs, independently of digits."""
+    role = _inline_role(obs.text)
+    if role is None or len(obs.character_scores) != len(obs.text):
+        return None
+    pattern = POSITIVE_CONTEXT if role == 'end' else NEGATIVE_CONTEXT
+    matches = list(pattern.finditer(obs.text))
+    if matches and all(min(obs.character_scores[m.start():m.end()]) >= .8 for m in matches):
+        return role
+    return None
+
+
 def _apply_views(active, lines, linked, jobs, observations, *, strict=False):
     decisions = []
     for index in sorted({job[0] for job in jobs}):
         evidence = [obs for obs, job in zip(observations, jobs) if job[0] == index]
+        # Complementary support is a stability gate, not an averaged or boosted
+        # confidence. Require an exact un-repaired token repeat and support for
+        # every digit in at least one view. Conflicting signatures still veto.
+        repeated = []
+        if strict:
+            for obs in evidence:
+                signature = _signature(obs.text)
+                peers = [p for p in evidence if signature and _signature(p.text) == signature
+                         and p.text == obs.text and p.date_digit_score is not None
+                         and p.date_digit_score >= .85 and p.score >= .8
+                         and len(p.character_scores) == len(p.text)]
+                if len(peers) < 2 or max(p.score for p in peers) < .85:
+                    continue
+                parses = parse_dates(obs.text)
+                if not parses:
+                    continue
+                token = parses[0]
+                positions = [i for i in range(token.start, token.end) if obs.text[i].isdigit()]
+                if positions and all(max(p.character_scores[i] for p in peers) >= .8 for i in positions):
+                    repeated.extend(peers)
         def eligible(obs):
-            return (_stable(obs) and (not strict or
+            return (any(obs is p for p in repeated) or (_stable(obs) and (not strict or
                     (obs.date_digit_score is not None and obs.date_digit_score >= .95
-                     and obs.date_digit_min_score >= .8)))
+                     and obs.date_digit_min_score >= .8))))
         votes = Counter(_signature(obs.text) for obs in evidence if eligible(obs) and _signature(obs.text))
         accepted = None
+        change_kind = None
+        decision_basis = 'no-eligible-date'
         if votes:
             signature, count = votes.most_common(1)[0]
+            decision_basis = ('conflicting-dates' if len(votes) > 1 else
+                              'insufficient-support' if count < 2 else 'same-date-no-context-gain')
             if count >= 2 and len(votes) == 1 and signature != _signature(lines[index].text):
                 supporters = [obs for obs in evidence if eligible(obs) and _signature(obs.text) == signature]
                 best = max(supporters, key=lambda obs: obs.score)
@@ -86,10 +124,45 @@ def _apply_views(active, lines, linked, jobs, observations, *, strict=False):
                                         date_digit_min_score=min(obs.date_digit_min_score for obs in supporters)
                                         if all(obs.date_digit_min_score is not None for obs in supporters) else None)
                 accepted = best.text
+                change_kind = 'date-token'
+                decision_basis = 'stable-date-change'
+            elif count >= 2 and len(votes) == 1 and linked[index].role is None:
+                # The date can stay identical while a previously unreadable
+                # expiry suffix is recovered. Do not overwrite an existing role
+                # or treat an English numeric fallback as Korean role evidence.
+                supporters = [obs for obs in evidence if eligible(obs) and _signature(obs.text) == signature]
+                roles = {_inline_role(obs.text) for obs in supporters} - {None}
+                grounded = [obs for obs in supporters if _supported_role(obs)]
+                if not strict and len(roles) == 1 and len(grounded) >= 2:
+                    best = max(grounded, key=lambda obs: obs.score)
+                    active[index] = replace(linked[index], text=best.text,
+                                            score=min(lines[index].score, *(obs.score for obs in grounded)),
+                                            character_scores=best.character_scores,
+                                            date_digit_score=best.date_digit_score,
+                                            date_digit_min_score=best.date_digit_min_score)
+                    accepted = best.text
+                    change_kind = 'context-only'
+                    decision_basis = 'stable-role-recovery'
+        audit = []
+        for obs in evidence:
+            signature = _signature(obs.text)
+            rejections = []
+            if not signature:
+                rejections.append('no-unrepaired-date-signature')
+            if obs.date_digit_min_score is not None and obs.date_digit_min_score < .5:
+                rejections.append('weak-digit')
+            if not _stable(obs):
+                rejections.append('unstable-view')
+            if strict and not eligible(obs):
+                rejections.append('secondary-evidence-gate')
+            audit.append(dict(variant=obs.variant, text=obs.text, signature=signature,
+                              score=obs.score, digit_min=obs.date_digit_min_score,
+                              eligible=bool(signature and eligible(obs)), rejections=rejections))
         decisions.append(dict(line_index=index, original_text=lines[index].text,
                               original_box=lines[index].original_box, role=linked[index].role,
                               role_basis=linked[index].role_basis, recognizer='english' if strict else 'primary',
-                              accepted_text=accepted, reason='same-model-view-stability' if accepted else 'keep-original'))
+                              accepted_text=accepted, reason='same-model-view-stability' if accepted else 'keep-original',
+                              change_kind=change_kind, decision_basis=decision_basis, evidence=audit))
     return decisions
 
 
@@ -156,6 +229,50 @@ def recover_lines(image, lines, recognize_crops, fallback_recognize=None):
         except Exception as exc:
             decisions.append(dict(line_index=-1, original_text='', original_box=None, accepted_text=None,
                                   reason='secondary-recognition-error', error=f'{type(exc).__name__}: {exc}'))
+        seconds += time.perf_counter()-started
+    # A complete original token is not necessarily correct. Recheck only when
+    # another view actually disagrees, using its original detector quadrilateral.
+    # Two character-grounded rectified views must agree; no confidence relaxation.
+    conflicts = {job[0] for job, obs in zip(jobs, observations[:len(jobs)])
+                 if _signature(lines[job[0]].text) and _signature(obs.text)
+                 and _signature(obs.text) != _signature(lines[job[0]].text)
+                 and obs.score >= .65}
+    accepted = {d['line_index'] for d in decisions if d.get('accepted_text')}
+    rect_jobs, rect_crops = [], []
+    if fallback_recognize is not None:
+        for index in sorted((conflicts | pending) - accepted)[:2]:
+            # Preserve the verified conflict path for complete originals. For
+            # still-unparsed rows, correct both skew and excessive aspect ratio.
+            views = ([(f'rectified-{padding}', rectified_crop(image, lines[index].polygon, padding))
+                      for padding in (0., .16)] if index in conflicts
+                     else recognition_views(image, lines[index].polygon))
+            for view, crop in views:
+                if crop is not None:
+                    rect_crops.append(crop)
+                    rect_jobs.append((index, view, lines[index].box))
+    if rect_crops:
+        started = time.perf_counter()
+        try:
+            results = fallback_recognize(rect_crops)
+            if len(results) != len(rect_jobs):
+                raise ValueError('Rectified recognition count does not match requested crops')
+            extra = []
+            for (index, view, bounds), result in zip(rect_jobs, results):
+                chars = tuple(result[2]) if len(result) > 2 else ()
+                mean, minimum = _digit_evidence(result[0], chars)
+                extra.append(replace(lines[index], text=result[0], score=result[1],
+                                     variant=f'line-{index}-{view}-english', members=(),
+                                     character_scores=chars, date_digit_score=mean,
+                                     date_digit_min_score=minimum))
+            rect_decisions = _apply_views(active, lines, linked, rect_jobs, extra, strict=True)
+            for decision in rect_decisions:
+                decision['stage'] = ('rectified-conflict-recheck' if decision['line_index'] in conflicts
+                                     else 'rectified-unparsed-recheck')
+            decisions.extend(rect_decisions)
+            observations.extend(extra)
+        except Exception as exc:
+            decisions.append(dict(line_index=-1, original_text='', original_box=None, accepted_text=None,
+                                  reason='rectified-recognition-error', error=f'{type(exc).__name__}: {exc}'))
         seconds += time.perf_counter()-started
     return active, observations, decisions, seconds
 

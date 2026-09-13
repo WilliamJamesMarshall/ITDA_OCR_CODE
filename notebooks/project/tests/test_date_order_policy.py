@@ -196,7 +196,7 @@ class OrderPolicyTest(unittest.TestCase):
         self.assertFalse(forced.order_resolved)
         self.assertTrue(forced.stop_ocr)
 
-    def test_pipeline_exits_after_one_ocr_and_passes_local_rules(self):
+    def test_pipeline_seeks_context_only_when_local_order_unresolved(self):
         class Backend:
             def __init__(self):
                 self.calls = 0
@@ -213,7 +213,7 @@ class OrderPolicyTest(unittest.TestCase):
                 backend = Backend()
                 result = predict_image(path, backend, PipelineConfig(product_date_rules=rules))
                 self.assertEqual(result.final_date, expected)
-                self.assertEqual(backend.calls, 1)
+                self.assertEqual(backend.calls, 1 if rules else 2)
 
 
 if __name__ == "__main__":

@@ -123,7 +123,15 @@ def release(base, number, approval_path, group_path):
     groups = read(group_path)
     admitted = build_admission(csv_read(base / 'test_to_original_mapping.csv'), number, previous, groups)
     roles = cumulative_partition(list(admitted.values()), roles)
-    pool = ROOT / '학습 및 테스트 결과/02_annotations/exports/20260911T193432620539Z/recognition_pool.jsonl'
+    input_version = base / 'active_training_inputs.json'
+    if input_version.exists():
+        inputs = read(input_version)
+        if inputs.get('round') != number:
+            raise ValueError('Training input version belongs to another round')
+        pool = checked_evidence(inputs['recognition_pool'])
+        checked_evidence(inputs['review_evidence'])
+    else:
+        pool = ROOT / '학습 및 테스트 결과/02_annotations/exports/20260911T193432620539Z/recognition_pool.jsonl'
     samples = [json.loads(line) for line in pool.read_text(encoding='utf-8').splitlines() if line.strip()]
     files = {}
     for role in ('optimizer_train', 'inner_validation'):

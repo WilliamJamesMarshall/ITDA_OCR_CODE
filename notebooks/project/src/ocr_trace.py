@@ -177,6 +177,12 @@ class ImageTrace:
         self.recovery_decisions.extend(decisions)
         self._emit(dict(kind='line_recovery', decisions=decisions))
 
+    def record_selector_input(self, lines, *, stage, final=False):
+        # Raw OCR observations include rejected recovery views. Store the exact
+        # active inputs separately so diagnostic replays cannot promote them.
+        self._emit(dict(kind='selector_input', stage=stage, final=final,
+                        lines=[asdict(line) for line in lines]))
+
     def finish(self, selection, error=None):
         self._emit(dict(kind='image_end', selection=self._selection(selection), error=error,
                         summary=self.summary()))

@@ -21,7 +21,9 @@ from PIL import Image, ImageOps
 from .date_extraction import DateContext, DateSelection, OCRLine, ProductDateRule, parse_dates, select_date, submission_fields
 from .ocr_trace import ImageFrame, ImageTrace
 from .line_recovery import recover_lines, recover_missing_rows, recovery_targets
+from .date_region_recovery import recover_geometric_rows
 from .recognition_evidence import CTCEvidence
+from .verified_product_rules import VERIFIED_PRODUCT_RULES
 
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 OUTPUT_COLUMNS = ["image_id", "year", "month", "day", "final_date"]
@@ -47,10 +49,11 @@ class PipelineConfig:
     tile_max_original_lines: int = 32
     tile_sparse_line_limit: int = 5
     progress_every: int = 25
-    product_date_rules: tuple[ProductDateRule, ...] = ()
+    product_date_rules: tuple[ProductDateRule, ...] = VERIFIED_PRODUCT_RULES
     date_context: DateContext | None = field(default_factory=DateContext)
     collect_trace: bool = True
     enable_line_recovery: bool = True
+    enable_geometric_recovery: bool = True
 
 
 @dataclass(frozen=True)
@@ -330,6 +333,11 @@ def _label_crop_bounds(image, lines):
         return None
     label=labels[0]
     h=label.height
+    if re.fullmatch(r'소비\s*기한|유통\s*기한|EXP|BBD',label.text,re.I):
+        # A heading may put its value to the right or below. "Until" is a
+        # suffix and keeps the narrower left-hand search used previously.
+        return (max(0,int(label.box[0]-6*h)),max(0,int(label.box[1]-h)),
+                min(width,int(label.box[2]+12*h)),min(height,int(label.box[3]+8*h)))
     return (max(0,int(label.box[0]-12*h)),max(0,int(label.box[1]-2*h)),
             min(width,int(label.box[2]+h)),min(height,int(label.box[3]+h)))
 
@@ -389,6 +397,8 @@ def _append_pass(
         lines = mapped_lines
     all_lines.extend(lines)
     passes.append(f"{detector}:{variant}")
+    if trace is not None:
+        trace.record_selector_input(all_lines,stage=f'{detector}:{variant}')
     try:
         selection = select_date(all_lines, product_rules=product_rules, context=context)
     except Exception as exc:
@@ -413,8 +423,36 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
     original_frame = ImageFrame(width, height)
     all_lines: list[OCRLine] = []
     passes: list[str] = []
+    original_lines: list[OCRLine] = []
 
     def finish(selection):
+        # Bounded last chance for missing/damaged rows. Never replace an output
+        # here, nor override explicit non-expiry/omission decisions.
+        if (config.enable_geometric_recovery and selection.final_date is None
+                and (not selection.stop_ocr or selection.reason.startswith('review_order:'))
+                and hasattr(backend, 'recognize_crops')):
+            recovery_started = time.perf_counter()
+            if trace is not None:
+                trace.start_pass(original_frame, 'recognition-only', 'geometric-rows')
+            try:
+                added, observations, decisions, seconds = recover_geometric_rows(
+                    image, original_lines, backend.recognize_crops, getattr(backend, 'recognize_date_crops', None))
+                candidate_lines = [*all_lines, *added]
+                if trace is not None:
+                    trace.record_selector_input(candidate_lines, stage='geometric-final', final=True)
+                candidate = select_date(candidate_lines, final=True, product_rules=config.product_date_rules,
+                                        context=config.date_context)
+                selection = candidate
+                if observations:
+                    passes.append('recognition-only:geometric-rows')
+                if trace is not None:
+                    trace.record_recovery(decisions)
+                    trace.record_pass([*observations, *added], [], original_frame, 'recognition-only',
+                                      'geometric-rows', seconds, selection)
+            except Exception as exc:
+                if trace is not None:
+                    trace.record_pass([], [], original_frame, 'recognition-only', 'geometric-rows',
+                                      time.perf_counter()-recovery_started, error=f'{type(exc).__name__}: {exc}')
         if trace is not None:
             trace.finish(selection)
         details = (dict(schema_version=1, original_size=trace.original_size,
@@ -429,6 +467,7 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
         all_lines, passes, backend, image, detector="mobile", variant="original", product_rules=config.product_date_rules,
         trace=trace, frame=original_frame, context=config.date_context,
     )
+    original_lines = list(all_lines)
     if config.enable_line_recovery and hasattr(backend, 'recognize_crops') and recovery_targets(all_lines):
         recovery_started = time.perf_counter()
         if trace is not None:
@@ -436,6 +475,8 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
         try:
             active, observations, decisions, seconds = recover_lines(
                 image, all_lines, backend.recognize_crops, getattr(backend,'recognize_date_crops',None))
+            if trace is not None:
+                trace.record_selector_input(active,stage='recognition-only:date-lines')
             recovered_selection = select_date(active, product_rules=config.product_date_rules, context=config.date_context)
             all_lines[:] = active
             selection = recovered_selection
@@ -454,7 +495,20 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
     if selection.stop_ocr:
         return finish(selection)
 
-    if selection.final_date is None and not selection.candidates:
+    # Clear digits with unresolved order need packaging context, not repeated
+    # recognition of the same digit crop. Spend at most one extra detector pass.
+    if (selection.digits_confident and selection.reason.startswith('review_order:')
+            and _label_crop_bounds(image,all_lines) is None):
+        if config.enable_recovery_fallback:
+            _append_pass(all_lines, passes, backend, image, detector='recovery', variant='original',
+                         product_rules=config.product_date_rules, trace=trace,
+                         frame=original_frame, context=config.date_context)
+        if trace is not None:
+            trace.record_selector_input(all_lines,stage='order-final',final=True)
+        return finish(select_date(all_lines, final=True,
+                                  product_rules=config.product_date_rules, context=config.date_context))
+
+    if selection.final_date is None and not any(c.explicit_positive for c in selection.candidates):
         label_lines = list(all_lines)
         bounds = _label_crop_bounds(image, all_lines)
         if bounds is not None:
@@ -473,6 +527,8 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
                     added, observations, decisions, seconds = recover_missing_rows(
                         image,label_lines,backend.recognize_crops,getattr(backend,'recognize_date_crops',None))
                     all_lines.extend(added)
+                    if trace is not None:
+                        trace.record_selector_input(all_lines,stage='recognition-only:label-rows')
                     selection = select_date(all_lines,product_rules=config.product_date_rules,context=config.date_context)
                     if observations:
                         passes.append('recognition-only:label-rows')
@@ -570,6 +626,8 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
             if selection.stop_ocr:
                 return finish(selection)
 
+    if trace is not None:
+        trace.record_selector_input(all_lines,stage='final',final=True)
     selection = select_date(all_lines, final=True, product_rules=config.product_date_rules, context=config.date_context)
     return finish(selection)
 
