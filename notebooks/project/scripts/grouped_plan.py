@@ -8,6 +8,7 @@ from scripts.prepare_sequential_rounds import ROOT, BASE as LEGACY_BASE, read, w
 BASE = Path('C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2')
 POLICY = 'grouped-8-v2'
 GROUPS = ((1,), (2, 3), (4, 5), (6, 7), (8,))
+CPU_POLICY = 'mixed-p2e2-v1'
 
 def round_for(image_id):
     match = re.fullmatch(r'[AB]MLT(\d{6})', image_id)
@@ -30,8 +31,11 @@ def previous_group(number):
     index = GROUPS.index(members(number))
     return GROUPS[index - 1] if index else ()
 
-def cpu_set(number):
-    return [0, 1, 2, 3] if number == members(number)[0] else [4, 5, 6, 7]
+def cpu_set(number, integration=False):
+    group = members(number)
+    if len(group) == 1 or integration:
+        return [0, 1, 2, 3]
+    return [0, 1, 4, 5] if number == group[0] else [2, 3, 6, 7]
 
 def validate_product_reference(row):
     """An existing augmented copy is a reference, never a training original."""

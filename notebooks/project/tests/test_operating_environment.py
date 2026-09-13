@@ -1,9 +1,19 @@
 import unittest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
-from scripts.operating_environment import network_probe, executable_paths
+from scripts.operating_environment import network_probe, executable_paths, enforce
 
 class OperatingEnvironmentTests(unittest.TestCase):
+    def test_online_mode_is_explicit_and_never_claims_offline(self):
+        with patch('scripts.operating_environment.limit_cpu',return_value=[0,1,4,5]), \
+             patch('scripts.operating_environment.network_probe',return_value=[{'connected':True}]) as probe, \
+             patch('scripts.operating_environment.executable_paths',return_value=[]):
+            value=enforce([0,1,4,5],'online')
+            probe.assert_called_once_with(False)
+            self.assertFalse(value['offline_verified'])
+            self.assertEqual(value['network_mode'],'online')
+            with self.assertRaises(ValueError): enforce([], 'unknown')
+
     def test_firewall_paths_include_junction_target(self):
         def resolved(path, strict=False):
             return Path(str(path).replace('alias-python', 'physical-python'))

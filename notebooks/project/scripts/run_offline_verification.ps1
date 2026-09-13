@@ -1,10 +1,14 @@
 param(
-    [ValidateSet('Qualify','Test','GroupQualify','GroupTest','GroupEvaluate')][string]$Action = 'Qualify',
+    [ValidateSet('Qualify','Test','GroupQualify','GroupTest','GroupEvaluate','GroupProfile','GroupRetest','GroupCorrectionProbe','GroupStructuralProbe')][string]$Action = 'Qualify',
     [ValidateRange(1,8)][int]$Round = 1,
     [string]$ApprovalPath,
     [string]$Workspace = 'C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2',
     [string]$ApprovalsDirectory,
     [string]$LabelsPath,
+    [string]$DevelopmentRoot,
+    [ValidateSet('legacy','shared','base-first')][string]$ProfileMode = 'legacy',
+    [ValidateSet(0,2,3)][int]$ProfileSlot = 0,
+    [string]$RestartDirectory,
     [switch]$Integration,
     [switch]$Retain
 )
@@ -22,6 +26,21 @@ if ($Action -eq 'Test' -and -not (Test-Path -LiteralPath $ApprovalPath -PathType
     throw 'Test requires an existing actual user start-instruction record.'
 }
 if ($taskGrouped) {
+    if ($Action -in @('GroupCorrectionProbe','GroupStructuralProbe')) {
+        if (-not $DevelopmentRoot) { throw 'GroupCorrectionProbe requires DevelopmentRoot' }
+    } elseif ($Action -eq 'GroupRetest') {
+        if (-not $RestartDirectory) { throw 'GroupRetest requires RestartDirectory' }
+        $taskRestartRunner = Join-Path $taskRoot 'notebooks/project/scripts/restart_grouped_tests.py'
+        & $taskPython $taskRestartRunner check --restart-directory $RestartDirectory
+        if ($LASTEXITCODE -ne 0) { throw 'Restart bindings or qualification invalid before firewall changes' }
+    }
+    if ($Action -eq 'GroupProfile') {
+        if (-not $DevelopmentRoot) { throw 'GroupProfile requires DevelopmentRoot' }
+        $taskProfileArguments = @('--development-root',$DevelopmentRoot)
+        if ($ProfileSlot -ne 0) { $taskProfileArguments += @('--slot',"$ProfileSlot") }
+        & $taskPython $taskRunner scripts.profile_grouped_performance check @taskProfileArguments
+        if ($LASTEXITCODE -ne 0) { throw 'Development profiling preflight failed before firewall changes' }
+    }
     & $taskPython $taskRunner scripts.run_round_groups verify --workspace $Workspace
     if ($LASTEXITCODE -ne 0) { throw 'Grouped plan verification failed before firewall changes' }
     if ($Action -eq 'GroupTest' -and -not (Test-Path -LiteralPath $ApprovalsDirectory -PathType Container)) {
@@ -55,7 +74,15 @@ try {
         $taskRecord.rules += [ordered]@{ name=$taskRule; program=$taskProgram; active=$true }
     }
     $taskRecord | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $taskEvidence -Encoding UTF8
-    if ($taskGrouped) {
+    if ($Action -eq 'GroupStructuralProbe') {
+        & $taskPython $taskRunner scripts.structural_model_probe --development-root $DevelopmentRoot
+    } elseif ($Action -eq 'GroupCorrectionProbe') {
+        & $taskPython $taskRunner scripts.correction_model_probe --development-root $DevelopmentRoot
+    } elseif ($Action -eq 'GroupRetest') {
+        & $taskPython $taskRestartRunner run --restart-directory $RestartDirectory
+    } elseif ($Action -eq 'GroupProfile') {
+        & $taskPython $taskRunner scripts.profile_grouped_performance run @taskProfileArguments --mode $ProfileMode
+    } elseif ($taskGrouped) {
         $taskGroupAction = @{GroupQualify='qualify';GroupTest='test';GroupEvaluate='evaluate'}[$Action]
         $taskArguments = @($taskRunner,'scripts.run_round_groups',$taskGroupAction,'--workspace',$Workspace,'--round',"$Round")
         if ($Action -eq 'GroupTest') { $taskArguments += @('--approvals-dir',$ApprovalsDirectory) }

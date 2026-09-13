@@ -110,7 +110,7 @@ def evaluate_candidate(base, number, labels_path, integration=False, retain=Fals
     for n in range(1, max(members(number)) + 1):
         manifest = Path(base) / f'test_round_{n:02d}.csv'
         out, runtime = run_notebook(base, number, weights=chosen['weights'], code_root=chosen['code_root'],
-                                    output_dir=dest / f'round_{n:02d}', manifest=manifest)
+                                    output_dir=dest / f'round_{n:02d}', manifest=manifest, integration=integration)
         ids = [row['image_id'] for row in csv_read(manifest)]
         labels = read_labels(labels_path)
         labels = {i: labels.get(i, labels.get(i[4:])) for i in ids}

@@ -35,6 +35,12 @@ class GroupedPlanTests(unittest.TestCase):
         for a,b in ((2,3),(4,5),(6,7)):
             self.assertFalse(set(cpu_set(a)) & set(cpu_set(b)))
             self.assertEqual(set(cpu_set(a)+cpu_set(b)),set(range(8)))
+            self.assertEqual(cpu_set(a), [0,1,4,5])
+            self.assertEqual(cpu_set(b), [2,3,6,7])
+            for n in (a,b):
+                self.assertEqual(len(set(cpu_set(n)) & set(range(4))), 2)
+                self.assertEqual(len(set(cpu_set(n)) & set(range(4,8))), 2)
+                self.assertEqual(cpu_set(n, integration=True), [0,1,2,3])
         self.assertEqual(cpu_set(1),[0,1,2,3])
         self.assertEqual(cpu_set(8),[0,1,2,3])
 
@@ -98,9 +104,11 @@ class GroupedApprovalTests(unittest.TestCase):
             base=Path(folder); dest=base/'rounds/round_02'; dest.mkdir(parents=True)
             self.assertFalse(already_finished(base,2,'test'))
             write(dest/'runtime.json',dict(status='completed'))
-            write(dest/'manifest.json',dict(round=2))
+            csv_write(dest/'manifest.csv',[dict(image_id='a',image_path='fixture')],['image_id','image_path'])
+            csv_write(dest/'submission.csv',[dict(image_id='a',year='2026',month='01',day='01',final_date='2026-01-01')],
+                      ['image_id','year','month','day','final_date'])
             write(dest/'state.json',dict(status='inference_complete',runtime=evidence(dest/'runtime.json'),
-                  manifest=evidence(dest/'manifest.json'),predictions=None))
+                  manifest=evidence(dest/'manifest.csv'),predictions=evidence(dest/'submission.csv')))
             self.assertTrue(already_finished(base,2,'test'))
             self.assertFalse(already_finished(base,3,'test'))
             write(dest/'runtime.json',dict(status='changed'))

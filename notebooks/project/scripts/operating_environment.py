@@ -62,8 +62,11 @@ def network_probe(require_denied=True):
         raise RuntimeError('Require explicit OS access-denied (WSAEACCES), not DNS errors or timeouts: ' + repr(results))
     return results
 
-def enforce(cpus=None):
-    return {'cpu_affinity': limit_cpu(cpus), 'network_probe': network_probe(),
+def enforce(cpus=None, network_mode='offline'):
+    if network_mode not in ('offline', 'online'):
+        raise ValueError('Unknown network mode')
+    return {'cpu_affinity': limit_cpu(cpus), 'network_probe': network_probe(network_mode=='offline'),
+            'network_mode': network_mode, 'offline_verified': network_mode=='offline',
             'python': sys.executable, 'base_python': sys._base_executable,
             'executable_paths': executable_paths()}
 

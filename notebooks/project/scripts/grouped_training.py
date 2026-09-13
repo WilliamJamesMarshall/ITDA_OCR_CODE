@@ -218,7 +218,7 @@ def train(path, inference_python):
     from scripts.operating_environment import limit_cpu
     from scripts.train_recognition_cpu import run_preflight, RUNTIME, DICTIONARY
     value = validate_training(path)
-    cpus = cpu_set(value['round']) if not value['integration'] else [0, 1, 2, 3]
+    cpus = cpu_set(value['round'], integration=value['integration'])
     limit_cpu(cpus)
     output = Path(value['output_dir'])
     if output.exists(): raise ValueError('Training output exists; use a reviewed new attempt')

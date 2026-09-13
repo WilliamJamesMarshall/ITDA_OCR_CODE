@@ -1,6 +1,14 @@
 # 5단계 병행 실행 운영
 
 정본: [grouped_8_rounds.md](../protocol/grouped_8_rounds.md).
+2단계 구조 개선 개발·혼합 CPU 계측: [개발 기록](performance_development_20260913.md).
+
+최신 2·3회 개발 재시험(2026-09-14, v12)은 사용자 지시로 온라인 실행했다.
+각 500장 완료, 378/500·1,444.517초 및 335/500·1,443.113초이며 95%/정답 퇴행 0 조건 미달로 미채택이다.
+[최신 결과·오답·보존 감사](C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2/retest-stage2-online-20260914-v12/summary.md)와
+[이번 온라인 실행 예외](online_stage2_exception_20260914.md)를 함께 읽는다.
+`status`의 회차 정본은 보존한 최초 결과/사용자 검토 대기 상태다. 이 추가 개발 성적을 최초 성적이나 단계 완료로 덮어쓰지 않는다.
+
 저장소 루트 `C:/ITDA_OCR_CODE`에서 실행한다. 예시의 `<...>`는 실제 검토된 파일로 대체해야 한다.
 명령 예시는 실행/학습 승인이 아니며 사용자 승인 JSON은 실제 지시를 기록할 때만 작성한다.
 
@@ -57,6 +65,13 @@ CPU·방화벽 권한은 기존 관리자 실행 방식을 유지한다. 임시 
 ```
 
 Round 2는 2·3, Round 4는 4·5, Round 6은 6·7을 실행한다. Round 1/8은 단독이다.
+병행 슬롯은 CPU 0,1,4,5 / 2,3,6,7 (각 P2+E2·4스레드)이다.
+이 배정은 회차별 후보 학습·누적 검증에도 동일하게 적용한다. 단독·통합 작업은 0–3을 유지한다.
+실행기는 Windows CPU topology를 검사하고 job/runtime에 정책과 실제 affinity를 남긴다.
+새 정책의 오프라인 증거는 `qualification_XX_mixed-p2e2-v1`에 저장한다.
+기존 `qualification_XX`와 최초 실행 증거는 보존하며 새 배정의 검증으로 인정하지 않는다.
+`status.cpus`는 앞으로 사용할 배정이고 `last_execution_cpus`는 이전 runtime의 실제 배정이다.
+코드·모델이 바뀐 개발 재평가는 별도 사본·출력 경로에서 수행하며 최초 테스트를 덮어쓰지 않는다.
 시작승인폴더에는 각각 `round_02.json`, `round_03.json`처럼 회차별 실제 기록이 있어야 한다.
 필드: actor=user, action=start_test, round, instruction, source_reference, approved_at(시간대),
 manifest_sha256, code, model. code/model은 `groups/group_02_03/release/release.json`과 일치해야 한다.

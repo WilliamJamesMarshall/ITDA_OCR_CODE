@@ -8,10 +8,10 @@ import time
 import uuid
 from pathlib import Path
 from scripts.prepare_sequential_rounds import ROOT, read, write, digest
-from scripts.grouped_plan import BASE, GROUPS, members, group_name, cpu_set, prepare, verify, revise_mapping
+from scripts.grouped_plan import BASE, CPU_POLICY, GROUPS, members, group_name, cpu_set, prepare, verify, revise_mapping
 from scripts.grouped_rounds import (group_dir, round_dir, exclusive, execution_release, prior_completion,
     freeze, qualification, check_qualification, infer, score, approval, evidence, checked_evidence,
-    model_lock, source_lock, child_environment, stop_process, now, require_pair_scored)
+    model_lock, source_lock, child_environment, stop_process, now, require_pair_scored, qualification_dir)
 
 
 def status(base=BASE):
@@ -59,6 +59,14 @@ def status(base=BASE):
             state = read(path) if path.exists() else dict(status='interrupted_preparation' if path.parent.exists() else 'not_started')
             row = dict(round=n, status=state['status'], cpus=cpu_set(n), report=str(round_dir(base, n) / 'report.md'),
                        imported_history=state.get('imported_history', False))
+            row['cpu_policy'] = CPU_POLICY
+            row['cpus_scope'] = 'planned future execution; historical runtime remains authoritative'
+            if state.get('runtime'):
+                try:
+                    historical = read(checked_evidence(state['runtime']))
+                    row['last_execution_cpus'] = historical.get('environment', {}).get('cpu_affinity')
+                except (ValueError, OSError) as error:
+                    errors.append(str(error))
             if state.get('completion_kind'): row['completion_kind'] = state['completion_kind']
             for field in ('report', 'release', 'candidate', 'completion'):
                 if field in state:
@@ -105,7 +113,7 @@ def status(base=BASE):
         states = [r['status'] for r in first_pending['round_statuses']]
         result['next_action'] = ('Resolve evidence errors' if first_pending['errors'] else
             'Confirm explicit model, freeze release, qualify both CPU slots, then obtain/start approved tests' if 'not_started' in states else
-            'Finish scoring each completed test' if 'inference_complete' in states else
+            'Score preserved completed/failed inference evidence' if any(s in ('inference_complete','inference_failed') for s in states) else
             'Review each report and feedback; resolve originals/groups; obtain round-specific training approval' if 'awaiting_user_review' in states else
             'Execute only the approved pending training release' if 'originals_admitted' in states else
             'Review and approve integration, train, evaluate cumulative rounds, and explicitly select/retain the model')
@@ -149,9 +157,16 @@ def already_finished(base, number, action, integration=False, retain=False):
         checked_evidence(value['runtime'])
         if value.get('predictions'): checked_evidence(value['predictions'])
         if value.get('report'): checked_evidence(value['report'])
+        runtime = read(checked_evidence(value['runtime']))
+        if runtime.get('status') != 'completed' or runtime.get('failures') or not value.get('predictions'):
+            return False
+        from scripts.grouped_rounds import validate_output
+        from scripts.prepare_sequential_rounds import csv_read
+        validate_output(checked_evidence(value['predictions']),
+                        [r['image_id'] for r in csv_read(checked_evidence(value['manifest']))])
         return True
     if action == 'qualify':
-        path = group_dir(base, number) / f'qualification_{number:02d}/qualification.json'
+        path = qualification_dir(base, number) / 'qualification.json'
         if not path.exists(): return False
         check_qualification(base, number)
         return True
@@ -173,6 +188,7 @@ def already_finished(base, number, action, integration=False, retain=False):
 def run_workers(base, number, action, approvals=None, labels=None, integration=False, retain=False):
     """One coordinator owns both workers and their lifetime; no approvals are synthesized."""
     import psutil
+    from scripts.grouped_cpu import verify_topology
     base = Path(base)
     group = members(number)
     numbers = (group[0],) if integration else group
@@ -184,6 +200,7 @@ def run_workers(base, number, action, approvals=None, labels=None, integration=F
         skipped = [n for n in numbers if already_finished(base, n, action, integration, retain)]
         numbers = tuple(n for n in numbers if n not in skipped)
         if not numbers: return dict(action=action, already_finished=skipped, launched=[])
+        topology_proof = verify_topology()
         for n in numbers:
             precheck(base, n, action, approvals, integration)
             if action == 'evaluate':
@@ -191,7 +208,7 @@ def run_workers(base, number, action, approvals=None, labels=None, integration=F
                 if (target / ('retain_evaluation' if retain else 'evaluation')).exists():
                     raise ValueError('Evaluation output already exists; preserve and review it before a new attempt')
         for n in numbers:
-            if any(c >= psutil.cpu_count() for c in cpu_set(n)): raise ValueError('CPU allocation unavailable')
+            if any(c >= psutil.cpu_count() for c in cpu_set(n, integration)): raise ValueError('CPU allocation unavailable')
         job_id = uuid.uuid4().hex
         dest = base / 'jobs' / job_id
         dest.mkdir(parents=True)
@@ -199,6 +216,8 @@ def run_workers(base, number, action, approvals=None, labels=None, integration=F
                    already_finished=skipped, approvals=str(Path(approvals).resolve()) if approvals else None,
                    labels=str(Path(labels).resolve()) if labels else None, integration=integration, retain=retain)
         job['controller_code'] = controller_lock()
+        job['cpu_policy'] = topology_proof
+        job['cpu_allocations'] = {str(n): cpu_set(n, integration) for n in numbers}
         write(dest / 'job.json', job)
         processes, logs = [], []
         try:
@@ -208,7 +227,7 @@ def run_workers(base, number, action, approvals=None, labels=None, integration=F
                 logs.append(log)
                 process = subprocess.Popen([str(executable), str(ROOT / 'notebooks/project/run.py'),
                     'scripts.run_round_groups', '_worker', '--workspace', str(base.resolve()), '--round', str(n),
-                    '--job', str(dest / 'job.json')], env=child_environment(cpu_set(n)), cwd=ROOT,
+                    '--job', str(dest / 'job.json')], env=child_environment(cpu_set(n, integration)), cwd=ROOT,
                     stdout=log, stderr=subprocess.STDOUT, start_new_session=os.name!='nt',
                     creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
                 processes.append((n, process))
@@ -233,7 +252,7 @@ def run_workers(base, number, action, approvals=None, labels=None, integration=F
 def controller_lock():
     names = ['run_round_groups.py', 'grouped_rounds.py', 'grouped_plan.py', 'grouped_review.py',
              'grouped_training.py', 'prepare_grouped_stage2.py', 'prepare_sequential_rounds.py',
-             'operating_environment.py']
+             'operating_environment.py', 'grouped_cpu.py']
     paths = [ROOT / 'notebooks/project/scripts' / name for name in names]
     paths.append(ROOT / 'notebooks/project/run.py')
     return {p.relative_to(ROOT).as_posix(): digest(p) for p in paths}
@@ -264,8 +283,11 @@ def worker(job_path, number):
     if job.get('controller_code') != controller_lock():
         raise ValueError('Worker controller code differs from coordinator')
     base = Path(job['base'])
-    limit_cpu(cpu_set(number))
-    with exclusive(base / 'locks' / ('cpu_A.lock' if cpu_set(number)[0]==0 else 'cpu_B.lock')):
+    cpus = cpu_set(number, integration=job['integration'])
+    if job.get('cpu_allocations', {}).get(str(number)) != cpus:
+        raise ValueError('Worker CPU allocation differs from coordinator')
+    limit_cpu(cpus)
+    with exclusive(base / 'locks' / ('cpu_A.lock' if cpus[0]==0 else 'cpu_B.lock')):
         precheck(base, number, job['action'], job['approvals'], job['integration'])
         if job['action']=='qualify': qualification(base, number)
         elif job['action']=='test': infer(base, number, Path(job['approvals']) / f'round_{number:02d}.json')

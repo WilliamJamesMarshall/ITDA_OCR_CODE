@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from scripts.prepare_sequential_rounds import ROOT, read, write, digest, csv_read, csv_write
 from scripts.sequential_rounds import evidence, checked_evidence, code_lock, model_lock, approval
-from scripts.grouped_plan import BASE, POLICY, GROUPS, members, previous_group, group_name, cpu_set, verify
+from scripts.grouped_plan import BASE, POLICY, CPU_POLICY, GROUPS, members, previous_group, group_name, cpu_set, verify
 
 def now():
     return datetime.now(timezone.utc).isoformat()
@@ -195,22 +195,46 @@ def stop_process(process):
         os.killpg(process.pid, signal.SIGKILL)
     process.wait()
 
-def run_notebook(base, number, qualification=False, weights=None, output_dir=None, manifest=None, code_root=None):
+def qualification_dir(base, number):
+    # Preserve old qualification evidence; a different CPU policy needs a new run.
+    return group_dir(base, number) / f'qualification_{number:02d}_{CPU_POLICY}'
+
+
+def embedded_source_manifest(source):
+    """Refuse a stale generated notebook; legacy notebooks keep their old layout."""
+    source = Path(source)
+    metadata = read(source/'predict.ipynb').get('metadata', {}).get('itda_embedded')
+    if metadata is None:
+        return None
+    expected = {p.stem: digest(p) for p in sorted((source/'notebooks/project/src').glob('*.py'))
+                if p.stem != '__init__'}
+    if (metadata.get('schema') != 1 or not expected or metadata.get('sources') != expected
+            or metadata.get('external_project_source_required') is not False):
+        raise ValueError('Embedded notebook is not bound to the current inference sources')
+    return expected
+
+
+def run_notebook(base, number, qualification=False, weights=None, output_dir=None, manifest=None, code_root=None, integration=False, network_mode='offline'):
     """Only images and inference files enter this notebook's submission copy."""
     from scripts.operating_environment import enforce, network_probe
     import psutil
     release = execution_release(base, number)
-    cpus = cpu_set(number)
-    proof = enforce(cpus)
-    dest = Path(output_dir) if output_dir else (group_dir(base, number) / f'qualification_{number:02d}' if qualification else round_dir(base, number))
+    from scripts.grouped_cpu import verify_topology
+    topology_proof = verify_topology()
+    cpus = cpu_set(number, integration=integration)
+    proof = enforce(cpus, network_mode)
+    proof['cpu_policy'] = topology_proof
+    dest = Path(output_dir) if output_dir else (qualification_dir(base, number) if qualification else round_dir(base, number))
     dest.mkdir(parents=True, exist_ok=False)
     sandbox = dest / 'submission'
     sandbox.mkdir()
     source = Path(code_root or release['code_root'])
     source_before = source_lock(source)
+    embedded = embedded_source_manifest(source)
     for name in ('predict.ipynb', 'requirements.txt', 'download_weights.sh'):
         shutil.copy2(source / name, sandbox / name)
-    shutil.copytree(source / 'notebooks/project/src', sandbox / 'notebooks/project/src', ignore=shutil.ignore_patterns('__pycache__'))
+    if embedded is None:
+        shutil.copytree(source / 'notebooks/project/src', sandbox / 'notebooks/project/src', ignore=shutil.ignore_patterns('__pycache__'))
     bundle = Path(weights or release['weights'])
     bundle_hash = model_lock(bundle)
     shutil.copytree(bundle, sandbox / 'weights/paddle')
@@ -272,6 +296,7 @@ def run_notebook(base, number, qualification=False, weights=None, output_dir=Non
         proof['error'] = repr(error)
     finally:
         runtime = dict(status=status, total_elapsed_seconds=time.perf_counter()-started, images=len(rows),
+                       embedded_sources=embedded, external_project_source_present=(sandbox/'notebooks/project/src').exists(),
                        environment=proof, peak_tree_rss_bytes=peak_rss, peak_tree_commit_bytes=peak_commit,
                        minimum_available_memory_bytes=minimum_available, child_affinity_checks=affinity_checks,
                        timing_scope='nbconvert startup and complete notebook; copies and scoring excluded', failures=[])
@@ -288,10 +313,14 @@ def run_notebook(base, number, qualification=False, weights=None, output_dir=Non
                             runtime.update(pipeline_summary=summary, failures=summary['failures'],
                                            p50=summary['p50_image_seconds'], p95=summary['p95_image_seconds'])
         try:
-            runtime['network_after'] = network_probe()
+            runtime['network_after'] = network_probe(network_mode=='offline')
             execution_release(base, number)
             if source_lock(source) != source_before: raise ValueError('Inference code changed during execution')
             if model_lock(bundle) != bundle_hash: raise ValueError('Candidate bundle changed during execution')
+            if runtime['status'] == 'completed':
+                runtime['output_rows'] = validate_output(output, [r['image_id'] for r in rows])
+                if runtime['failures'] or runtime.get('pipeline_summary', {}).get('status', 'completed') != 'completed':
+                    raise ValueError('Pipeline reported failure or incomplete processing')
         except Exception as error:
             runtime.update(status='failed', verification_error=repr(error))
         write(dest / 'runtime.json', runtime)
@@ -303,16 +332,52 @@ def qualification(base, number):
         raise ValueError('Offline qualification failed; retained runtime evidence')
     rows = csv_read(dest / 'submission.csv')
     if len(rows) != 1 or rows[0]['image_id'] != 'BMLC002247': raise ValueError('Qualification output mismatch')
-    value = dict(status='passed', cpus=cpu_set(number), release=evidence(group_dir(base, number) / 'release/release.json'),
-                 runtime=evidence(dest / 'runtime.json'), created_at=now())
+    value = dict(status='passed', cpu_policy=CPU_POLICY, cpus=cpu_set(number), release=evidence(group_dir(base, number) / 'release/release.json'),
+                 runtime=evidence(dest / 'runtime.json'), created_at=now(),
+                 scope='offline connectivity and loading smoke only', full_round_performance_verified=False)
     write(dest / 'qualification.json', value)
 
 def check_qualification(base, number):
-    q = read(group_dir(base, number) / f'qualification_{number:02d}/qualification.json')
-    if q['status'] != 'passed' or q['cpus'] != cpu_set(number): raise ValueError('CPU qualification mismatch')
+    q = read(qualification_dir(base, number) / 'qualification.json')
+    if q['status'] != 'passed' or q['cpus'] != cpu_set(number) or q.get('cpu_policy') != CPU_POLICY:
+        raise ValueError('CPU qualification mismatch')
     if checked_evidence(q['release']) != group_dir(base, number) / 'release/release.json':
         raise ValueError('Wrong qualified release')
     checked_evidence(q['runtime'])
+
+def validate_output(output, expected_ids):
+    """Validate coverage/format without consulting ground truth."""
+    import csv
+    import re
+    from datetime import date
+    with Path(output).open(encoding='utf-8-sig', newline='') as stream:
+        reader = csv.DictReader(stream)
+        if reader.fieldnames != ['image_id', 'year', 'month', 'day', 'final_date']:
+            raise ValueError('Submission columns mismatch')
+        rows = list(reader)
+    ids = [r['image_id'] for r in rows]
+    if len(ids) != len(expected_ids) or len(set(ids)) != len(ids) or set(ids) != set(expected_ids):
+        raise ValueError('Submission coverage mismatch')
+    for row in rows:
+        if None in row or any(v is None for v in row.values()):
+            raise ValueError('Malformed submission row')
+        value = row['final_date']
+        fields = [row[k] for k in ('year','month','day')]
+        if value == 'NONE':
+            if fields != ['NONE'] * 3: raise ValueError('Invalid NONE fields')
+        else:
+            if value.split('-') != fields:
+                raise ValueError('Invalid date fields')
+            if re.fullmatch(r'\d{4}-\d{2}-\d{2}', value):
+                date.fromisoformat(value)
+            elif re.fullmatch(r'NONE-\d{2}-\d{2}', value):
+                date(2000, int(fields[1]), int(fields[2]))
+            elif re.fullmatch(r'\d{4}-\d{2}-NONE', value):
+                date(int(fields[0]), int(fields[1]), 1)
+            else:
+                raise ValueError('Invalid date format')
+    return len(rows)
+
 
 def infer(base, number, approval_path):
     release = execution_release(base, number)
@@ -324,17 +389,19 @@ def infer(base, number, approval_path):
              code=release['code'], model=release['model']))
     with exclusive(Path(base) / 'locks' / f'round_{number:02d}.lock'):
         dest, runtime = run_notebook(base, number)
-        state = dict(status='inference_complete', round=number, created_at=now(), manifest=evidence(manifest),
+        state = dict(status='inference_complete' if runtime['status']=='completed' else 'inference_failed', round=number, created_at=now(), manifest=evidence(manifest),
                      code=release['code'], model=release['model'], start_approval=evidence(approval_path),
                      runtime=evidence(dest / 'runtime.json'), predictions=evidence(dest / 'submission.csv')
                      if (dest / 'submission.csv').exists() else None)
         write(dest / 'state.json', state)
+        if runtime['status'] != 'completed' or runtime['failures']:
+            raise RuntimeError('Inference failed; runtime and partial results retained at ' + str(dest))
 
 def score(base, number, labels_path):
     from scripts.evaluate_pipeline import read_labels, score_predictions
     dest = round_dir(base, number)
     state = read(dest / 'state.json')
-    if state['status'] != 'inference_complete': raise ValueError('Inference must finish before scoring')
+    if state['status'] not in ('inference_complete', 'inference_failed'): raise ValueError('Inference must finish before scoring')
     runtime = read(checked_evidence(state['runtime']))
     ids = [r['image_id'] for r in csv_read(checked_evidence(state['manifest']))]
     all_labels = read_labels(labels_path)

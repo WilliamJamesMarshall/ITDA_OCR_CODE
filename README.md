@@ -14,6 +14,11 @@
 
 상품 이미지에서 소비기한을 찾아 `submission.csv`로 저장하는 CPU 전용 오프라인 추론 파이프라인입니다. 비공개 평가 입력 500장과 제한시간 2,400초를 기준으로 설계했으며, 외부 API·GPU·추론 중 다운로드를 사용하지 않습니다.
 
+## 추가 수집 데이터
+
+추가 수집 이미지 364장은 `custom_data/*.jpg`, 최종 날짜 정답은 [정답지](custom_data/labels/answer_003353_003716_manual.xlsx)의 `정답 날짜` 열에 있습니다(ID 3353 → 003353.jpg).
+원천 OCR 영역·문자열 주석과 출처 대응표는 `custom_data/metadata/`에, 출처·라이선스와 라벨 안내는 [ATTRIBUTION.md](custom_data/ATTRIBUTION.md)에 정리했습니다.
+
 ## 최종 구성
 
 | 역할 | 모델 또는 방법 |
@@ -186,7 +191,7 @@ python notebooks/project/run.py scripts.evaluate_pipeline \
 - 입력 이미지 수와 CSV 행 수, 5개 열 순서, 중복 `image_id` 여부 확인
 - 실행 경로에 `input()`·`getpass()`·외부 API 호출이 없는지 확인
 - 저장소를 Public으로 두거나 운영진 계정 `b9511242000-blip`에 접근 권한 부여
-- 가중치·원본 이미지·실행 결과를 Git에 포함하지 않았는지 확인
+- 가중치·로컬 원본 이미지·실행 결과를 Git에 포함하지 않았는지 확인(추가 데이터 제출용 `custom_data/`의 이미지·라벨·출처 정보는 포함)
 
 ## 참고 자료
 
