@@ -23,11 +23,17 @@ def recovery_targets(lines):
         digits = sum(c.isdigit() for c in text)
         if (not line.geometry_valid or len(text) > 40 or digits < 3
                 or digits / max(1, len(text)) < .25
-                or re.search(r'%|kcal|mg|ml|brix|영양|전화|고객|품목|인증|허가|등록|\b(?:TEL|LOT)\b', text, re.I)
+                or re.search(r'%|kcal|mg|ml|brix|영양|전화|고객|상담|수신|품목|인증|허가|등록|\b(?:TEL|LOT)\b|'
+                             r'(?<!\d)0\d{1,2}[- )]\d{2,4}-\d{3,4}', text, re.I)
                 or re.fullmatch(r'\d{1,2}:\d{2}(?::\d{2})?', text)):
             continue
         if not (parse_dates(text) or sum(text.count(s) for s in './-·') >= 2
                 or (digits >= 4 and any(s in text for s in './-·'))):
+            continue
+        # A near-saturated, unrepaired full token does not need three more
+        # recognition views. Damaged tokens and lower-confidence rows still do.
+        if (line.score >= .98 and len(line.polygon) == 4 and _signature(text)
+                and all(p.year_digits == 4 for p in parse_dates(text))):
             continue
         targets.append(index)
     return targets[:2]
@@ -273,6 +279,37 @@ def recover_lines(image, lines, recognize_crops, fallback_recognize=None):
         except Exception as exc:
             decisions.append(dict(line_index=-1, original_text='', original_box=None, accepted_text=None,
                                   reason='rectified-recognition-error', error=f'{type(exc).__name__}: {exc}'))
+        seconds += time.perf_counter()-started
+    # Axis-aligned crops can include the next clock row even when the original
+    # detector quad isolates the date. Recheck remaining damaged tokens with
+    # the primary recognizer too, using two padded, deskewed views.
+    accepted = {d['line_index'] for d in decisions if d.get('accepted_text')}
+    extra_jobs, extra_crops = [], []
+    for index in sorted(pending - accepted):
+        for padding in (.3, .6):
+            crop = rectified_crop(image, lines[index].polygon, padding)
+            if crop is None:
+                continue
+            h = crop.shape[0]
+            extra_crops.append(cv2.resize(crop, (round(h*4.8), h), interpolation=cv2.INTER_AREA))
+            extra_jobs.append((index, f'primary-rectified-{padding}', lines[index].box))
+    if extra_crops:
+        started = time.perf_counter()
+        results = recognize_crops(extra_crops)
+        if len(results) != len(extra_jobs):
+            raise ValueError('Primary rectified result count does not match requested crops')
+        extra = []
+        for (index, view, bounds), result in zip(extra_jobs, results):
+            chars = tuple(result[2]) if len(result) > 2 else ()
+            mean, minimum = _digit_evidence(result[0], chars)
+            extra.append(replace(lines[index], text=result[0], score=result[1],
+                                 variant=view, character_scores=chars,
+                                 date_digit_score=mean, date_digit_min_score=minimum))
+        audit = _apply_views(active, lines, linked, extra_jobs, extra, strict=True)
+        for decision in audit:
+            decision.update(stage='primary-rectified-unparsed', recognizer='primary')
+        decisions.extend(audit)
+        observations.extend(extra)
         seconds += time.perf_counter()-started
     return active, observations, decisions, seconds
 

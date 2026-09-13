@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import math
 import os
@@ -22,6 +23,8 @@ from .date_extraction import DateContext, DateSelection, OCRLine, ProductDateRul
 from .ocr_trace import ImageFrame, ImageTrace
 from .line_recovery import recover_lines, recover_missing_rows, recovery_targets
 from .date_region_recovery import recover_geometric_rows
+from .printed_context_recovery import recover_printed_context
+from .thin_dot_recovery import recover_thin_dots
 from .recognition_evidence import CTCEvidence
 from .verified_product_rules import VERIFIED_PRODUCT_RULES
 
@@ -199,7 +202,7 @@ class PaddleOCRBackend:
         if not hasattr(pipeline, 'text_rec_model'):
             pipeline = pipeline._pipeline
         model = pipeline.text_rec_model
-        return self._recognize_with_evidence(model,crops)
+        return self._recognize_cached(model,crops)
 
     def recognize_date_crops(self, crops):
         """Lazy offline English/numeric recovery; no additional detector."""
@@ -210,7 +213,28 @@ class PaddleOCRBackend:
             wrapper = create_model(name,model_dir=str(self._model_dir(name)),device='cpu',
                                    cpu_threads=self.config.cpu_threads,enable_mkldnn=True)
             self._date_recognizer = wrapper._predictor
-        return self._recognize_with_evidence(self._date_recognizer,crops)
+        return self._recognize_cached(self._date_recognizer,crops)
+
+    def begin_image(self):
+        self._crop_cache = {}
+
+    def _recognize_cached(self, model, crops):
+        # Exact pixels, shape, dtype and recognizer identity; never fuzzy regions.
+        # Reuse computation only. Callers retain the same evidence/view counts.
+        cache = getattr(self,'_crop_cache',None)
+        if cache is None:
+            return self._recognize_with_evidence(model,crops)
+        keys = [(id(model),crop.shape,str(crop.dtype),hashlib.sha256(crop.tobytes()).digest()) for crop in crops]
+        missing = list(dict.fromkeys(key for key in keys if key not in cache))
+        results = self._recognize_with_evidence(model,[crops[keys.index(key)] for key in missing]) if missing else []
+        if len(results) != len(missing):
+            raise ValueError('Cached recognition result count mismatch')
+        found = dict(zip(missing,results))
+        answer = [cache[key] if key in cache else found[key] for key in keys]
+        if len(cache)+len(found)>128:
+            cache.clear()
+        cache.update(list(found.items())[:128])
+        return answer
 
     @staticmethod
     def _recognize_with_evidence(model,crops):
@@ -414,6 +438,8 @@ def _append_pass(
 
 def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: ImageTrace | None = None) -> ImagePrediction:
     started = time.perf_counter()
+    if hasattr(backend,'begin_image'):
+        backend.begin_image()
     image = _load_bgr(path)
     height, width = image.shape[:2]
     if trace is None and config.collect_trace:
@@ -424,6 +450,7 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
     all_lines: list[OCRLine] = []
     passes: list[str] = []
     original_lines: list[OCRLine] = []
+    geometric_result = None
 
     def finish(selection):
         # Bounded last chance for missing/damaged rows. Never replace an output
@@ -435,14 +462,17 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
             if trace is not None:
                 trace.start_pass(original_frame, 'recognition-only', 'geometric-rows')
             try:
-                added, observations, decisions, seconds = recover_geometric_rows(
+                added, observations, decisions, seconds = geometric_result if geometric_result is not None else recover_geometric_rows(
                     image, original_lines, backend.recognize_crops, getattr(backend, 'recognize_date_crops', None))
+                if geometric_result is not None:
+                    observations, decisions, seconds = [], [], 0.
                 candidate_lines = [*all_lines, *added]
                 if trace is not None:
                     trace.record_selector_input(candidate_lines, stage='geometric-final', final=True)
                 candidate = select_date(candidate_lines, final=True, product_rules=config.product_date_rules,
                                         context=config.date_context)
                 selection = candidate
+                all_lines[:] = candidate_lines
                 if observations:
                     passes.append('recognition-only:geometric-rows')
                 if trace is not None:
@@ -452,6 +482,56 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
             except Exception as exc:
                 if trace is not None:
                     trace.record_pass([], [], original_frame, 'recognition-only', 'geometric-rows',
+                                      time.perf_counter()-recovery_started, error=f'{type(exc).__name__}: {exc}')
+        if (config.enable_line_recovery and selection.final_date is None
+                and (not selection.stop_ocr or selection.reason.startswith('review_order:'))
+                and hasattr(backend, 'recognize_crops')):
+            recovery_started = time.perf_counter()
+            if trace is not None:
+                trace.start_pass(original_frame,'recognition-only','stroke-rows')
+            try:
+                added, observations, decisions, seconds = recover_printed_context(image,all_lines,backend.recognize_crops)
+                all_lines.extend(added)
+                if trace is not None:
+                    trace.record_selector_input(all_lines,stage='stroke-final',final=True)
+                selection = select_date(all_lines,final=True,product_rules=config.product_date_rules,context=config.date_context)
+                if observations:
+                    passes.append('recognition-only:stroke-rows')
+                if trace is not None:
+                    trace.record_recovery(decisions)
+                    trace.record_pass([*observations,*added],[],original_frame,'recognition-only','stroke-rows',seconds,selection)
+            except Exception as exc:
+                if trace is not None:
+                    trace.record_pass([],[],original_frame,'recognition-only','stroke-rows',
+                                      time.perf_counter()-recovery_started,error=f'{type(exc).__name__}: {exc}')
+        for natural in (False, True):
+            if not (config.enable_geometric_recovery and selection.final_date is None
+                    and (not selection.stop_ocr or selection.reason.startswith('review_order:'))
+                    and hasattr(backend, 'recognize_crops')):
+                continue
+            # A separate full-year row can resolve ambiguous short-date order.
+            # Do not spend this extra pass on absent/negative date evidence.
+            if natural and not selection.reason.startswith('review_order:'):
+                continue
+            stage = 'natural-dot-rows' if natural else 'thin-dot-rows'
+            recovery_started = time.perf_counter()
+            if trace is not None:
+                trace.start_pass(original_frame, 'recognition-only', stage)
+            try:
+                added, observations, decisions, seconds = recover_thin_dots(
+                    image, all_lines, backend.recognize_crops, getattr(backend, 'recognize_date_crops', None), natural=natural)
+                all_lines.extend(added)
+                if trace is not None:
+                    trace.record_selector_input(all_lines, stage='natural-dot-final' if natural else 'thin-dot-final', final=True)
+                selection = select_date(all_lines, final=True, product_rules=config.product_date_rules, context=config.date_context)
+                if observations:
+                    passes.append('recognition-only:'+stage)
+                if trace is not None:
+                    trace.record_recovery(decisions)
+                    trace.record_pass([*observations, *added], [], original_frame, 'recognition-only', stage, seconds, selection)
+            except Exception as exc:
+                if trace is not None:
+                    trace.record_pass([], [], original_frame, 'recognition-only', stage,
                                       time.perf_counter()-recovery_started, error=f'{type(exc).__name__}: {exc}')
         if trace is not None:
             trace.finish(selection)
@@ -490,6 +570,34 @@ def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: Im
             if trace is not None:
                 trace.record_pass([], [], original_frame, 'recognition-only', 'date-lines',
                                   time.perf_counter()-recovery_started, error=f'{type(exc).__name__}: {exc}')
+    # Existing strict geometry can resolve a missing date before costly detector
+    # retries. Score against every known original line; ambiguous/partial results
+    # continue unchanged. The exact geometry result is reused at the final stage.
+    if (config.enable_geometric_recovery and selection.final_date is None
+            and not selection.candidates and not selection.stop_ocr
+            and hasattr(backend,'recognize_crops')):
+        recovery_started = time.perf_counter()
+        if trace is not None:
+            trace.start_pass(original_frame,'recognition-only','geometric-early')
+        try:
+            geometric_result = recover_geometric_rows(image,original_lines,backend.recognize_crops,
+                                                       getattr(backend,'recognize_date_crops',None))
+            added, observations, decisions, seconds = geometric_result
+            candidate_lines = [*all_lines,*added]
+            if trace is not None:
+                trace.record_selector_input(candidate_lines,stage='geometric-early')
+            candidate = select_date(candidate_lines,product_rules=config.product_date_rules,context=config.date_context)
+            if observations:
+                passes.append('recognition-only:geometric-early')
+            if trace is not None:
+                trace.record_recovery(decisions)
+                trace.record_pass([*observations,*added],[],original_frame,'recognition-only','geometric-early',seconds,candidate)
+            if candidate.stop_ocr and candidate.final_date is not None and not candidate.is_partial:
+                return finish(candidate)
+        except Exception as exc:
+            if trace is not None:
+                trace.record_pass([],[],original_frame,'recognition-only','geometric-early',
+                                  time.perf_counter()-recovery_started,error=f'{type(exc).__name__}: {exc}')
     original_line_count = len(all_lines)
     original_fragments = _date_fragment_lines(all_lines)
     if selection.stop_ocr:

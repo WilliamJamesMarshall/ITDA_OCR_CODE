@@ -2,9 +2,15 @@
 
 ## 저장소와 학습 문서
 
+현재 테스트·학습 실행은 [5단계 병행 계획](notebooks/docs/protocol/grouped_8_rounds.md)을 따릅니다.
+순서는 1회 → (2·3회) → (4·5회) → (6·7회) → 8회이며,
+[상태 조회·운영 명령](notebooks/docs/training/grouped_operations.md)과
+[새 세션 프롬프트](notebooks/docs/training/grouped_session_prompts.md)에서 현재 단계와 대상 회차를 확인합니다.
+옛 준비/미실행 문구보다 새 상태 조회와 실제 실행·학습 증거가 우선합니다.
+
 제출 진입점 `predict.ipynb`, `requirements.txt`, `download_weights.sh`는 루트에, 실행 코드·설정·테스트는 `notebooks/project/`에 있습니다. 학습·평가 문서는 [notebooks 안내](notebooks/README.md), 현재 구조는 [엄격 제출 구조 보고](notebooks/reports/migration/strict_layout.md)를 참조하세요. 이전 구조 보고서는 과거 기록입니다.
 
-지정된 8개 이미지·정답지 폴더는 로컬의 기존 경로와 내용을 보존하되 Git 제출에서는 제외합니다. 승인 이력·원시 실험 결과는 `C:/ITDA_OCR_WORKSPACE/`에 보관하고 기존 경로에는 Windows 호환 연결을 유지합니다. 이 경로는 채점 추론에 필요하지 않습니다. 학습·평가 계획 수정사항이 반영될 때까지 3단계와 학습은 실행하지 않습니다.
+지정된 8개 이미지·정답지 폴더는 로컬의 기존 경로와 내용을 보존하되 Git 제출에서는 제외합니다. 승인 이력·원시 실험 결과는 `C:/ITDA_OCR_WORKSPACE/`에 보관하고 기존 경로에는 Windows 호환 연결을 유지합니다. 이 경로는 채점 추론에 필요하지 않습니다. 계획 구현과 실제 실행 승인은 별개이며, 현재 단계의 완료 근거와 회차별 사용자 승인을 확인한 작업만 실행합니다.
 
 상품 이미지에서 소비기한을 찾아 `submission.csv`로 저장하는 CPU 전용 오프라인 추론 파이프라인입니다. 비공개 평가 입력 500장과 제한시간 2,400초를 기준으로 설계했으며, 외부 API·GPU·추론 중 다운로드를 사용하지 않습니다.
 

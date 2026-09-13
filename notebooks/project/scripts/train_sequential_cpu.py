@@ -35,11 +35,17 @@ class WindowsEpochLoader:
 
 def main():
     from scripts.train_recognition_cpu import RUNTIME, CHECKPOINT, SEED
-    from scripts.sequential_rounds import require_training_release, round_dir
-    base = Path(os.environ['ITDA_SEQUENTIAL_WORKSPACE'])
-    number = int(os.environ['ITDA_SEQUENTIAL_ROUND'])
-    dest = round_dir(base, number)
-    require_training_release(base, number, dest / 'optimizer_train.txt', dest / 'inner_validation.txt')
+    grouped = os.environ.get('ITDA_GROUPED_RELEASE')
+    if grouped:
+        from scripts.grouped_training import validate_training
+        value = validate_training(Path(grouped))
+        dest = Path(grouped).parent
+    else:
+        from scripts.sequential_rounds import require_training_release, round_dir
+        base = Path(os.environ['ITDA_SEQUENTIAL_WORKSPACE'])
+        number = int(os.environ['ITDA_SEQUENTIAL_ROUND'])
+        dest = round_dir(base, number)
+        require_training_release(base, number, dest / 'optimizer_train.txt', dest / 'inner_validation.txt')
     sys.path.insert(0, str(RUNTIME))
     import tools.program as program
     import tools.train as trainer
@@ -50,6 +56,9 @@ def main():
     def train(*args, **kwargs):
         bound = inspect.signature(original_train).bind(*args, **kwargs)
         context.update(bound.arguments)
+        if grouped and bound.arguments['config']['Global'].get('freeze_bn_statistics', False):
+            from scripts.frozen_batch_norm import FrozenBatchNormStatistics
+            context['bn_guard'] = FrozenBatchNormStatistics(bound.arguments['model'])
         if os.name == 'nt':
             bound.arguments['train_dataloader'] = WindowsEpochLoader(bound.arguments['train_dataloader'])
         return original_train(*bound.args, **bound.kwargs)
@@ -61,6 +70,7 @@ def main():
         epoch = kwargs['epoch']
         metric = PolicyMetric()
         model = args[0]
+        if 'bn_guard' in context: context['bn_guard'].assert_unchanged()
         import paddle
         model.eval()
         # The pinned generic Windows evaluator drops its final batch. Recognition
@@ -93,6 +103,14 @@ def main():
 
     program.train, program.save_model = train, save
     config, device, logger, writer = program.preprocess(is_train=True)
+    if grouped:
+        import yaml
+        expected = yaml.safe_load(Path(value['effective_config']['path']).read_text(encoding='utf-8'))
+        # preprocess adds runtime-only keys; approved model/training sections may not change.
+        for section in ('Global', 'Architecture', 'Optimizer', 'Train', 'Eval', 'Loss', 'PostProcess'):
+            for key, item in expected[section].items():
+                if config[section].get(key) != item:
+                    raise ValueError('Approved configuration override: ' + section + '.' + key)
     for section, role in [('Train', 'optimizer_train'), ('Eval', 'inner_validation')]:
         if [Path(p).resolve() for p in config[section]['dataset']['label_file_list']] != [(dest / (role + '.txt')).resolve()]:
             raise ValueError('Runtime training list override rejected')

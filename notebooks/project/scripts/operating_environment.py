@@ -22,7 +22,13 @@ def executable_paths():
         paths.add(buffer.value)
     return sorted(paths | {str(Path(path).resolve(strict=True)) for path in paths})
 
-def limit_cpu():
+def cpu_list(value):
+    cpus = [int(i) for i in value.split(',')] if isinstance(value, str) else list(value)
+    if len(cpus) != 4 or len(set(cpus)) != 4 or any(i < 0 or i >= 64 for i in cpus):
+        raise ValueError('Exactly four distinct logical CPUs are required')
+    return cpus
+
+def limit_cpu(cpus=None):
     if os.name != 'nt': raise RuntimeError('This verifier is for the documented local Windows reproduction')
     kernel = ctypes.WinDLL('kernel32', use_last_error=True)
     kernel.GetCurrentProcess.restype = ctypes.c_void_p
@@ -32,9 +38,12 @@ def limit_cpu():
     kernel.SetProcessAffinityMask.argtypes = [ctypes.c_void_p, ctypes.c_size_t]
     if not kernel.GetProcessAffinityMask(process, ctypes.byref(affinity), ctypes.byref(system)):
         raise ctypes.WinError(ctypes.get_last_error())
-    cpus = [i for i in range(64) if affinity.value & (1 << i)][:4]
+    requested = cpus if cpus is not None else os.environ.get('ITDA_CPU_SET')
+    cpus = cpu_list(requested) if requested is not None else [i for i in range(64) if affinity.value & (1 << i)][:4]
     if len(cpus) != 4: raise RuntimeError('Four logical CPUs must be available')
     mask = sum(1 << i for i in cpus)
+    if mask & system.value != mask:
+        raise RuntimeError('Requested CPUs are not available on this machine')
     if not kernel.SetProcessAffinityMask(process, mask): raise ctypes.WinError(ctypes.get_last_error())
     if not kernel.GetProcessAffinityMask(process, ctypes.byref(affinity), ctypes.byref(system)) or affinity.value != mask:
         raise RuntimeError('CPU affinity verification failed')
@@ -53,8 +62,8 @@ def network_probe(require_denied=True):
         raise RuntimeError('Require explicit OS access-denied (WSAEACCES), not DNS errors or timeouts: ' + repr(results))
     return results
 
-def enforce():
-    return {'cpu_affinity': limit_cpu(), 'network_probe': network_probe(),
+def enforce(cpus=None):
+    return {'cpu_affinity': limit_cpu(cpus), 'network_probe': network_probe(),
             'python': sys.executable, 'base_python': sys._base_executable,
             'executable_paths': executable_paths()}
 

@@ -1,5 +1,7 @@
 # 8회 실행 준비와 운영
 
+> 과거 번호순 실행 안내. 현재 명령과 상태 조회는 [병행 실행 운영](grouped_operations.md)을 따른다.
+
 정책 정본: [sequential_8_rounds.md](../protocol/sequential_8_rounds.md).
 아래 명령은 향후 실행용이며 명령 예시는 사용자 승인이 아니다.
 외부 작업 폴더 기본값은 `C:/ITDA_OCR_WORKSPACE/sequential-8-rounds`이다.

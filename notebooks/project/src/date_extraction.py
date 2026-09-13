@@ -6,6 +6,7 @@ import unicodedata
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, replace
 from datetime import date
+from functools import lru_cache
 
 MIN_YEAR = 1
 MAX_YEAR = 2099
@@ -549,6 +550,17 @@ def _iter_month_name_dates(text: str, repaired: bool) -> Iterable[ParsedDate]:
 
 
 def parse_dates(text: str) -> list[ParsedDate]:
+    # Only literal parsing is reusable. Role, geometry and final selection are
+    # never cached. Return a caller-owned list of immutable ParsedDate objects.
+    return list(_cached_date_parses(text))
+
+
+@lru_cache(maxsize=4096)
+def _cached_date_parses(text: str) -> tuple[ParsedDate, ...]:
+    return tuple(_parse_dates_uncached(text))
+
+
+def _parse_dates_uncached(text: str) -> list[ParsedDate]:
     text = _normalise_text(text)
     original = _date_text(text)
     variants = [(original, False)]
@@ -1300,6 +1312,31 @@ def _select_full_date(lines: Sequence[OCRLine], *, final: bool = False, product_
     for same_date in grouped.values():
         best = max(same_date, key=lambda item: item.score)
         independent_passes = {(item.source, item.variant) for item in same_date}
+        if context is not None:
+            # A detector/contrast/crop retry of the same printed token is not
+            # another independent date observation. Use mapped physical boxes
+            # when available; preserve the legacy API for unmapped inputs.
+            boxes = []
+            for item in same_date:
+                members = [lines[i] for i in item.members if i < len(lines)]
+                if not members or any(line.original_box is None for line in members):
+                    boxes = []
+                    break
+                box = (min(line.original_box[0] for line in members),
+                       min(line.original_box[1] for line in members),
+                       max(line.original_box[2] for line in members),
+                       max(line.original_box[3] for line in members))
+                boxes.append(box)
+            if boxes:
+                regions = []
+                for a in sorted(boxes, key=lambda b:(b[2]-b[0])*(b[3]-b[1]), reverse=True):
+                    if any(max(0.,min(a[2],b[2])-max(a[0],b[0])) *
+                           max(0.,min(a[3],b[3])-max(a[1],b[1])) >=
+                           .5*min((a[2]-a[0])*(a[3]-a[1]),(b[2]-b[0])*(b[3]-b[1]))
+                           for b in regions):
+                        continue
+                    regions.append(a)
+                independent_passes = set(range(len(regions)))
         agreement_bonus = min(0.60, 0.22 * (len(independent_passes) - 1))
         ranked.append(replace(best, score=best.score + agreement_bonus))
     ranked.sort(key=lambda item: (item.score, item.value), reverse=True)

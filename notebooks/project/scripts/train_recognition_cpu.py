@@ -20,6 +20,8 @@ CPU_THREADS = 4
 MAX_TEXT_LENGTH = 25
 
 ROOT = Path(__file__).resolve().parents[3]
+if os.environ.get('ITDA_GROUPED_RELEASE'):
+    ROOT = Path(os.environ['ITDA_ASSET_ROOT']).resolve()
 RUNTIME = ROOT / "training_runtime" / "PaddleOCR-v3.7.0"
 CHECKPOINT = ROOT / "weights" / "training" / "korean_PP-OCRv5_mobile_rec_pretrained.pdparams"
 DICTIONARY = RUNTIME / "ppocr" / "utils" / "dict" / "ppocrv5_korean_dict.txt"

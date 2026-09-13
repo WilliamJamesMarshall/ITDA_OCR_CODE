@@ -3,6 +3,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -10,6 +11,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
+if os.environ.get('ITDA_GROUPED_RELEASE'):
+    ROOT = Path(os.environ['ITDA_ASSET_ROOT']).resolve()
 BASE = Path('C:/ITDA_OCR_WORKSPACE/sequential-8-rounds')
 PROTECTED = ('상품사진_정답지', '상품사진입니다', '추가수집_정답지', '추가수집데이터',
              '테스트용_정답지', '테스트용데이터', '학습대상_정답지', '학습대상데이터')
