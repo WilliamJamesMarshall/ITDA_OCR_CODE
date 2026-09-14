@@ -56,6 +56,23 @@ fetch() {
     echo "Downloaded ${model}/${filename}"
 }
 
+verify_adopted() {
+    local filename="$1"
+    local expected="$2"
+    local destination="${WEIGHTS_DIR}/korean_PP-OCRv5_mobile_rec/${filename}"
+    if [[ ! -f "$destination" ]] || [[ "$(hash_file "$destination")" != "$expected" ]]; then
+        echo "Missing or mismatched adopted model: ${destination}" >&2
+        echo "Restore the committed model files from this branch; upstream fallback is disabled." >&2
+        return 1
+    fi
+    echo "Verified adopted korean_PP-OCRv5_mobile_rec/${filename}"
+}
+
+# Validate the user-adopted export before any download. Never replace it with upstream weights.
+verify_adopted "inference.json" "0802d527934ec3ab851ce2ba51386d8b4f3a84ad4e2b953e96dce5ab70bc4f67"
+verify_adopted "inference.pdiparams" "4383ffa10c9fe76aeb931817ca67a0182b71ee300a91613ed70ddfd0f8c434e4"
+verify_adopted "inference.yml" "60723ce943ecc524b5b32e07b8527a9b75f27c79c6fccf9c13e401304633b025"
+
 fetch "PP-OCRv5_mobile_det" "0d63e78e2b680928f6b1747d76a08db6e645efb7" "inference.json" \
     "05feef1acb00aa4cd7362b15f7f501fc4f99d7b1fa73c1c871e0c7b1504b0f5c"
 fetch "PP-OCRv5_mobile_det" "0d63e78e2b680928f6b1747d76a08db6e645efb7" "inference.pdiparams" \
@@ -69,13 +86,6 @@ fetch "PP-OCRv6_small_det" "106c97591b235f607453300d9fc8c1cad1b25488" "inference
     "5043d4ccc8d63402ccea8feefcee4db57077431a873e78d2191836a178a492da"
 fetch "PP-OCRv6_small_det" "106c97591b235f607453300d9fc8c1cad1b25488" "inference.yml" \
     "193f435274bf9f0b5f71a929bbfbcf148282df7e633b34e7c373e8f44741b516"
-
-fetch "korean_PP-OCRv5_mobile_rec" "24b085d9d3d9153a21d97f585fcaaee7a362a487" "inference.json" \
-    "562404e3c590c50c93778d5f0a94df21b47b5ab8f3ea6d47c7f8a7930c3bc844"
-fetch "korean_PP-OCRv5_mobile_rec" "24b085d9d3d9153a21d97f585fcaaee7a362a487" "inference.pdiparams" \
-    "cac3e5f12cf04aaa77f6a5bc704e4e736ef2908476551891d84b41b4e9090462"
-fetch "korean_PP-OCRv5_mobile_rec" "24b085d9d3d9153a21d97f585fcaaee7a362a487" "inference.yml" \
-    "f757fa1c40e99edcf27e9cce879b93eb2a51fa46f5ef39095689b8c37dd75998"
 
 fetch "en_PP-OCRv5_mobile_rec" "267c36e24c331595590fe7bd72bde2436fd286f2" "inference.json" \
     "fd1b6ec722ea841a72d3ba43e527df1d1066d5d7808e0503ee3eec7265188753"

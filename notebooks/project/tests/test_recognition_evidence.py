@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 
 from src.recognition_evidence import CTCEvidence
-from src.pipeline import PaddleOCRBackend
+from src.pipeline import PaddleOCRBackend, PipelineConfig
 from types import SimpleNamespace
 
 
@@ -43,7 +43,8 @@ class RecognitionEvidenceTests(unittest.TestCase):
         model = BrokenModel()
         original = model.post_op
         backend = object.__new__(PaddleOCRBackend)
-        backend._mobile = SimpleNamespace(paddlex_pipeline=SimpleNamespace(text_rec_model=model))
+        backend.config = PipelineConfig()
+        backend._mobile = SimpleNamespace(paddlex_pipeline=SimpleNamespace(text_rec_model=model, text_det_model=None))
         with self.assertRaises(RuntimeError):
             backend.recognize_crops([np.zeros((10,10,3))])
         self.assertIs(model.post_op,original)

@@ -8,7 +8,7 @@ from src.date_extraction import OCRLine
 
 class RecoveryExecutionTest(unittest.TestCase):
     def test_exact_cache_separates_models_shapes_pixels_and_images(self):
-        backend=object.__new__(PaddleOCRBackend);backend.begin_image()
+        backend=object.__new__(PaddleOCRBackend);backend.config=PipelineConfig();backend.begin_image()
         image=np.zeros((20,40,3),dtype=np.uint8);models=[object(),object()];calls=[]
         def recognize(model,crops):
             calls.append(len(crops));return [('text',.99,(.99,)*4)]*len(crops)
@@ -24,7 +24,7 @@ class RecoveryExecutionTest(unittest.TestCase):
         self.assertEqual(calls,[1,1,1,1,1])
 
     def test_cache_is_bounded_and_requires_matching_results(self):
-        backend=object.__new__(PaddleOCRBackend);backend.begin_image()
+        backend=object.__new__(PaddleOCRBackend);backend.config=PipelineConfig();backend.begin_image()
         crops=[np.full((2,2,3),i,dtype=np.uint8) for i in range(140)]
         with patch.object(backend,'_recognize_with_evidence',return_value=[('x',.9,())]*140):
             self.assertEqual(len(backend._recognize_cached(object(),crops)),140)

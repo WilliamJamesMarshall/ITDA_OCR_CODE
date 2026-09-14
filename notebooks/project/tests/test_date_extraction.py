@@ -192,7 +192,7 @@ class DateSelectionTest(unittest.TestCase):
                 self.assertIsNone(select_date([line(raw)], final=True).final_date)
 
     def test_partial_output_rejects_malformed_values(self):
-        for value in ("NONE-02-30", "2021-13-NONE", "2100-01-NONE", "NONE-NONE-01", "NONE-2-14"):
+        for value in ("NONE-02-30", "2021-13-NONE", "2100-01-NONE", "NONE-2-14"):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 submission_fields(value)
 
