@@ -69,3 +69,14 @@ Thumbs.db
 !/notebooks/
 !/weights/
 !/custom_data/
+
+# Explicitly adopted inference export only; datasets and training checkpoints remain ignored.
+!/weights/.gitattributes
+!/weights/adopted_model.json
+!/weights/paddle/
+/weights/paddle/*
+!/weights/paddle/korean_PP-OCRv5_mobile_rec/
+/weights/paddle/korean_PP-OCRv5_mobile_rec/*
+!/weights/paddle/korean_PP-OCRv5_mobile_rec/inference.json
+!/weights/paddle/korean_PP-OCRv5_mobile_rec/inference.pdiparams
+!/weights/paddle/korean_PP-OCRv5_mobile_rec/inference.yml

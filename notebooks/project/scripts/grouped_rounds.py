@@ -87,6 +87,9 @@ def prior_completion(base, number):
     if value.get('completion_kind') == 'legacy_user_closure':
         from scripts.prepare_grouped_stage2 import validate_legacy_completion
         validate_legacy_completion(base, value)
+    elif value.get('completion_kind') == 'explicit_user_adoption':
+        from scripts.grouped_user_adoption import validate_user_adoption
+        validate_user_adoption(base, value)
     return value
 
 def freeze(base, number, weights=None):

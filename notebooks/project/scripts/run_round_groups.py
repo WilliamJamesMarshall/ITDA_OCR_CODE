@@ -66,6 +66,9 @@ def status(base=BASE):
                 if value.get('completion_kind') == 'legacy_user_closure':
                     from scripts.prepare_grouped_stage2 import validate_legacy_completion
                     validate_legacy_completion(base, value)
+                elif value.get('completion_kind') == 'explicit_user_adoption':
+                    from scripts.grouped_user_adoption import validate_user_adoption
+                    validate_user_adoption(base, value)
                 valid = True
             except (ValueError, KeyError, OSError) as error: errors.append(str(error))
         rows = []
@@ -96,6 +99,9 @@ def status(base=BASE):
                      integration_required=len(group)==2,
                      integration_release=(dest / 'integration/training_release.json').exists(),
                      integration_candidate=(dest / 'integration/candidate_complete.json').exists())
+        if valid and value.get('completion_kind') == 'explicit_user_adoption':
+            stage.update(completion_kind=value['completion_kind'], performance_targets_met=False,
+                         closure_scope='Explicit user adoption, not an automatic performance pass')
         if not valid and first_pending is None: first_pending = stage
         preceding_complete &= valid
         stages.append(stage)
