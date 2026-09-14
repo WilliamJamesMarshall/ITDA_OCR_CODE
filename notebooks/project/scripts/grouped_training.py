@@ -33,8 +33,13 @@ def validate_samples(base, admitted, samples):
     test_root = (ROOT / '테스트용데이터').resolve()
     augmented_hashes = {r['test_sha256'] for r in csv_read(Path(base) / 'test_to_original_mapping.csv')
                         if r['augmented'] == 'true'}
+    excluded = Path(base) / 'excluded_derivatives.csv'
+    if excluded.exists():
+        augmented_hashes.update(r['test_sha256'] for r in csv_read(excluded))
     result = {}
     for sample in samples:
+        if sample.get('review_status') in ('pending', 'draft', 'unreviewed'):
+            raise ValueError('Review draft is not an approved training crop')
         row = admitted.get(sample['image_id'])
         if row is None: continue
         crop = Path(sample['crop_path']).resolve()
@@ -128,6 +133,8 @@ def create_training_release(base, number, approval_path, config_path, group_path
         for sample in samples:
             if roles[admitted[sample['image_id']]['group_id']] != 'inner_validation':
                 continue
+            if sample.get('field_review_status') in ('pending', 'draft', 'unreviewed'):
+                raise ValueError('Review draft field labels are not approved validation truth')
             if 'date_fields' not in sample:
                 raise ValueError('Approved internal-validation crop needs explicit year/month/day labels; no automatic transcription-to-truth inference')
             expected_fields = field_values(sample['date_fields'])
@@ -136,6 +143,8 @@ def create_training_release(base, number, approval_path, config_path, group_path
                 raise ValueError('Conflicting field truth for identical validation transcription')
             field_targets[key] = expected_fields
         config = yaml.safe_load(Path(config_path).read_text(encoding='utf-8'))
+        if config['Global'].get('paper_review_status') in ('pending', 'draft', 'unreviewed'):
+            raise ValueError('Review the draft training configuration before approving its hash')
         epochs = config['Global']['epoch_num']
         if type(epochs) is not int or not 1 <= epochs <= 75: raise ValueError('Approved epoch count must be 1..75')
         target.mkdir(parents=True, exist_ok=True)
@@ -221,6 +230,8 @@ def validate_training(path):
         for sample in value['samples']:
             role = value['group_roles'][value['admitted'][sample['image_id']]['group_id']]
             if role == 'inner_validation':
+                if sample.get('field_review_status') in ('pending', 'draft', 'unreviewed'):
+                    raise ValueError('Review draft field labels are not approved validation truth')
                 key = normalize_text(sample['transcription'])
                 fields = field_values(sample['date_fields'])
                 if key in expected_fields and expected_fields[key] != fields:

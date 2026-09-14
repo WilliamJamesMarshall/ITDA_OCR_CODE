@@ -41,7 +41,7 @@ def main():
         mapping = {r['test_id']: r for r in csv_read(BASE/'test_to_original_mapping.csv')}
         inputs = []
         for i in (*SAMPLES, 'AMLT000643'):
-            image = ROOT/'테스트용데이터'/(i+'.jpg')
+            image = Path(mapping[i]['original_path'])
             if digest(image) != mapping[i]['test_sha256'] or int(mapping[i]['round']) not in (2,3):
                 raise ValueError('Unexpected or changed diagnostic image')
             inputs.append(dict(image_id=i, image_path=str(image), sha256=digest(image)))
@@ -81,7 +81,7 @@ def main():
                 # The original-width full recovery is a distinct, bounded diagnostic.
                 if width == 320:
                     backend.profile.image_id = 'AMLT000643'
-                    prediction = predict_image(ROOT/'테스트용데이터/AMLT000643.jpg', backend=backend, config=config)
+                    prediction = predict_image(Path(mapping['AMLT000643']['original_path']), backend=backend, config=config)
                     write(dest/'fresh_643.json', json.loads(json.dumps(asdict(prediction),default=str,ensure_ascii=False)))
                 del backend
                 gc.collect()

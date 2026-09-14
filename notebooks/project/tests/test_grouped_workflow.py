@@ -15,24 +15,24 @@ from scripts.run_round_groups import status, worker, already_finished
 
 class GroupedPlanTests(unittest.TestCase):
     def test_all_images_once_and_new_boundaries(self):
-        counts = Counter(round_for(f'AMLT{i:06d}') for i in range(1,3717))
-        self.assertEqual(counts, {1:216, **{n:500 for n in range(2,9)}})
+        ids = [f'AMLC{i:06d}' for i in range(1,2247)] + [f'BMLC{i:06d}' for i in range(2247,2611)]
+        counts = Counter(round_for(i) for i in ids)
+        self.assertEqual(counts, {1:216, 2:500, 3:500, 4:394, 5:500, 6:500})
         for i,n in [(216,1),(217,2),(263,2),(352,2),(353,3),(852,3),(853,4),
-                    (1352,4),(1353,5),(1852,5),(1853,6),(2352,6),(2353,7),
-                    (2852,7),(2853,8),(3352,8),(3353,2),(3716,2)]:
-            self.assertEqual(round_for(f'AMLT{i:06d}'),n)
-        self.assertEqual(round_for('BMLT003716'),2)
+                    (1246,4),(1247,5),(1746,5),(1747,6),(2246,6)]:
+            self.assertEqual(round_for(f'AMLC{i:06d}'),n)
+        self.assertEqual(round_for('BMLC002610'),2)
 
     def test_dependencies_are_between_groups_not_peer_rounds(self):
         self.assertEqual(previous_group(2),(1,))
         self.assertEqual(previous_group(3),(1,))
         self.assertEqual(previous_group(4),(2,3))
         self.assertEqual(previous_group(5),(2,3))
-        self.assertEqual(previous_group(8),(6,7))
-        self.assertEqual(len(GROUPS),5)
+        self.assertEqual(previous_group(6),(4,5))
+        self.assertEqual(len(GROUPS),4)
 
     def test_cpu_assignments_do_not_overlap(self):
-        for a,b in ((2,3),(4,5),(6,7)):
+        for a,b in ((2,3),(4,5)):
             self.assertFalse(set(cpu_set(a)) & set(cpu_set(b)))
             self.assertEqual(set(cpu_set(a)+cpu_set(b)),set(range(8)))
             self.assertEqual(cpu_set(a), [0,1,4,5])
@@ -42,10 +42,10 @@ class GroupedPlanTests(unittest.TestCase):
                 self.assertEqual(len(set(cpu_set(n)) & set(range(4,8))), 2)
                 self.assertEqual(cpu_set(n, integration=True), [0,1,2,3])
         self.assertEqual(cpu_set(1),[0,1,2,3])
-        self.assertEqual(cpu_set(8),[0,1,2,3])
+        self.assertEqual(cpu_set(6),[0,1,2,3])
 
     def test_invalid_round_and_cpu_set(self):
-        for value in (0,9,-1):
+        for value in (0,7,8,9,-1):
             with self.assertRaises(ValueError): members(value)
         for value in ('0,1,2','0,1,2,2','0,1,2,64','-1,0,1,2'):
             with self.assertRaises(ValueError): cpu_list(value)
@@ -169,7 +169,7 @@ class GroupedCompletionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             path=Path(folder)/'missing'
             result=status(path)
-            self.assertEqual(result['total_stages'],5)
+            self.assertEqual(result['total_stages'],4)
             self.assertEqual(result['current_stage'],1)
             self.assertEqual(result['current_rounds'],[1])
             self.assertFalse(path.exists())

@@ -1,0 +1,15 @@
+{
+  "status": "draft_not_approved_not_executed",
+  "architecture": "unchanged korean_PP-OCRv5_mobile_rec SVTR_LCNet",
+  "dictionary": "unchanged",
+  "seed": 20260911,
+  "checkpoint_selection": "approved inner-validation field accuracy, CER, NED, earliest epoch; patience 5",
+  "requires": ["reviewed original crop pool", "permanent product group roles", "explicit internal-validation date_fields", "configuration approval", "separate execution instruction"],
+  "candidates": {
+    "existing_aug_control": {"epoch_num": 15, "learning_rate": 0.00005, "warmup_epoch": 1, "freeze_bn_statistics": true, "paper_train_scope": "all", "recconaug_prob": 0.5, "packaging": null},
+    "packaging_mild": {"epoch_num": 15, "learning_rate": 0.00005, "warmup_epoch": 1, "freeze_bn_statistics": true, "paper_train_scope": "all", "recconaug_prob": 0.5, "packaging": {"prob": 0.5, "severity": 0.3, "morphology": false}},
+    "packaging_no_concat": {"epoch_num": 15, "learning_rate": 0.00005, "warmup_epoch": 1, "freeze_bn_statistics": true, "paper_train_scope": "all", "recconaug_prob": 0.0, "packaging": {"prob": 0.5, "severity": 0.3, "morphology": false}},
+    "head_only": {"epoch_num": 15, "learning_rate": 0.0001, "warmup_epoch": 1, "freeze_bn_statistics": true, "paper_train_scope": "head", "recconaug_prob": 0.5, "packaging": {"prob": 0.5, "severity": 0.3, "morphology": false}},
+    "dot_morphology_later": {"epoch_num": 15, "learning_rate": 0.00005, "warmup_epoch": 1, "freeze_bn_statistics": true, "paper_train_scope": "all", "recconaug_prob": 0.0, "packaging": {"prob": 0.3, "severity": 0.2, "morphology": true}}
+  }
+}

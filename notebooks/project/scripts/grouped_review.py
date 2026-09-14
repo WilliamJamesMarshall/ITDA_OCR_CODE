@@ -2,9 +2,9 @@
 from datetime import datetime, timezone
 from pathlib import Path
 from scripts.prepare_sequential_rounds import ROOT, read, write, csv_read, digest
-from scripts.grouped_plan import members, GROUPS, verify
+from scripts.grouped_plan import members, GROUPS, verify, time_target_met, time_target_seconds
 from scripts.grouped_rounds import (group_dir, round_dir, now, evidence, checked_evidence, model_lock,
-    source_lock, execution_release, prior_completion, run_notebook, report_approval, render_report, exclusive)
+    source_lock, execution_release, prior_completion, run_notebook, report_approval, render_report, exclusive, labels_for)
 
 
 def import_round1(base):
@@ -118,7 +118,7 @@ def evaluate_candidate(base, number, labels_path, integration=False, retain=Fals
                                     output_dir=dest / f'round_{n:02d}', manifest=manifest, integration=integration)
         ids = [row['image_id'] for row in csv_read(manifest)]
         labels = read_labels(labels_path)
-        labels = {i: labels.get(i, labels.get(i[4:])) for i in ids}
+        labels = labels_for(base, ids, labels)
         if any(not r or r.get('라벨 상태') not in ('approved', 'manual') for r in labels.values()):
             raise ValueError('Unapproved cumulative evaluation label')
         if any(labels[i]['정답 날짜'].strip()!=expected for i,expected in history.get('protected_expected',{}).items() if i in labels):
@@ -134,7 +134,8 @@ def evaluate_candidate(base, number, labels_path, integration=False, retain=Fals
             baseline = score_predictions(labels, csv_read(old_output), old_report['runtime']['failures'], expected_ids=ids)
             protected_fields.update(f'{i}:{k}' for i,v in baseline['field_results'].items() for k,matched in v.items() if matched)
         report = dict(round=n, ids=ids, runtime=runtime, metrics=metrics,
-                      time_target_met=runtime['status']=='completed' and runtime['total_elapsed_seconds']<=(3.2 if n in (2,3) else 3)*len(ids))
+                      time_target_seconds=time_target_seconds(len(ids)),
+                      time_target_met=time_target_met(runtime, len(ids)))
         write(out / 'report.json', report)
         reports.append(report)
     gate = evaluation_gate(reports, protected, protected_fields)
@@ -183,7 +184,7 @@ def finish(base, number, approval_path, retain=False):
                      evaluation=evidence(path), protected_correct=gate['correct_ids'], protected_fields=gate['correct_fields'],
                      accuracy_policy='date-fields-v1', accuracy_metric='field_accuracy',
                      candidate_accepted=not retain, targets_met=review['targets_met'], development_100=review['development_100'],
-                     workflow_finished=number==8, independent_final_test=False)
+                     workflow_finished=members(number)==GROUPS[-1], independent_final_test=False)
         write(dest / 'completion.json', value)
         for n in members(number):
             rd = round_dir(base, n)

@@ -38,7 +38,7 @@ def main():
         mapping = {r['test_id']: r for r in csv_read(BASE/'test_to_original_mapping.csv')}
         inputs = []
         for i in SAMPLES:
-            image = ROOT/'테스트용데이터'/(i+'.jpg')
+            image = Path(mapping[i]['original_path'])
             if digest(image) != mapping[i]['test_sha256'] or int(mapping[i]['round']) not in (2,3):
                 raise ValueError('Unexpected or changed diagnostic image')
             inputs.append(dict(image_id=i, image_path=str(image), sha256=digest(image)))
@@ -59,7 +59,7 @@ def main():
             original_det, original_rec = inner.text_det_model, inner.text_rec_model
             shared = []
             for i in ('AMLT000375', 'AMLT000378'):
-                image = _load_bgr(ROOT/'테스트용데이터'/(i+'.jpg'))
+                image = _load_bgr(Path(mapping[i]['original_path']))
                 backend.profile.image_id = i
                 lines = backend.recognize(image, detector='recovery', variant='equivalence')
                 assert inner.text_det_model is original_det and inner.text_rec_model is original_rec
@@ -69,7 +69,7 @@ def main():
             equivalence = []
             for i, expected in zip(('AMLT000375', 'AMLT000378'), shared):
                 backend.profile.image_id = i
-                actual = backend.recognize(_load_bgr(ROOT/'테스트용데이터'/(i+'.jpg')),
+                actual = backend.recognize(_load_bgr(Path(mapping[i]['original_path'])),
                                            detector='recovery', variant='equivalence')
                 same = actual == expected
                 equivalence.append(dict(image_id=i, identical=same, shared=[asdict(l) for l in expected],

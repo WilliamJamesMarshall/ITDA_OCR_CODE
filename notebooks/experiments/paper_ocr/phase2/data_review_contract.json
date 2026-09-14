@@ -1,0 +1,17 @@
+{
+  "status": "review_contract_not_a_dataset_or_approval",
+  "current_original_rounds": [1, 2, 3],
+  "sampling_unit": "permanent product/capture group, not augmented crop count",
+  "required_crop_fields": ["image_id", "crop_path", "crop_sha256", "record_sha256", "transcription", "group_id", "reviewed_role", "failure_tags"],
+  "failure_tags": ["dot_matrix", "ink_bleed", "low_contrast", "small_digits", "curved_surface", "reflection", "joined_date_time", "korean_heading", "clean_control"],
+  "required_inner_validation_fields": ["date_fields.year", "date_fields.month", "date_fields.day"],
+  "rules": [
+    "Retain clean dates and Korean role headings as regression controls.",
+    "Select recognition-sensitive crops using reviewed crop/text interventions after execution approval.",
+    "Do not infer date_fields from transcription or full-image answers.",
+    "Use permanent optimizer/inner-validation group roles; split calibration fit and calibration holdout by reviewed group.",
+    "Do not use future-round or excluded augmented-test bytes.",
+    "Do not count correlated views of a crop as independent confidence evidence.",
+    "Difficulty strata need reviewed tags; paper thresholds are not copied as task thresholds."
+  ]
+}

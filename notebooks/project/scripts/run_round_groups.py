@@ -1,4 +1,4 @@
-"""Entry point for the five-stage, eight-round workflow. Status is read-only."""
+"""Entry point for the four-stage, six-round original-only workflow. Status is read-only."""
 import argparse
 import json
 import os
@@ -8,21 +8,36 @@ import time
 import uuid
 from pathlib import Path
 from scripts.prepare_sequential_rounds import ROOT, read, write, digest
-from scripts.grouped_plan import BASE, CPU_POLICY, GROUPS, members, group_name, cpu_set, prepare, verify, revise_mapping
+from scripts.grouped_plan import BASE, CPU_POLICY, GROUPS, ROUND_SIZES, members, group_name, cpu_set, prepare, verify, revise_mapping
 from scripts.grouped_rounds import (group_dir, round_dir, exclusive, execution_release, prior_completion,
     freeze, qualification, check_qualification, infer, score, approval, evidence, checked_evidence,
-    model_lock, source_lock, child_environment, stop_process, now, require_pair_scored, qualification_dir)
+    model_lock, source_lock, child_environment, stop_process, now, require_pair_scored, qualification_dir, inherited_execution)
 
 
 def status(base=BASE):
     """Never derive completion from stale booleans or from the presence of a checkpoint."""
     base = Path(base)
     if not (base / 'plan.json').exists():
-        return dict(total_stages=5, current_stage=1, current_rounds=[1], prepared=False,
+        return dict(total_stages=len(GROUPS), current_stage=1, current_rounds=[1], prepared=False,
                     next_action='Prepare the approved grouped plan; preserve prior history')
     summary = verify(base)
     stages, first_pending, preceding_complete = [], None, True
-    active_jobs = []
+    active_jobs = inherited_execution(base)
+    # Isolated development runners share this lock without creating formal round jobs.
+    execution_lock = base / 'locks/execution.lock'
+    if execution_lock.exists():
+        try:
+            import psutil
+            owner = read(execution_lock)
+            process = psutil.Process(owner['pid'])
+            from scripts.grouped_rounds import stamp
+            if process.create_time() <= stamp(owner['started_at']).timestamp() + 1:
+                active_jobs.append(dict(path=str(execution_lock), pid=process.pid,
+                                        action='current workspace execution', command=process.cmdline()))
+        except psutil.NoSuchProcess:
+            pass
+        except (psutil.AccessDenied, ValueError, KeyError, OSError):
+            active_jobs.append(dict(path=str(execution_lock), action='execution lock requires inspection'))
     for path in sorted((base / 'jobs').glob('*/job.json')):
         if (path.parent / 'result.json').exists(): continue
         job = read(path)
@@ -87,7 +102,7 @@ def status(base=BASE):
     legacy = read(base / 'legacy_history.json')
     legacy_base = Path(read(base / 'plan.json')['legacy_workspace'])
     training_record = legacy_base / 'remediation_13/final_summary.json'
-    result = dict(policy=summary['policy'], total_stages=5, prepared=True,
+    result = dict(policy=summary['policy'], total_stages=len(GROUPS), prepared=True,
         current_stage=first_pending['stage'] if first_pending else None,
         current_rounds=first_pending['rounds'] if first_pending else [], completed_stages=sum(s['completed'] for s in stages),
         stages=stages, workflow_complete=first_pending is None, inventory=summary,
@@ -117,7 +132,7 @@ def status(base=BASE):
             'Review each report and feedback; resolve originals/groups; obtain round-specific training approval' if 'awaiting_user_review' in states else
             'Execute only the approved pending training release' if 'originals_admitted' in states else
             'Review and approve integration, train, evaluate cumulative rounds, and explicitly select/retain the model')
-    else: result['next_action'] = 'All five stages complete; no ninth test. Report final model without an independent post-training score.'
+    else: result['next_action'] = 'All four stages complete; no seventh test. Report final model without an independent post-training score.'
     if active_jobs: result['next_action'] = 'An existing coordinator is running; inspect its jobs/logs and do not launch duplicate work'
     return result
 
@@ -305,7 +320,7 @@ def main():
     parser.add_argument('action', choices=['prepare','verify','status','import-round1','link-history','revise-mapping','freeze','qualify','test','score',
         'bindings','release','integration-review','release-integration','train','evaluate','finish','refresh-report','_worker'])
     parser.add_argument('--workspace', type=Path, default=BASE)
-    parser.add_argument('--round', type=int, choices=range(1,9))
+    parser.add_argument('--round', type=int, choices=ROUND_SIZES)
     parser.add_argument('--weights', type=Path)
     parser.add_argument('--approval', type=Path)
     parser.add_argument('--approvals-dir', type=Path)
@@ -323,7 +338,7 @@ def main():
     if action not in ('prepare','verify','status','import-round1','link-history','revise-mapping') and n is None: parser.error('--round required')
     result = None
     if action=='prepare': result=prepare(base)
-    elif action=='verify': result=verify(base)
+    elif action=='verify': result=verify(base, check_assets=True)
     elif action=='status': result=status(base)
     elif action=='revise-mapping':
         if not args.mapping: parser.error('--mapping required')

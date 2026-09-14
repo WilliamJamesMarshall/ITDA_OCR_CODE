@@ -2,7 +2,7 @@ param(
     [ValidateSet('Qualify','Test','GroupQualify','GroupTest','GroupEvaluate','GroupProfile','GroupRetest','GroupCorrectionProbe','GroupStructuralProbe')][string]$Action = 'Qualify',
     [ValidateRange(1,8)][int]$Round = 1,
     [string]$ApprovalPath,
-    [string]$Workspace = 'C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2',
+    [string]$Workspace = 'C:/ITDA_OCR_WORKSPACE/grouped-6-originals-v1',
     [string]$ApprovalsDirectory,
     [string]$LabelsPath,
     [string]$DevelopmentRoot,
@@ -17,6 +17,7 @@ $taskRoot = (Resolve-Path (Join-Path $PSScriptRoot '../../..')).Path
 $taskPython = Join-Path $taskRoot '.labeling_paddle_env/Scripts/python.exe'
 $taskRunner = Join-Path $taskRoot 'notebooks/project/run.py'
 $taskGrouped = $Action.StartsWith('Group')
+if ($taskGrouped -and $Round -gt 6) { throw 'The original-only grouped workflow has rounds 1 through 6.' }
 $taskIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $taskPrincipal = [Security.Principal.WindowsPrincipal]::new($taskIdentity)
 if (-not $taskPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {

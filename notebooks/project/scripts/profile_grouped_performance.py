@@ -82,7 +82,7 @@ def run(development, mode, smoke=False, slot=None, network_mode='offline'):
             if not set(SAMPLES) <= completed: raise ValueError('Profile samples must already be exposed')
             mapping = {r['test_id']:r for r in csv_read(BASE/'test_to_original_mapping.csv')}
             for image_id in SAMPLES:
-                image = ROOT/'테스트용데이터'/(image_id+'.jpg')
+                image = Path(mapping[image_id]['original_path'])
                 if digest(image) != mapping[image_id]['test_sha256']: raise ValueError('Sample changed')
                 rows.append(dict(image_id=image_id,image_path=str(image)))
             csv_write(dest/'manifest.csv',rows,['image_id','image_path'])

@@ -9,7 +9,7 @@ from pathlib import Path
 
 if __package__ in (None, ''):
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from scripts.grouped_plan import BASE, cpu_set
+from scripts.grouped_plan import BASE, PREVIOUS_BASE, cpu_set, time_target_seconds
 from scripts.grouped_rounds import evidence, checked_evidence, exclusive, now, child_environment, stop_process, validate_output
 from scripts.prepare_sequential_rounds import ROOT, read, write, digest, csv_read
 from scripts.profile_grouped_performance import preflight, controller_lock, MINIMUM_RUNNING_BYTES
@@ -44,7 +44,7 @@ def check_fresh_resolution(record, proof, gate):
     labels = {}
     for n in (2,3):
         labels.update({r['image_id']:r['정답 날짜'].strip().replace('NONE-NONE-NONE','NONE')
-                       for r in csv_read(BASE/f'stage2_initial_20260913/approved_labels_round_{n:02d}.csv')})
+                       for r in csv_read(PREVIOUS_BASE/f'stage2_initial_20260913/approved_labels_round_{n:02d}.csv')})
     for n in (2,3):
         runtime = read(checked_evidence(resolution['slots'][str(n)]['runtime']))
         output = checked_evidence(resolution['slots'][str(n)]['submission'])
@@ -112,7 +112,7 @@ def prepare(dest, instruction, source_reference, development=DEVELOPMENT):
                  budget_seconds=read(development/'development.json').get('budget_seconds',1470),
                  accuracy_policy=read(development/'development.json').get('accuracy_policy','historical-exact'),
                  evaluation_code=evidence(ROOT/'notebooks/project/scripts/evaluate_pipeline.py'),
-                 notebook_target_seconds=read(development/'development.json').get('notebook_target_seconds',1500),
+                 notebook_target_seconds=time_target_seconds(500),
                  development=str(development),development_evidence=evidence(development/'development.json'),
                  sample_gate=evidence(ROOT/'notebooks/project/scripts/correction_sample_gate.py'),
                  cpu_policy=proof['cpu'],training_authorized=False,
@@ -147,8 +147,8 @@ def check(dest):
     check_submission_gate(development, proof)
     dev_record = read(development/'development.json')
     if (value['mode']!='base-first' or value['budget_seconds']!=dev_record.get('budget_seconds',1470)
-            or value.get('notebook_target_seconds',1500)!=dev_record.get('notebook_target_seconds',1500)
-            or (value['budget_seconds'],value.get('notebook_target_seconds',1500)) not in {(1470,1500),(1570,1600)}):
+            or value.get('notebook_target_seconds') != time_target_seconds(500)
+            or value['budget_seconds'] not in (1470,1570)):
         raise ValueError('Authorized runtime policy changed')
     for n in (2,3):
         manifest = checked_evidence(value['manifests'][str(n)])

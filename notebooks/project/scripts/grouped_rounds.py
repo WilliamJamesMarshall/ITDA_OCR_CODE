@@ -10,7 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from scripts.prepare_sequential_rounds import ROOT, read, write, digest, csv_read, csv_write
 from scripts.sequential_rounds import evidence, checked_evidence, code_lock, model_lock, approval
-from scripts.grouped_plan import BASE, POLICY, CPU_POLICY, GROUPS, members, previous_group, group_name, cpu_set, verify
+from scripts.grouped_plan import (BASE, POLICY, CPU_POLICY, GROUPS, members, previous_group, group_name,
+                                 cpu_set, verify, time_target_seconds, time_target_met, HARD_TIMEOUT_SECONDS)
 
 def now():
     return datetime.now(timezone.utc).isoformat()
@@ -20,9 +21,34 @@ def stamp(value):
     if result.tzinfo is None: raise ValueError('Timezone is required')
     return result
 
+def inherited_execution(base):
+    """An old workspace can still own CPU slots while the new metadata is prepared."""
+    plan_path = Path(base) / 'plan.json'
+    if not plan_path.exists(): return []
+    previous = read(plan_path).get('previous_workspace')
+    if not previous: return []
+    import psutil
+    active = []
+    # Development runs also own locks outside the formal jobs directory.
+    # Read only: stale and interrupted evidence must never be removed here.
+    for lock_path in Path(previous).rglob('execution.lock'):
+        try:
+            lock = read(lock_path)
+            process = psutil.Process(lock['pid'])
+            if process.create_time() > stamp(lock['started_at']).timestamp() + 1: continue
+            active.append(dict(path=str(lock_path), pid=process.pid, action='previous workspace execution',
+                               command=process.cmdline(), workspace=previous))
+        except psutil.NoSuchProcess:
+            continue
+        except (psutil.AccessDenied, ValueError, KeyError, OSError):
+            active.append(dict(path=str(lock_path), action='previous execution lock requires inspection', workspace=previous))
+    return active
+
 @contextmanager
 def exclusive(path):
     path = Path(path)
+    if path.name == 'execution.lock' and inherited_execution(path.parent.parent):
+        raise ValueError('Previous workspace still owns execution slots; inspect its lock and running job')
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open('x', encoding='utf-8') as stream:
         stream.write(json.dumps(dict(pid=os.getpid(), started_at=now())))
@@ -187,6 +213,15 @@ def child_environment(cpus):
             'OMP_NUM_THREADS': '4', 'OPENBLAS_NUM_THREADS': '4', 'MKL_NUM_THREADS': '4',
             'FLAGS_num_threads': '4', 'FLAGS_paddle_num_threads': '4'}
 
+
+def notebook_budget_seconds(images, qualification=False):
+    """Internal work budget, distinct from the total target and outer watchdog."""
+    if qualification:
+        return 90.0  # Loading/connectivity smoke is not a throughput measurement.
+    target = time_target_seconds(images)
+    # Tiny diagnostic subsets need loading time; their unchanged 3.2N target may fail.
+    return max(61.0, target - 30.0)  # Pipeline separately retains its output reserve.
+
 def stop_process(process):
     if process.poll() is not None: return
     if os.name == 'nt':
@@ -213,6 +248,32 @@ def embedded_source_manifest(source):
             or metadata.get('external_project_source_required') is not False):
         raise ValueError('Embedded notebook is not bound to the current inference sources')
     return expected
+
+
+def original_inputs(base, rows):
+    """Bind inference aliases to original files; folder names alone are insufficient."""
+    mapping = {r['test_id']: r for r in csv_read(Path(base) / 'test_to_original_mapping.csv')}
+    if not rows or len({r['image_id'] for r in rows}) != len(rows):
+        raise ValueError('Empty or duplicate inference input')
+    original_root = (ROOT / '학습대상데이터').resolve()
+    for row in rows:
+        source = mapping.get(row['image_id'])
+        path = Path(row['image_path']).resolve()
+        if (not source or source['augmented'] != 'false' or path.parent != original_root
+                or path != Path(source['original_path']).resolve() or path.stem != source['original_id']
+                or source['test_sha256'] != source['original_sha256'] or digest(path) != source['original_sha256']):
+            raise ValueError('Inference requires the bound original: ' + row['image_id'])
+    return rows
+
+
+def labels_for(base, ids, all_labels):
+    """Prefer explicit aliases, then original IDs; never confuse BMLT and BMLC serials."""
+    mapping = {r['test_id']: r for r in csv_read(Path(base) / 'test_to_original_mapping.csv')}
+    result = {}
+    for i in ids:
+        original_id = mapping[i]['original_id']
+        result[i] = all_labels.get(i, all_labels.get(original_id, all_labels.get(original_id[4:])))
+    return result
 
 
 def run_notebook(base, number, qualification=False, weights=None, output_dir=None, manifest=None, code_root=None, integration=False, network_mode='offline'):
@@ -250,31 +311,38 @@ def run_notebook(base, number, qualification=False, weights=None, output_dir=Non
         rows = [dict(image_id=original.stem, image_path=str(original))]
     else:
         rows = csv_read(manifest or Path(base) / f'test_round_{number:02d}.csv')
-        mapping = {r['test_id']: r for r in csv_read(Path(base) / 'test_to_original_mapping.csv')}
-        if any(digest(r['image_path']) != mapping[r['image_id']]['test_sha256'] for r in rows):
-            raise ValueError('Test image changed')
+        original_inputs(base, rows)
     for row in rows:
         image = Path(row['image_path'])
-        shutil.copy2(image, input_dir / image.name)
+        # Retain historical output IDs without reading the historical test directory.
+        shutil.copy2(image, input_dir / (row['image_id'] + image.suffix))
     output = dest / 'submission.csv'
     kernel = dest / 'jupyter'
     write(kernel / 'kernels/python3/kernel.json', dict(argv=[sys.executable, '-m', 'ipykernel_launcher', '-f', '{connection_file}'],
                                                      display_name='ITDA grouped frozen kernel', language='python'))
     env = {**child_environment(cpus), 'JUPYTER_PATH': str(kernel),
-           'ITDA_INPUT_DIR': str(input_dir), 'ITDA_OUTPUT_PATH': str(output)}
+           'ITDA_INPUT_DIR': str(input_dir), 'ITDA_OUTPUT_PATH': str(output),
+           'ITDA_BUDGET_SECONDS': str(notebook_budget_seconds(len(rows), qualification))}
     started = time.perf_counter()
     peak_rss, peak_commit, minimum_available, affinity_checks = 0, 0, psutil.virtual_memory().available, 0
     status, process = 'failed', None
+    next_resource_check = started
     try:
         with (dest / 'inference.log').open('w', encoding='utf-8') as log:
             process = subprocess.Popen([sys.executable, '-m', 'nbconvert', '--execute', '--to', 'notebook',
-                      '--ExecutePreprocessor.timeout=2400', '--output', 'executed.ipynb', 'predict.ipynb'],
-                      cwd=sandbox, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=os.name != 'nt')
+                      f'--ExecutePreprocessor.timeout={HARD_TIMEOUT_SECONDS}', '--output', 'executed.ipynb', 'predict.ipynb'],
+                      cwd=sandbox, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=os.name != 'nt',
+                      creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
             while process.poll() is None:
-                if time.perf_counter() - started > 2400:
+                if time.perf_counter() - started >= HARD_TIMEOUT_SECONDS:
                     status = 'timeout'
                     stop_process(process)
                     break
+                # Poll the deadline at 0.2s; recursive Windows resource sampling at 1Hz.
+                if time.perf_counter() < next_resource_check:
+                    time.sleep(.2)
+                    continue
+                next_resource_check = time.perf_counter() + 1.
                 try:
                     parent = psutil.Process(process.pid)
                     rss, commit = 0, 0
@@ -297,6 +365,9 @@ def run_notebook(base, number, qualification=False, weights=None, output_dir=Non
         proof['error'] = repr(error)
     finally:
         runtime = dict(status=status, total_elapsed_seconds=time.perf_counter()-started, images=len(rows),
+                       hard_limit_seconds=HARD_TIMEOUT_SECONDS, time_target_seconds=time_target_seconds(len(rows)),
+                       internal_budget_seconds=notebook_budget_seconds(len(rows), qualification),
+                       qualification_only=qualification, resource_sample_interval_seconds=1., watchdog_poll_seconds=.2,
                        embedded_sources=embedded, external_project_source_present=(sandbox/'notebooks/project/src').exists(),
                        environment=proof, peak_tree_rss_bytes=peak_rss, peak_tree_commit_bytes=peak_commit,
                        minimum_available_memory_bytes=minimum_available, child_affinity_checks=affinity_checks,
@@ -324,6 +395,8 @@ def run_notebook(base, number, qualification=False, weights=None, output_dir=Non
                     raise ValueError('Pipeline reported failure or incomplete processing')
         except Exception as error:
             runtime.update(status='failed', verification_error=repr(error))
+        # A completed 1,601-second run is a target miss, not a 2,400-second watchdog timeout.
+        runtime['time_target_met'] = not qualification and time_target_met(runtime, len(rows))
         write(dest / 'runtime.json', runtime)
     return dest, runtime
 
@@ -394,7 +467,7 @@ def score(base, number, labels_path):
     runtime = read(checked_evidence(state['runtime']))
     ids = [r['image_id'] for r in csv_read(checked_evidence(state['manifest']))]
     all_labels = read_labels(labels_path)
-    labels = {i: all_labels.get(i, all_labels.get(i[4:])) for i in ids}
+    labels = labels_for(base, ids, all_labels)
     if any(not v or v.get('라벨 상태') not in ('approved', 'manual') for v in labels.values()):
         raise ValueError('Each label must be approved')
     predictions = csv_read(checked_evidence(state['predictions'])) if state['predictions'] else []
@@ -414,8 +487,8 @@ def score(base, number, labels_path):
         strata[name] = score_predictions(labels, [p for p in predictions if p['image_id'] in subset], failures,
                                         expected_ids=subset) if subset else None
     report = dict(round=number, created_at=now(), images=len(ids), runtime=runtime, metrics=metrics, strata=strata,
-                  mean_seconds=runtime['total_elapsed_seconds']/len(ids), time_target_seconds=3*len(ids),
-                  time_target_met=runtime['status']=='completed' and runtime['total_elapsed_seconds']<=3*len(ids),
+                  mean_seconds=runtime['total_elapsed_seconds']/len(ids), time_target_seconds=time_target_seconds(len(ids)),
+                  time_target_met=time_target_met(runtime, len(ids)),
                   ground_truth=evidence(labels_path), manifest=state['manifest'], code=state['code'], model=state['model'])
     write(dest / 'initial_report.json', report)
     state.update(status='awaiting_user_review', report=evidence(dest / 'initial_report.json'))

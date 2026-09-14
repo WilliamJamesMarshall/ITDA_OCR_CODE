@@ -13,6 +13,8 @@
 
 주석 JSON·정답 XLSX·crop·checkpoint·샘플별 trace는 이 폴더에 추가하지 않습니다.
 
-이번 구조 변경은 실행계획의 **내용을 수정하지 않았습니다.** 수정할 원본 계획은 기존 경로 `C:/ITDA_OCR_CODE/학습 및 테스트 결과/학습_및_평가_실행계획.md`에서 계속 접근할 수 있습니다(실제 보관: `C:/ITDA_OCR_WORKSPACE/workspace/`). 여기의 계획 사본보다 원본이 우선입니다. 새 계획 확정 후 사본과 다음 단계 상태를 갱신해야 합니다.
+현재 실행 정본은 [원본 6회·4단계 규칙](docs/protocol/grouped_6_rounds.md)입니다.
+`학습대상데이터` 원본 2,610장을 216/500/500/394/500/500장으로 배정하며 평균 3.2초/장을 목표로 합니다.
+기존 경로의 8회·단계별 계획은 역사적 기록입니다. 현재 상태는 [운영 안내](docs/training/grouped_operations.md)의 명령으로 조회합니다.
 
 이동한 `docs/`의 옛 로컬 링크는 호환 연결로 유지됩니다. 새 Git checkout에서는 호환 연결에 의존하지 말고 `notebooks/docs/architecture/`를 사용하세요. Git에는 junction이나 외부 데이터가 포함되지 않습니다.

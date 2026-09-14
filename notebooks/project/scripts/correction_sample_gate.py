@@ -1,7 +1,7 @@
 """Scorer-only gate: fixed labels never enter submission inference."""
 from pathlib import Path
 from scripts.prepare_sequential_rounds import csv_read
-from scripts.grouped_plan import BASE
+from scripts.grouped_plan import PREVIOUS_BASE as BASE
 
 
 def check_samples(folder, samples):
