@@ -82,7 +82,19 @@ def _supported_role(obs):
     return None
 
 
-def _apply_views(active, lines, linked, jobs, observations, *, strict=False):
+def safe_numeric_change(original, proposed):
+    """Do not replace a readable complete token by a shortened crop reading."""
+    old = parse_dates(original.text)
+    new = parse_dates(proposed.text)
+    if not _signature(original.text) or original.score < .85 or not old or not new:
+        return True
+    old_digits = sum(c.isdigit() for c in old[0].raw)
+    new_digits = sum(c.isdigit() for c in new[0].raw)
+    return new_digits >= old_digits
+
+
+def _apply_views(active, lines, linked, jobs, observations, *, strict=False,
+                 defer_complete_conflicts=False):
     decisions = []
     for index in sorted({job[0] for job in jobs}):
         evidence = [obs for obs, job in zip(observations, jobs) if job[0] == index]
@@ -121,6 +133,30 @@ def _apply_views(active, lines, linked, jobs, observations, *, strict=False):
             if count >= 2 and len(votes) == 1 and signature != _signature(lines[index].text):
                 supporters = [obs for obs in evidence if eligible(obs) and _signature(obs.text) == signature]
                 best = max(supporters, key=lambda obs: obs.score)
+                if (defer_complete_conflicts and _signature(lines[index].text)
+                        and lines[index].score >= .85 and parse_dates(lines[index].text)):
+                    # Correlated primary views must not replace a readable complete
+                    # token before the existing cross-recognizer quad recheck.
+                    # Leave it unaccepted so the conflict path below can run.
+                    decisions.append(dict(line_index=index, original_text=lines[index].text,
+                        original_box=lines[index].original_box, role=linked[index].role,
+                        role_basis=linked[index].role_basis, recognizer='primary',
+                        accepted_text=None, reason='keep-original', change_kind=None,
+                        decision_basis='complete-token-conflict-needs-cross-recognizer',
+                        evidence=[dict(variant=o.variant, text=o.text, score=o.score,
+                            signature=_signature(o.text), digit_min=o.date_digit_min_score,
+                            eligible=True, rejections=['correlated-views-only']) for o in supporters]))
+                    continue
+                if not safe_numeric_change(lines[index], best):
+                    decisions.append(dict(line_index=index, original_text=lines[index].text,
+                        original_box=lines[index].original_box, role=linked[index].role,
+                        role_basis=linked[index].role_basis, recognizer='english' if strict else 'primary',
+                        accepted_text=None, reason='keep-original', change_kind=None,
+                        decision_basis='complete-token-digit-deletion', evidence=[
+                            dict(variant=o.variant,text=o.text,score=o.score,signature=_signature(o.text),
+                                 digit_min=o.date_digit_min_score,eligible=False,
+                                 rejections=['complete-token-digit-deletion']) for o in supporters]))
+                    continue
                 # Multiple views of one region are not independent selector votes.
                 active[index] = replace(linked[index], text=best.text, score=min(obs.score for obs in supporters),
                                         role_basis='recovery_anchor' if linked[index].role else None,
@@ -132,14 +168,14 @@ def _apply_views(active, lines, linked, jobs, observations, *, strict=False):
                 accepted = best.text
                 change_kind = 'date-token'
                 decision_basis = 'stable-date-change'
-            elif count >= 2 and len(votes) == 1 and linked[index].role is None:
+            elif count >= 2 and len(votes) == 1:
                 # The date can stay identical while a previously unreadable
                 # expiry suffix is recovered. Do not overwrite an existing role
                 # or treat an English numeric fallback as Korean role evidence.
                 supporters = [obs for obs in evidence if eligible(obs) and _signature(obs.text) == signature]
                 roles = {_inline_role(obs.text) for obs in supporters} - {None}
                 grounded = [obs for obs in supporters if _supported_role(obs)]
-                if not strict and len(roles) == 1 and len(grounded) >= 2:
+                if not strict and linked[index].role is None and len(roles) == 1 and len(grounded) >= 2:
                     best = max(grounded, key=lambda obs: obs.score)
                     active[index] = replace(linked[index], text=best.text,
                                             score=min(lines[index].score, *(obs.score for obs in grounded)),
@@ -149,6 +185,21 @@ def _apply_views(active, lines, linked, jobs, observations, *, strict=False):
                     accepted = best.text
                     change_kind = 'context-only'
                     decision_basis = 'stable-role-recovery'
+                elif len(supporters) >= 2:
+                    grounded_digits = [obs for obs in supporters if obs.date_digit_score is not None
+                                       and obs.date_digit_score >= .95 and obs.date_digit_min_score is not None
+                                       and obs.date_digit_min_score >= .9]
+                    if len(grounded_digits) >= 2:
+                        best = max(grounded_digits, key=lambda obs: obs.date_digit_min_score)
+                        # Preserve the text and whole-row confidence. Store actual
+                        # aligned digit evidence, not a synthetic confidence bonus.
+                        active[index] = replace(linked[index], character_scores=(best.character_scores
+                            if best.text == linked[index].text else linked[index].character_scores),
+                            date_digit_score=min(obs.date_digit_score for obs in grounded_digits),
+                            date_digit_min_score=min(obs.date_digit_min_score for obs in grounded_digits))
+                        accepted = lines[index].text
+                        change_kind = 'digit-evidence-only'
+                        decision_basis = 'stable-aligned-date-digits'
         audit = []
         for obs in evidence:
             signature = _signature(obs.text)
@@ -172,7 +223,7 @@ def _apply_views(active, lines, linked, jobs, observations, *, strict=False):
     return decisions
 
 
-def recover_lines(image, lines, recognize_crops, fallback_recognize=None):
+def recover_lines(image, lines, recognize_crops, fallback_recognize=None, *, on_progress=None):
     """Return active lines, raw view observations, and decisions for audit."""
     active = list(lines)
     linked = _link_roles(lines)
@@ -211,7 +262,10 @@ def recover_lines(image, lines, recognize_crops, fallback_recognize=None):
                                     polygon=(), variant=f'line-{index}-{view}', members=(),
                                     character_scores=character_scores, date_digit_score=mean_digit,
                                     date_digit_min_score=min_digit))
-    decisions = _apply_views(active, lines, linked, jobs, observations)
+    decisions = _apply_views(active, lines, linked, jobs, observations,
+                             defer_complete_conflicts=True)
+    if on_progress:
+        on_progress(active, observations, decisions, seconds)
     # A second recognizer may recover a still-unparsed/repaired token, never
     # override a successful primary recovery or a clear complete original date.
     pending = {d['line_index'] for d in decisions if not d['accepted_text']
@@ -236,6 +290,8 @@ def recover_lines(image, lines, recognize_crops, fallback_recognize=None):
             decisions.append(dict(line_index=-1, original_text='', original_box=None, accepted_text=None,
                                   reason='secondary-recognition-error', error=f'{type(exc).__name__}: {exc}'))
         seconds += time.perf_counter()-started
+        if on_progress:
+            on_progress(active, observations, decisions, seconds)
     # A complete original token is not necessarily correct. Recheck only when
     # another view actually disagrees, using its original detector quadrilateral.
     # Two character-grounded rectified views must agree; no confidence relaxation.
@@ -280,6 +336,8 @@ def recover_lines(image, lines, recognize_crops, fallback_recognize=None):
             decisions.append(dict(line_index=-1, original_text='', original_box=None, accepted_text=None,
                                   reason='rectified-recognition-error', error=f'{type(exc).__name__}: {exc}'))
         seconds += time.perf_counter()-started
+        if on_progress:
+            on_progress(active, observations, decisions, seconds)
     # Axis-aligned crops can include the next clock row even when the original
     # detector quad isolates the date. Recheck remaining damaged tokens with
     # the primary recognizer too, using two padded, deskewed views.
@@ -311,6 +369,8 @@ def recover_lines(image, lines, recognize_crops, fallback_recognize=None):
         decisions.extend(audit)
         observations.extend(extra)
         seconds += time.perf_counter()-started
+        if on_progress:
+            on_progress(active, observations, decisions, seconds)
     return active, observations, decisions, seconds
 
 

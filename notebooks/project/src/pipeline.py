@@ -27,6 +27,7 @@ from .printed_context_recovery import recover_printed_context
 from .thin_dot_recovery import recover_thin_dots
 from .recognition_evidence import CTCEvidence
 from .verified_product_rules import VERIFIED_PRODUCT_RULES
+from .shared_detector import inner_ocr_pipeline
 
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 OUTPUT_COLUMNS = ["image_id", "year", "month", "day", "final_date"]
@@ -44,6 +45,8 @@ class PipelineConfig:
     recovery_detector_name: str = "PP-OCRv6_small_det"
     recovery_side_limit: int = 1600
     cpu_threads: int = 4
+    recognition_batch_size: int = 8
+    recognition_minimum_width: int = 160
     enable_clahe: bool = True
     enable_recovery_fallback: bool = True
     enable_rotation_fallback: bool = False
@@ -57,6 +60,9 @@ class PipelineConfig:
     collect_trace: bool = True
     enable_line_recovery: bool = True
     enable_geometric_recovery: bool = True
+    enable_width_batches: bool = True
+    collect_ctc_candidates: bool = False
+    recovery_policy_path: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -70,11 +76,23 @@ class ImagePrediction:
     trace: dict[str, Any] | None = None
 
 
+def configure_recognizer_width(model, width):
+    """Trim only short-line zero padding; retain height and longer-line pixels."""
+    if width not in (160, 192, 320):
+        raise ValueError('Unsupported verified padding experiment width')
+    resize = model.pre_tfs['ReisizeNorm']
+    if list(resize.rec_image_shape) != [3,48,320]:
+        raise ValueError('Recognizer resize contract changed')
+    resize.rec_image_shape = [3,48,width]
+
+
 class PaddleOCRBackend:
     """Two-detector PaddleOCR backend with fully local model paths."""
 
     def __init__(self, config: PipelineConfig):
         self.config = config
+        from .performance_profile import Profile
+        self.profile = Profile(os.environ.get('ITDA_PROFILE_PATH'))
         self._validate_model("PP-OCRv5_mobile_det")
         self._validate_model("korean_PP-OCRv5_mobile_rec")
         self._mobile = self._build("PP-OCRv5_mobile_det", config.mobile_side_limit)
@@ -98,7 +116,7 @@ class PaddleOCRBackend:
     def _build(self, detector_name: str, side_limit: int):
         from paddleocr import PaddleOCR
 
-        return PaddleOCR(
+        model = PaddleOCR(
             text_detection_model_name=detector_name,
             text_detection_model_dir=str(self._model_dir(detector_name)),
             text_recognition_model_name="korean_PP-OCRv5_mobile_rec",
@@ -111,7 +129,7 @@ class PaddleOCRBackend:
             device="cpu",
             enable_mkldnn=True,
             cpu_threads=self.config.cpu_threads,
-            text_recognition_batch_size=8,
+            text_recognition_batch_size=self.config.recognition_batch_size,
             text_det_limit_type="max",
             text_det_limit_side_len=side_limit,
             text_det_thresh=0.25,
@@ -119,12 +137,27 @@ class PaddleOCRBackend:
             text_det_unclip_ratio=1.8,
             text_rec_score_thresh=0.15,
         )
+        pipeline = inner_ocr_pipeline(model)
+        configure_recognizer_width(pipeline.text_rec_model, self.config.recognition_minimum_width)
+        from .recognizer_padding import install_padding_guard
+        install_padding_guard(pipeline.text_rec_model)
+        pipeline.text_det_model = self.profile.wrap(pipeline.text_det_model, detector_name + ':detector')
+        pipeline.text_rec_model = self.profile.wrap(pipeline.text_rec_model, detector_name + ':recognizer')
+        return model
 
     def _recovery_model(self):
         if self._recovery is None:
             name = self.config.recovery_detector_name
             self._validate_model(name)
-            self._recovery = self._build(name, self.config.recovery_side_limit)
+            if os.environ.get('ITDA_SHARE_RECOGNIZER', '1') == '1':
+                from paddlex import create_model
+                from .shared_detector import SharedDetectorView
+                wrapper = create_model(name, model_dir=str(self._model_dir(name)), device='cpu',
+                                       cpu_threads=self.config.cpu_threads, enable_mkldnn=True)
+                detector = self.profile.wrap(wrapper._predictor, name + ':detector')
+                self._recovery = SharedDetectorView(self._mobile, detector, self.config.recovery_side_limit)
+            else:
+                self._recovery = self._build(name, self.config.recovery_side_limit)
         return self._recovery
 
     def recognize(
@@ -198,11 +231,19 @@ class PaddleOCRBackend:
 
     def recognize_crops(self, crops):
         """Use the already-loaded recognizer without rerunning detection."""
-        pipeline = self._mobile.paddlex_pipeline
-        if not hasattr(pipeline, 'text_rec_model'):
-            pipeline = pipeline._pipeline
+        pipeline = inner_ocr_pipeline(self._mobile)
         model = pipeline.text_rec_model
-        return self._recognize_cached(model,crops)
+        # Only recovery crops use the full recognizer width; base OCR keeps
+        # its measured short-line padding. Restore shared model state always.
+        resize = getattr(model, 'pre_tfs', {}).get('ReisizeNorm')
+        if resize is None:
+            return self._recognize_cached(model,crops)
+        original_shape = resize.rec_image_shape
+        try:
+            resize.rec_image_shape = [3,48,320]
+            return self._recognize_cached(model,crops)
+        finally:
+            resize.rec_image_shape = original_shape
 
     def recognize_date_crops(self, crops):
         """Lazy offline English/numeric recovery; no additional detector."""
@@ -212,11 +253,12 @@ class PaddleOCRBackend:
             self._validate_model(name)
             wrapper = create_model(name,model_dir=str(self._model_dir(name)),device='cpu',
                                    cpu_threads=self.config.cpu_threads,enable_mkldnn=True)
-            self._date_recognizer = wrapper._predictor
+            self._date_recognizer = self.profile.wrap(wrapper._predictor, 'numeric:recognizer')
         return self._recognize_cached(self._date_recognizer,crops)
 
     def begin_image(self):
         self._crop_cache = {}
+        self.last_ctc_candidates = []
 
     def _recognize_cached(self, model, crops):
         # Exact pixels, shape, dtype and recognizer identity; never fuzzy regions.
@@ -224,7 +266,10 @@ class PaddleOCRBackend:
         cache = getattr(self,'_crop_cache',None)
         if cache is None:
             return self._recognize_with_evidence(model,crops)
-        keys = [(id(model),crop.shape,str(crop.dtype),hashlib.sha256(crop.tobytes()).digest()) for crop in crops]
+        resize = getattr(model, 'pre_tfs', {}).get('ReisizeNorm')
+        preprocess = (tuple(getattr(resize, 'rec_image_shape', ())),
+                      tuple(getattr(resize, 'input_shape', ()) or ()), self.config.collect_ctc_candidates)
+        keys = [(id(model),preprocess,crop.shape,str(crop.dtype),hashlib.sha256(crop.tobytes()).digest()) for crop in crops]
         missing = list(dict.fromkeys(key for key in keys if key not in cache))
         results = self._recognize_with_evidence(model,[crops[keys.index(key)] for key in missing]) if missing else []
         if len(results) != len(missing):
@@ -236,10 +281,24 @@ class PaddleOCRBackend:
         cache.update(list(found.items())[:128])
         return answer
 
-    @staticmethod
-    def _recognize_with_evidence(model,crops):
+    def _recognize_with_evidence(self,model,crops):
+        from .crop_batching import width_batches
+        if not crops:
+            return []
+        batches = (width_batches(crops, self.config.recognition_batch_size) if self.config.enable_width_batches
+                   else [list(range(len(crops)))])
+        answer = [None] * len(crops)
+        for indices in batches:
+            results = self._recognize_batch_with_evidence(model, [crops[i] for i in indices])
+            if len(results) != len(indices):
+                raise ValueError('Width batch changed crop result count')
+            for index, result in zip(indices, results):
+                answer[index] = result
+        return answer
+
+    def _recognize_batch_with_evidence(self,model,crops):
         original = model.post_op
-        evidence = CTCEvidence(original)
+        evidence = CTCEvidence(original, collect_candidates=self.config.collect_ctc_candidates)
         try:
             model.post_op = evidence
             results = list(model(crops))
@@ -247,6 +306,14 @@ class PaddleOCRBackend:
             model.post_op = original
         aligned = len(evidence.rows) == len(results) and all(
             text == result['rec_text'] for (text, _), result in zip(evidence.rows, results))
+        if aligned and self.config.collect_ctc_candidates:
+            diagnostics = getattr(self, 'last_ctc_candidates', [])
+            for crop, result, alternatives in zip(crops, results, evidence.candidate_rows):
+                if alternatives:
+                    diagnostics.append(dict(crop_sha256=hashlib.sha256(crop.tobytes()).hexdigest(),
+                        crop_shape=crop.shape, greedy=result['rec_text'], candidates=alternatives,
+                        admissible_selector_input=False))
+            self.last_ctc_candidates = diagnostics[-32:]
         return [(str(result['rec_text']), float(result['rec_score']), evidence.rows[i][1] if aligned else ())
                 for i, result in enumerate(results)]
 
@@ -438,6 +505,8 @@ def _append_pass(
 
 def predict_image(path: Path, backend: Any, config: PipelineConfig, *, trace: ImageTrace | None = None) -> ImagePrediction:
     started = time.perf_counter()
+    if hasattr(backend, 'profile'):
+        backend.profile.image_id = path.stem
     if hasattr(backend,'begin_image'):
         backend.begin_image()
     image = _load_bgr(path)
@@ -745,7 +814,8 @@ def _write_submission(path: Path, rows: Sequence[dict[str, str]]) -> None:
     with path.open("w", encoding="utf-8", newline="") as output:
         writer = csv.DictWriter(output, fieldnames=OUTPUT_COLUMNS, lineterminator="\n")
         writer.writeheader()
-        writer.writerows({"image_id": row["image_id"], **submission_fields(row["final_date"])} for row in rows)
+        from .date_fields import serialize_fields
+        writer.writerows({"image_id": row["image_id"], **serialize_fields(row)} for row in rows)
 
 
 def _percentile(values: Sequence[float], fraction: float) -> float:
@@ -762,7 +832,14 @@ def run_pipeline(
     backend: Any | None = None,
     max_images: int | None = None,
     on_image: Callable[[dict[str, Any]], None] | None = None,
+    notebook_started: float | None = None,
 ) -> dict[str, Any]:
+    if os.environ.get('ITDA_EXECUTION_POLICY', 'base-first-v2') in {'base-first-v1', 'base-first-v2'}:
+        from .budget_pipeline import run_budget_pipeline
+        return run_budget_pipeline(input_dir, output_path, config=config, backend=backend,
+                                   max_images=max_images, on_image=on_image,
+                                   budget_seconds=float(os.environ.get('ITDA_BUDGET_SECONDS', '1470')),
+                                   notebook_started=notebook_started)
     total_started = time.perf_counter()
     config = config or PipelineConfig()
     images = discover_images(input_dir)

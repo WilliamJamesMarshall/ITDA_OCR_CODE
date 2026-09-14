@@ -72,7 +72,9 @@ class GeometricRecoveryTests(unittest.TestCase):
             self.fail('No conflict, secondary must not load')
         active, _, _, _ = recover_lines(self.image, [self.line],
             lambda crops: [reading(self.line.text)]*len(crops), forbidden)
-        self.assertEqual(active[0], self.line)
+        self.assertEqual((active[0].text, active[0].score, active[0].box),
+                         (self.line.text, self.line.score, self.line.box))
+        self.assertGreaterEqual(active[0].date_digit_min_score, .9)
 
     def geometric(self, primary, secondary=None, polygons=None):
         with patch('src.date_region_recovery.numeric_region_proposals', return_value=polygons or [self.quad]), \

@@ -1,5 +1,6 @@
 import io
 import json
+import os
 import tempfile
 import time
 import unittest
@@ -225,7 +226,8 @@ class PipelineTraceTest(unittest.TestCase):
             geometry = result.trace['frames'][0]['geometry']
             self.assertEqual((geometry['width'], geometry['height']), (200, 100))
 
-    def test_backend_error_keeps_previous_evidence_and_error_event(self):
+    @patch.dict(os.environ, ITDA_EXECUTION_POLICY='legacy')
+    def test_legacy_backend_error_keeps_previous_evidence_and_error_event(self):
         class Backend:
             def recognize(self, image, *, detector, variant):
                 if variant == 'original':

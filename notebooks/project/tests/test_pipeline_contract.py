@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -29,9 +30,9 @@ class PipelineContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / 'out.csv'
             _write_submission(output, [
-                {'image_id': 'empty', 'final_date': 'NONE-NONE-NONE'},
-                {'image_id': 'partial', 'final_date': 'NONE-02-14'},
-                {'image_id': 'month', 'final_date': '2026-09-NONE'},
+                {'image_id': 'empty', 'year':'NONE', 'month':'NONE', 'day':'NONE', 'final_date': 'NONE-NONE-NONE'},
+                {'image_id': 'partial', 'year':'NONE', 'month':'02', 'day':'14', 'final_date': 'NONE'},
+                {'image_id': 'month', 'year':'2026', 'month':'09', 'day':'NONE', 'final_date': 'NONE'},
             ])
             with output.open(encoding='utf-8', newline='') as source:
                 rows = list(csv.DictReader(source))
@@ -95,7 +96,8 @@ class PipelineContractTest(unittest.TestCase):
             self.assertEqual(row, {'image_id':'sample','year':'2021','month':'05','day':'NONE','final_date':'2021-05-NONE'})
             self.assertEqual(summary['failures'], [])
 
-    def test_serialization_error_is_an_image_failure_not_a_batch_abort(self):
+    @patch.dict(os.environ, ITDA_EXECUTION_POLICY='legacy')
+    def test_legacy_serialization_error_is_an_image_failure_not_a_batch_abort(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             Image.new('RGB',(24,24),'white').save(root/'sample.jpg')
@@ -165,7 +167,8 @@ class PipelineContractTest(unittest.TestCase):
             self.assertEqual(summary["images"], 1)
             self.assertEqual(summary["failures"], [])
 
-    def test_corrupt_image_becomes_none_without_aborting(self):
+    @patch.dict(os.environ, ITDA_EXECUTION_POLICY='legacy')
+    def test_legacy_corrupt_image_becomes_none_without_aborting(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             image_dir = root / "images"
@@ -199,8 +202,18 @@ class PipelineContractTest(unittest.TestCase):
         )
         self.assertIn('os.environ.get("ITDA_INPUT_DIR"', first_source)
         self.assertIn('os.environ.get("ITDA_OUTPUT_PATH"', first_source)
-        self.assertNotIn("input(", all_source)
-        self.assertIn("run_pipeline(INPUT_DIR, OUTPUT_PATH)", all_source)
+        # Embedded tracing contains record_selector_input(...), not interactive input.
+        # Validate actual calls, independent of whitespace and packaging.
+        import ast
+        calls = [node for cell in notebook['cells'] if cell['cell_type']=='code'
+                 for node in ast.walk(ast.parse(''.join(cell['source']))) if isinstance(node,ast.Call)]
+        self.assertFalse(any(isinstance(call.func,ast.Name) and call.func.id=='input' for call in calls))
+        runs = [call for call in calls if
+                (isinstance(call.func,ast.Name) and call.func.id=='run_pipeline') or
+                (isinstance(call.func,ast.Attribute) and call.func.attr=='run_pipeline')]
+        self.assertTrue(any([ast.unparse(arg) for arg in call.args[:2]]==['INPUT_DIR','OUTPUT_PATH'] and
+                            any(kw.arg=='notebook_started' and ast.unparse(kw.value)=='NOTEBOOK_STARTED'
+                                for kw in call.keywords) for call in runs))
 
 
 if __name__ == "__main__":
