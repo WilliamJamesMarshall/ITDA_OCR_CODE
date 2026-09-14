@@ -124,7 +124,7 @@ def render_report(base, number):
     report = read(checked_evidence(state['report']))
     metrics = report['metrics']
     lines = [f'# {number}회 결과보고서', '', f"상태: {state['status']}", '',
-             f"최초 평가: {metrics['exact_match_rate']:.2%}, {report['images']}장.",
+             f"최초 평가: {metrics.get('field_accuracy', metrics['exact_match_rate']):.2%}, {report['images']}장. 지표: {metrics.get('accuracy_metric', 'historical_exact_match_rate')}",
              f"노트북 전체: {report['runtime']['total_elapsed_seconds']:.3f}초.",
              f"평균: {report['mean_seconds']:.3f}초/장. 시간 목표: {report['time_target_seconds']}초.",
              f"최초 평가 근거: {state['report']['path']}", '',
@@ -132,7 +132,8 @@ def render_report(base, number):
              '오답별 검출·잘림·문자 인식·조각 결합·문맥·선택 원인은 analysis.json에 기록합니다.',
              '분석이 없으면 미분석이며 원인을 자동으로 확정하지 않습니다.', '']
     lines += ['최초 평가 진단:', '```json', json.dumps(dict(
-        exact_matches=metrics.get('exact_matches'), field_metrics=metrics.get('field_metrics'),
+        field_correct=metrics.get('field_correct'), field_total=metrics.get('field_total'),
+        field_accuracy=metrics.get('field_accuracy'), exact_matches=metrics.get('exact_matches'), field_metrics=metrics.get('field_metrics'),
         submission_format=metrics.get('submission_format'), error_types=metrics.get('error_type_counts'),
         errors=metrics.get('errors')), ensure_ascii=False, indent=2), '```', '']
     analysis = dest / 'analysis.json'
@@ -361,21 +362,9 @@ def validate_output(output, expected_ids):
     for row in rows:
         if None in row or any(v is None for v in row.values()):
             raise ValueError('Malformed submission row')
-        value = row['final_date']
-        fields = [row[k] for k in ('year','month','day')]
-        if value == 'NONE':
-            if fields != ['NONE'] * 3: raise ValueError('Invalid NONE fields')
-        else:
-            if value.split('-') != fields:
-                raise ValueError('Invalid date fields')
-            if re.fullmatch(r'\d{4}-\d{2}-\d{2}', value):
-                date.fromisoformat(value)
-            elif re.fullmatch(r'NONE-\d{2}-\d{2}', value):
-                date(2000, int(fields[1]), int(fields[2]))
-            elif re.fullmatch(r'\d{4}-\d{2}-NONE', value):
-                date(int(fields[0]), int(fields[1]), 1)
-            else:
-                raise ValueError('Invalid date format')
+        from src.date_fields import compliant_row
+        if not compliant_row(row):
+            raise ValueError('Invalid independent date fields')
     return len(rows)
 
 

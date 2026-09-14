@@ -10,8 +10,9 @@ from scripts.prepare_sequential_rounds import write
 class PolicyMetric:
     main_indicator = 'acc'
 
-    def __init__(self):
+    def __init__(self, field_targets=None):
         self.pairs = []
+        self.field_targets = field_targets
 
     def __call__(self, pred_label, *args, **kwargs):
         predictions, labels = pred_label
@@ -20,7 +21,23 @@ class PolicyMetric:
 
     def get_metric(self):
         result = asdict(compute_metrics(self.pairs))
-        result['acc'] = result['string_exact_match_rate']
+        if self.field_targets is not None:
+            from src.date_extraction import OCRLine, DateContext, select_date
+            from src.date_fields import FIELDS, field_values, fields_from_date
+            from scripts.recognition_metrics import normalize_text
+            correct = 0
+            for truth, prediction in self.pairs:
+                expected = field_values(self.field_targets[normalize_text(truth)])
+                selection = select_date([OCRLine(prediction,1.,(0,0,1000,48))],context=DateContext())
+                actual = fields_from_date(selection.final_date)
+                if selection.final_date is None and selection.candidates and selection.reason.startswith('review_order:'):
+                    candidates = [fields_from_date(c.iso) for c in selection.candidates if not c.explicit_negative and not c.repaired]
+                    if candidates:
+                        actual = {k:candidates[0][k] if len({c[k] for c in candidates}) == 1 else 'NONE' for k in FIELDS}
+                correct += sum(actual[k] == expected[k] for k in FIELDS)
+            result.update(accuracy_policy='date-fields-v1', accuracy_metric='field_accuracy',
+                          field_correct=correct, field_total=3*len(self.pairs), field_accuracy=correct/(3*len(self.pairs)))
+        result['acc'] = result.get('field_accuracy', result['string_exact_match_rate'])
         return result
 
 class StopTraining(Exception):
@@ -68,7 +85,12 @@ def main():
         result = original_save(*args, **kwargs)
         if kwargs.get('prefix') != 'latest': return result
         epoch = kwargs['epoch']
-        metric = PolicyMetric()
+        targets = None
+        if grouped:
+            from scripts.grouped_rounds import checked_evidence
+            from scripts.prepare_sequential_rounds import read
+            targets = read(checked_evidence(value['field_validation']))['targets_by_transcription']
+        metric = PolicyMetric(targets)
         model = args[0]
         if 'bn_guard' in context: context['bn_guard'].assert_unchanged()
         import paddle

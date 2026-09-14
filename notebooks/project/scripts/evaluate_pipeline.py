@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
 
 from src.pipeline import PipelineConfig, discover_images
 from src.date_extraction import submission_fields
+from src.date_fields import POLICY, field_values, fields_from_date, compliant_row
 from scripts.validation_runner import HARD_TIMEOUT_SECONDS, run_timed_pipeline
 
 REFERENCE_IMAGES = 500
@@ -52,7 +53,7 @@ def assess_targets(runtime, accuracy, *, target_seconds_500=DEFAULT_TARGET_SECON
     return {
         'reference_images': REFERENCE_IMAGES,
         'accuracy_target': 0.95,
-        'accuracy_metric': 'exact_match_rate',
+        'accuracy_metric': 'field_accuracy',
         'submission_format_met': format_met,
         'internal_seconds_500': target_seconds_500,
         'timeout_seconds_500': TIMEOUT_SECONDS_500,
@@ -110,11 +111,9 @@ def read_predictions(path: Path) -> list[dict[str, str]]:
 
 def _evaluation_fields(value):
     """Only legacy all-missing spelling is normalized; malformed dates earn no credit."""
-    if not isinstance(value, str) or not re.fullmatch(
-        r'(?:NONE|NONE-NONE-NONE|[0-9]{4}-[0-9]{2}-[0-9]{2}|NONE-[0-9]{2}-[0-9]{2}|[0-9]{4}-[0-9]{2}-NONE)', value
-    ):
+    if not isinstance(value, str):
         raise ValueError(f'Invalid evaluation date: {value!r}')
-    return submission_fields(value)
+    return fields_from_date(value)
 
 
 def _date_kind(value):
@@ -138,6 +137,7 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
               for name in DATE_FIELDS}
     output_kinds = {kind: 0 for kind in ('full', 'partial', 'none', 'invalid')}
     format_counts = dict(rows=0, final_date_compliant=0, rows_compliant=0)
+    field_results = {}
 
     def record_fields(expected, actual):
         for name, metric in fields.items():
@@ -146,6 +146,8 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
             prefix = 'known' if known else 'absent'
             metric[f'{prefix}_total'] += 1
             if actual is None:
+                metric[f'{prefix}_unavailable'] += 1
+            elif actual[name] is None:
                 metric[f'{prefix}_unavailable'] += 1
             elif actual[name] == expected[name]:
                 metric['matches'] += 1
@@ -171,9 +173,7 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
         format_counts['rows'] += 1
         date_compliant = actual_fields is not None and raw_actual == actual
         format_counts['final_date_compliant'] += int(date_compliant)
-        format_counts['rows_compliant'] += int(date_compliant and
-            list(prediction) == ['image_id', *DATE_FIELDS, 'final_date'] and
-            all(prediction.get(name) == actual_fields[name] for name in DATE_FIELDS))
+        format_counts['rows_compliant'] += int(compliant_row(prediction))
         label = labels.get(image_id)
         if label is None:
             skipped['unlabelled_predictions'] += 1
@@ -188,7 +188,15 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
         expected = expected_fields['final_date']
         kind = _date_kind(expected)
         is_failure = raw_id in failed or image_id in failed
-        record_fields(expected_fields, None if is_failure else actual_fields)
+        independent = {}
+        for name in DATE_FIELDS:
+            try:
+                independent[name] = field_values({k: prediction.get(k) if k == name else 'NONE' for k in DATE_FIELDS})[name]
+            except ValueError:
+                independent[name] = None
+        scored_fields = None if is_failure else independent
+        record_fields(expected_fields, scored_fields)
+        field_results[image_id] = {name: bool(scored_fields is not None and scored_fields[name] == expected_fields[name]) for name in DATE_FIELDS}
         correct = actual == expected and not is_failure
         categories[kind]['total'] += 1
         categories[kind]['correct'] += int(correct)
@@ -209,6 +217,7 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
         expected = expected_fields['final_date']
         kind = _date_kind(expected)
         record_fields(expected_fields, None)
+        field_results[image_id] = dict.fromkeys(DATE_FIELDS, False)
         categories[kind]['total'] += 1
         counts['출력 누락'] += 1
         errors.append({'image_id': image_id, 'expected': expected, 'actual': None,
@@ -225,14 +234,19 @@ def score_predictions(labels, predictions, failures, *, all_label_statuses=False
         format_counts['rows_compliant'] == format_counts['rows'])
     for key in ('final_date_compliant', 'rows_compliant'):
         format_counts[f'{key}_rate'] = format_counts[key] / format_counts['rows'] if format_counts['rows'] else None
+    field_correct = sum(v['matches'] for v in fields.values())
+    field_total = 3 * (len(scope) if expected_ids is not None else total)
     return {'evaluated_labels':total, 'exact_matches':exact, 'exact_match_rate':exact/total,
-            'accuracy_target':0.95, 'accuracy_target_met':exact/total >= 0.95,
-            'accuracy_metric':'exact_match_rate',
+            'accuracy_target':0.95, 'accuracy_target_met':field_correct/field_total >= 0.95,
+            'accuracy_policy':POLICY, 'accuracy_metric':'field_accuracy',
+            'field_correct':field_correct, 'field_total':field_total, 'field_accuracy':field_correct/field_total,
+            'field_results':field_results,
+            'field_errors':[{ 'image_id':i, 'fields':[k for k,v in values.items() if not v]} for i,values in field_results.items() if not all(values.values())],
             'field_metrics':fields, 'prediction_categories':output_kinds,
             'submission_format':format_counts,
             'official_partial_score':None,
-            'metric_scope':'Internal exact match target is 95%; field metrics are diagnostics, not official points. '
-                           'Official field weights and NONE scoring are unknown. Legacy NONE-NONE-NONE is normalized only for semantic comparison. '
+            'metric_scope':'User-defined accuracy is correct Y/M/D columns divided by 3 * evaluated images; target 95%. '
+                           'NONE equality counts; missing/failed images remain in denominator. Whole-date exact is auxiliary. '
                            'Field denominators include all eligible labels; unavailable means failure, invalid output or missing row. '
                            'Submission format and prediction categories cover all returned rows.',
             'categories':categories, 'errors':errors, 'error_type_counts':dict(counts),

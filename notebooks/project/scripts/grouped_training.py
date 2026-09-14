@@ -21,7 +21,8 @@ def training_bindings(base, number, config, groups=None, pool=None, code_root=No
                     mapping_sha256=digest(Path(base) / 'test_to_original_mapping.csv'),
                     code=execution['code'], model=execution['model'],
                     training_code=source_lock(code_root or ROOT), config_sha256=digest(config),
-                    initial_checkpoint_sha256=CHECKPOINT_SHA256)
+                    initial_checkpoint_sha256=CHECKPOINT_SHA256, accuracy_policy='date-fields-v1',
+                    accuracy_metric='field_accuracy')
     if groups: bindings['groups_sha256'] = digest(groups)
     if pool: bindings['pool_sha256'] = digest(pool)
     return bindings
@@ -121,6 +122,19 @@ def create_training_release(base, number, approval_path, config_path, group_path
             role = roles[admitted[sample['image_id']]['group_id']]
             lists[role].append(str(Path(sample['crop_path']).resolve()) + '\t' + sample['transcription'])
         if any(not rows for rows in lists.values()): raise ValueError('Both partitions require usable crops')
+        from src.date_fields import field_values
+        from scripts.recognition_metrics import normalize_text
+        field_targets = {}
+        for sample in samples:
+            if roles[admitted[sample['image_id']]['group_id']] != 'inner_validation':
+                continue
+            if 'date_fields' not in sample:
+                raise ValueError('Approved internal-validation crop needs explicit year/month/day labels; no automatic transcription-to-truth inference')
+            expected_fields = field_values(sample['date_fields'])
+            key = normalize_text(sample['transcription'])
+            if key in field_targets and field_targets[key] != expected_fields:
+                raise ValueError('Conflicting field truth for identical validation transcription')
+            field_targets[key] = expected_fields
         config = yaml.safe_load(Path(config_path).read_text(encoding='utf-8'))
         epochs = config['Global']['epoch_num']
         if type(epochs) is not int or not 1 <= epochs <= 75: raise ValueError('Approved epoch count must be 1..75')
@@ -146,11 +160,15 @@ def create_training_release(base, number, approval_path, config_path, group_path
             config[section]['loader'].update(num_workers=0, drop_last=False)
         effective = target / 'effective_config.yml'
         effective.write_text(yaml.safe_dump(config, allow_unicode=True, sort_keys=False), encoding='utf-8')
+        field_manifest = target / 'field_validation.json'
+        write(field_manifest,dict(accuracy_policy='date-fields-v1',targets_by_transcription=field_targets,
+                                 scope='Approved inner-validation crops only; not full-image end-to-end score'))
         value = dict(policy=POLICY, base=str(base.resolve()), round=number, integration=integration,
             created_at=now(), admitted=admitted, group_roles=roles, samples=samples,
             approval=evidence(approval_path), report=evidence(report_path), bindings=bindings,
             sources=sources, code_root=str(snapshot), training_code=bindings['training_code'],
             approved_config=evidence(config_path), effective_config=evidence(effective),
+            accuracy_policy='date-fields-v1', field_validation=evidence(field_manifest),
             initial_checkpoint=evidence(CHECKPOINT), dictionary=evidence(DICTIONARY), output_dir=str(output),
             partitions={r: evidence(target / (r + '.txt')) for r in lists})
         write(target / 'training_release.json', value)
@@ -195,6 +213,21 @@ def validate_training(path):
     for item in [value['approved_config'], value['effective_config'], value['initial_checkpoint'], value['dictionary'],
                  *value['sources'], *value['partitions'].values()]: checked_evidence(item)
     if source_lock(value['code_root']) != value['training_code']: raise ValueError('Approved training code changed')
+    if value.get('accuracy_policy') == 'date-fields-v1':
+        checked_evidence(value['field_validation'])
+        from src.date_fields import field_values
+        from scripts.recognition_metrics import normalize_text
+        expected_fields = {}
+        for sample in value['samples']:
+            role = value['group_roles'][value['admitted'][sample['image_id']]['group_id']]
+            if role == 'inner_validation':
+                key = normalize_text(sample['transcription'])
+                fields = field_values(sample['date_fields'])
+                if key in expected_fields and expected_fields[key] != fields:
+                    raise ValueError('Conflicting approved validation fields')
+                expected_fields[key] = fields
+        if read(value['field_validation']['path'])['targets_by_transcription'] != expected_fields:
+            raise ValueError('Field validation not derived from approved crop pool')
     registry = read(base / 'group_roles.json')
     if any(registry.get(g) != role for g, role in value['group_roles'].items()): raise ValueError('Group role changed')
     for row in value['admitted'].values():
@@ -218,6 +251,8 @@ def train(path, inference_python):
     from scripts.operating_environment import limit_cpu
     from scripts.train_recognition_cpu import run_preflight, RUNTIME, DICTIONARY
     value = validate_training(path)
+    if value.get('accuracy_policy') != 'date-fields-v1':
+        raise ValueError('Historical release preserved; new training needs reviewed field-accuracy bindings')
     cpus = cpu_set(value['round'], integration=value['integration'])
     limit_cpu(cpus)
     output = Path(value['output_dir'])

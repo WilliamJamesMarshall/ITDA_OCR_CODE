@@ -1,11 +1,23 @@
 # 5단계 병행 실행 운영
 
 정본: [grouped_8_rounds.md](../protocol/grouped_8_rounds.md).
+2026-09-14 정확도 정정: 이후 주 지표는 [date-fields-v1](date_field_accuracy_20260914.md)의
+연/월/일 필드 정답 수 / 3N이다. 아래 보존된 v14의 380/500·332/500은 당시 전체 날짜 보조 성적이며,
+동일 CSV를 새 기준으로 계산하면 1166/1500(77.7333%)·1039/1500(69.2667%)다. 기존 보고서 해시는 바꾸지 않는다.
 2단계 구조 개선 개발·혼합 CPU 계측: [개발 기록](performance_development_20260913.md).
 
-최신 2·3회 개발 재시험(2026-09-14, v12)은 사용자 지시로 온라인 실행했다.
-각 500장 완료, 378/500·1,444.517초 및 335/500·1,443.113초이며 95%/정답 퇴행 0 조건 미달로 미채택이다.
-[최신 결과·오답·보존 감사](C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2/retest-stage2-online-20260914-v12/summary.md)와
+최신 v15(2026-09-14)는 필드 기준 변경·부분 출력 수정 후 온라인으로 각각 500장을 완료했다.
+2회 1192/1500(79.4667%)·1545.988초, 3회 1064/1500(70.9333%)·1545.213초다.
+동일 기준 v14 대비 +26/+25 필드지만 95% 미달, 기존 필드 손실 5/3개로 공용 반영·단계 승격하지 않았다.
+[v15 최신 결과](C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2/retest-stage2-field-accuracy-online-20260914-v15/summary.md)와
+[v15 남은 문제](C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2/retest-stage2-field-accuracy-online-20260914-v15/findings.md)를 먼저 읽는다.
+
+직전 2·3회 개발 재시험(2026-09-14, v14)은 사용자 지시로 수정 후 온라인 실행했다.
+각 500장 완료, 380/500·1,545.603초 및 332/500·1,544.792초다. 이번 1,600초 목표는 충족했지만
+95% 미달이며 v12 대비 개선/퇴행은 각각 7/5, 5/8건으로 미채택이다. 학습·공용 코드/가중치 반영·단계 승격은 하지 않았다.
+[최신 결과·오답·보존 감사](C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2/retest-stage2-online-1600-20260914-v14/summary.md),
+[수정 후 확인된 회귀](C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2/retest-stage2-online-1600-20260914-v14/case_review.md),
+[이전 v12 결과](C:/ITDA_OCR_WORKSPACE/grouped-8-rounds-v2/retest-stage2-online-20260914-v12/summary.md)와
 [이번 온라인 실행 예외](online_stage2_exception_20260914.md)를 함께 읽는다.
 `status`의 회차 정본은 보존한 최초 결과/사용자 검토 대기 상태다. 이 추가 개발 성적을 최초 성적이나 단계 완료로 덮어쓰지 않는다.
 

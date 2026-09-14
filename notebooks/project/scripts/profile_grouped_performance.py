@@ -88,6 +88,7 @@ def run(development, mode, smoke=False, slot=None, network_mode='offline'):
             csv_write(dest/'manifest.csv',rows,['image_id','image_path'])
         numbers = (slot,) if slot else (2,3)
         job = dict(created_at=now(), parent_pid=os.getpid(), mode=mode, smoke=smoke, preflight=proof, slots=numbers, network_mode=network_mode,
+                   budget_seconds=read(development/'development.json').get('budget_seconds',1470),
                    samples=SAMPLES if not smoke else [], model=read(development/'development.json')['model'],
                    controller=controller_lock(), training_authorized=False,
                    manifest=evidence(dest/'manifest.csv') if rows else None)

@@ -203,7 +203,8 @@ class TrainingReleaseLifecycleTests(unittest.TestCase):
                     original_sha256=digest(original),test_sha256=digest(original),annotation_path=str(annotation),
                     annotation_sha256=digest(annotation),augmented='false'))
                 samples.append(dict(image_id=oid,crop_path=str(crop),crop_sha256=digest(crop),
-                                    record_sha256=digest(annotation),transcription='2027.01.01'))
+                                    record_sha256=digest(annotation),transcription='2027.01.01',
+                                    date_fields=dict(year='2027',month='01',day='01')))
             csv_write(base/'test_to_original_mapping.csv',rows,list(rows[0]))
             group_path=root/'groups.json';write(group_path,groups)
             pool=root/'pool.jsonl';pool.write_text('\n'.join(json.dumps(s) for s in samples),encoding='utf-8')

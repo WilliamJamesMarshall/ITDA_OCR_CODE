@@ -77,8 +77,10 @@ def compute_metrics(pairs: Iterable[tuple[str, str]]) -> RecognitionMetrics:
 
 
 def selection_key(candidate: dict) -> tuple[float, float, float, int]:
+    if candidate.get('accuracy_policy') == 'date-fields-v1' and 'field_accuracy' not in candidate:
+        raise ValueError('Field accuracy is required for the new training selection policy')
     return (
-        float(candidate["string_exact_match_rate"]),
+        float(candidate.get('field_accuracy', candidate.get('string_exact_match_rate', 0))),
         -float(candidate["micro_cer"]),
         float(candidate["normalized_edit_similarity"]),
         -int(candidate["epoch"]),

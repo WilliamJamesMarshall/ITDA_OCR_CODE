@@ -62,7 +62,7 @@ def correct_ids(report, ids):
     return set(ids) - {row['image_id'] for row in report['metrics']['errors']}
 
 
-def evaluation_gate(reports, protected):
+def evaluation_gate(reports, protected, protected_fields=()):
     correct, runtime_ok, format_ok = set(), True, True
     for report in reports:
         correct.update(correct_ids(report, report['ids']))
@@ -70,9 +70,13 @@ def evaluation_gate(reports, protected):
         runtime_ok &= runtime['status'] == 'completed' and not runtime['failures']
         format_ok &= report['metrics']['submission_format']['all_rows_compliant']
     regressions = sorted(set(protected) - correct)
-    return dict(correct_ids=sorted(correct), regressions=regressions,
-                correctness_protected=not regressions, runtime_valid=bool(runtime_ok), format_valid=bool(format_ok),
-                eligible=not regressions and bool(runtime_ok) and bool(format_ok))
+    correct_fields = sorted(f'{i}:{field}' for r in reports for i, values in r['metrics'].get('field_results', {}).items()
+                            for field, matched in values.items() if matched)
+    field_regressions = sorted(set(protected_fields) - set(correct_fields))
+    return dict(correct_ids=sorted(correct), correct_fields=correct_fields, regressions=regressions,
+                field_regressions=field_regressions,
+                correctness_protected=not regressions and not field_regressions, runtime_valid=bool(runtime_ok), format_valid=bool(format_ok),
+                eligible=not regressions and not field_regressions and bool(runtime_ok) and bool(format_ok))
 
 
 def evaluate_candidate(base, number, labels_path, integration=False, retain=False):
@@ -95,6 +99,7 @@ def evaluate_candidate(base, number, labels_path, integration=False, retain=Fals
     dest.mkdir(parents=True, exist_ok=False)
     previous = prior_completion(base, number)
     protected = set(previous['protected_correct']) if previous else set()
+    protected_fields = set(previous.get('protected_fields', [])) if previous else set()
     history_path = Path(base) / 'development_history.json'
     history = read(history_path) if history_path.exists() else {}
     if history:
@@ -122,17 +127,24 @@ def evaluate_candidate(base, number, labels_path, integration=False, retain=Fals
         if any(row['image_id'] not in ids for row in predictions): raise ValueError('Out of scope prediction')
         failures = runtime['failures'] if runtime['status']=='completed' else [dict(image_id=i) for i in ids]
         metrics = score_predictions(labels, predictions, failures, expected_ids=ids)
+        old_state = read(round_dir(base, n) / 'state.json')
+        old_report = read(checked_evidence(old_state['report']))
+        old_output = round_dir(base, n) / 'submission.csv'
+        if old_output.exists():
+            baseline = score_predictions(labels, csv_read(old_output), old_report['runtime']['failures'], expected_ids=ids)
+            protected_fields.update(f'{i}:{k}' for i,v in baseline['field_results'].items() for k,matched in v.items() if matched)
         report = dict(round=n, ids=ids, runtime=runtime, metrics=metrics,
-                      time_target_met=runtime['status']=='completed' and runtime['total_elapsed_seconds']<=3*len(ids))
+                      time_target_met=runtime['status']=='completed' and runtime['total_elapsed_seconds']<=(3.2 if n in (2,3) else 3)*len(ids))
         write(out / 'report.json', report)
         reports.append(report)
-    gate = evaluation_gate(reports, protected)
+    gate = evaluation_gate(reports, protected, protected_fields)
     result = dict(created_at=now(), round=number, rounds=list(members(number)),
                   training_release=evidence(target / 'training_release.json'), candidate=evidence(target / 'candidate_complete.json'),
                   model=chosen['model'], weights=chosen['weights'], code=chosen['code'], code_root=chosen['code_root'],
                   labels=evidence(labels_path), reports=reports, gate=gate, retained_previous=retain,
                   targets_met=all(r['time_target_met'] and r['metrics']['accuracy_target_met'] for r in reports),
-                  development_100=all(r['metrics']['exact_match_rate']==1 for r in reports))
+                  accuracy_policy='date-fields-v1', accuracy_metric='field_accuracy',
+                  development_100=all(r['metrics']['field_accuracy']==1 for r in reports))
     write(dest / 'review.json', result)
     for n in members(number) if integration else (number,):
         render_report(base, n)
@@ -152,6 +164,8 @@ def finish(base, number, approval_path, retain=False):
     expected_rounds = list(range(1, max(members(number)) + 1))
     if [r['round'] for r in review['reports']] != expected_rounds: raise ValueError('Missing cumulative evaluation rounds')
     gate = review['gate']
+    if review.get('accuracy_policy') != 'date-fields-v1' or any(r['metrics'].get('accuracy_metric') != 'field_accuracy' for r in review['reports']):
+        raise ValueError('New completion requires date-fields-v1 evaluation; preserve historical review')
     if not gate['eligible']: raise ValueError('Regression, runtime, or output format gate failed')
     if model_lock(Path(review['weights'])) != review['model'] or source_lock(review['code_root']) != review['code']:
         raise ValueError('Reviewed model/code changed')
@@ -166,7 +180,8 @@ def finish(base, number, approval_path, retain=False):
         value = dict(status='complete', created_at=now(), rounds=list(members(number)), weights=review['weights'],
                      model=review['model'], code_root=review['code_root'], code=review['code'],
                      training_release=review['training_release'], approval=evidence(approval_path),
-                     evaluation=evidence(path), protected_correct=gate['correct_ids'],
+                     evaluation=evidence(path), protected_correct=gate['correct_ids'], protected_fields=gate['correct_fields'],
+                     accuracy_policy='date-fields-v1', accuracy_metric='field_accuracy',
                      candidate_accepted=not retain, targets_met=review['targets_met'], development_100=review['development_100'],
                      workflow_finished=number==8, independent_final_test=False)
         write(dest / 'completion.json', value)

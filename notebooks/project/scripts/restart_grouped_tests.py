@@ -67,6 +67,8 @@ def check_submission_gate(development, proof):
     if not record.get('submission_gate'):
         raise ValueError('Actual submission-path regression evidence required')
     gate = read(checked_evidence(record['submission_gate']))
+    if record.get('accuracy_policy') == 'date-fields-v1' and gate.get('accuracy_policy') != 'date-fields-v1':
+        raise ValueError('Submission replay must declare the current field policy')
     expected = {(run, n) for run in ('retest-stage2-20260913', 'retest-stage2-corrected-20260914-v6') for n in (2,3)}
     results = gate.get('results', [])
     if (len(results) != 4 or {(r['run'],r['round']) for r in results} != expected
@@ -106,7 +108,11 @@ def prepare(dest, instruction, source_reference, development=DEVELOPMENT):
     value = dict(actor='user',action='restart_tests',rounds=[2,3],instruction=instruction,
                  network_mode=read(development/'development.json').get('network_mode','offline'),
                  source_reference=source_reference,recorded_at=now(),copies=proof['copies'],
-                 model=read(development/'development.json')['model'],mode='base-first',budget_seconds=1470,
+                 model=read(development/'development.json')['model'],mode='base-first',
+                 budget_seconds=read(development/'development.json').get('budget_seconds',1470),
+                 accuracy_policy=read(development/'development.json').get('accuracy_policy','historical-exact'),
+                 evaluation_code=evidence(ROOT/'notebooks/project/scripts/evaluate_pipeline.py'),
+                 notebook_target_seconds=read(development/'development.json').get('notebook_target_seconds',1500),
                  development=str(development),development_evidence=evidence(development/'development.json'),
                  sample_gate=evidence(ROOT/'notebooks/project/scripts/correction_sample_gate.py'),
                  cpu_policy=proof['cpu'],training_authorized=False,
@@ -129,13 +135,20 @@ def check(dest):
             raise ValueError('Development identity changed')
     if 'sample_gate' in value:
         checked_evidence(value['sample_gate'])
+    if 'evaluation_code' in value:
+        checked_evidence(value['evaluation_code'])
+    if value.get('accuracy_policy','historical-exact') != read(development/'development.json').get('accuracy_policy','historical-exact'):
+        raise ValueError('Authorized accuracy policy changed')
     proof = preflight(development)
     if value['copies']!=proof['copies'] or value['model']!=read(development/'development.json')['model']:
         raise ValueError('Authorized source, model, or CPU assignment changed')
     if value.get('network_mode','offline') != read(development/'development.json').get('network_mode','offline'):
         raise ValueError('Authorized network mode changed')
     check_submission_gate(development, proof)
-    if value['mode']!='base-first' or value['budget_seconds']!=1470:
+    dev_record = read(development/'development.json')
+    if (value['mode']!='base-first' or value['budget_seconds']!=dev_record.get('budget_seconds',1470)
+            or value.get('notebook_target_seconds',1500)!=dev_record.get('notebook_target_seconds',1500)
+            or (value['budget_seconds'],value.get('notebook_target_seconds',1500)) not in {(1470,1500),(1570,1600)}):
         raise ValueError('Authorized runtime policy changed')
     for n in (2,3):
         manifest = checked_evidence(value['manifests'][str(n)])
