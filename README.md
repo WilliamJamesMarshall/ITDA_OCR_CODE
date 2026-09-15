@@ -1,122 +1,79 @@
 # ITDA 소비기한 OCR
 
-## 저장소와 학습 문서
+상품 뒷면 이미지에서 소비기한을 추출하여 `submission.csv`로 저장하는 CPU 전용 추론 파이프라인입니다. 운영진이 주입한 입력·출력 환경변수를 읽고 `predict.ipynb`를 처음부터 끝까지 실행합니다. 추론 중 가중치 다운로드, 외부 API 호출, GPU 또는 사용자 입력이 필요하지 않습니다.
 
-현재 테스트·학습 실행은 [원본 6회·4단계 계획](notebooks/docs/protocol/grouped_6_rounds.md)을 따릅니다.
-입력은 `학습대상데이터`의 원본 2,610장, 회차 장수는 216/500/500/394/500/500이며,
-순서는 1회 → (2·3회) → (4·5회) → 6회입니다.
-[상태 조회·운영 명령](notebooks/docs/training/grouped_operations.md)과
-[새 세션 프롬프트](notebooks/docs/training/grouped_session_prompts.md)에서 현재 단계와 대상 회차를 확인합니다.
-옛 준비/미실행 문구보다 새 상태 조회와 실제 실행·학습 증거가 우선합니다.
+## 채점 환경
 
-제출 진입점 `predict.ipynb`, `requirements.txt`, `download_weights.sh`는 루트에, 실행 코드·설정·테스트는 `notebooks/project/`에 있습니다. 학습·평가 문서는 [notebooks 안내](notebooks/README.md), 현재 구조는 [엄격 제출 구조 보고](notebooks/reports/migration/strict_layout.md)를 참조하세요. 이전 구조 보고서는 과거 기록입니다.
-
-지정된 8개 이미지·정답지 폴더는 로컬의 기존 경로와 내용을 보존하되 Git 제출에서는 제외합니다. 승인 이력·원시 실험 결과는 `C:/ITDA_OCR_WORKSPACE/`에 보관하고 기존 경로에는 Windows 호환 연결을 유지합니다. 이 경로는 채점 추론에 필요하지 않습니다. 계획 구현과 실제 실행 승인은 별개이며, 현재 단계의 완료 근거와 회차별 사용자 승인을 확인한 작업만 실행합니다.
-
-상품 이미지에서 소비기한을 찾아 `submission.csv`로 저장하는 CPU 전용 오프라인 추론 파이프라인입니다. 비공개 평가 입력 500장과 제한시간 2,400초를 기준으로 설계했으며, 외부 API·GPU·추론 중 다운로드를 사용하지 않습니다.
-
-## 추가 수집 데이터
-
-추가 수집 이미지 364장은 `custom_data/*.jpg`, 최종 날짜 정답은 [정답지](custom_data/labels/answer_003353_003716_manual.xlsx)의 `정답 날짜` 열에 있습니다(ID 3353 → 003353.jpg).
-원천 OCR 영역·문자열 주석과 출처 대응표는 `custom_data/metadata/`에, 출처·라이선스와 라벨 안내는 [ATTRIBUTION.md](custom_data/ATTRIBUTION.md)에 정리했습니다.
-
-## 최종 구성
-
-| 역할 | 모델 또는 방법 |
+| 항목 | 운영진 안내 기준 |
 | --- | --- |
-| 기본 텍스트 검출 | `PP-OCRv5_mobile_det` |
-| 조건부 복구 검출 | `PP-OCRv6_small_det` |
-| 한국어·영문·숫자 인식 | `korean_PP-OCRv5_mobile_rec` |
-| 읽지 못한 날짜 줄의 조건부 보조 인식 | `en_PP-OCRv5_mobile_rec` (지연 초기화, 추가 검출 없음) |
-| 소비기한 선택 | 달력 검증 + 키워드·좌표·신뢰도 규칙 |
+| OS | Ubuntu 22.04 LTS, x86_64 |
+| Python | 3.10 |
+| CPU / RAM | 4코어 / 8GB |
+| GPU | 미제공 |
+| 네트워크 | 추론 시 인터넷 차단 |
+| 패키지 | 팀별 독립 venv에 `requirements.txt` 설치 |
+| 평가 입력 | 운영진이 별도로 구성한 비공개 이미지 500장 |
+| 실행 한도 | 노트북 Run All 2,400초 |
 
-모든 이미지에는 빠른 mobile 검출기만 먼저 실행합니다. 유효 날짜가 없거나 제조일·소비기한 문맥이 충돌할 때만 ROI 확대, CLAHE, PP-OCRv6 복구 검출을 순서대로 실행합니다. 명시 부분 표기와 문자 근거가 충족된 경우 외에는 부분 날짜의 복구를 계속합니다. 모든 전체 이미지 패스에서도 날짜가 없거나 부분 날짜만 남고, 원본 OCR 라인이 32개 이하이면서 날짜 조각이 보이거나 OCR 라인이 5개 이하인 경우에만 네 개의 겹치는 타일을 확대 판독합니다.
+패키지 설치와 가중치 준비는 추론 전에 수행하며, 운영진 안내에 따라 속도 평가 시간에서 제외됩니다.
 
-2026-09-11 보강: 기본 검출 후 날짜 줄 최대 2곳을 기존 인식기로만 재확인합니다(각 3개 화면, 추가 검출 없음). 원본 영역의 역할 근거, 날짜 문자 점수, 복구 채택/기각 이력을 분리해 보존합니다. 명시 기한을 우선하고 관련 무표제 날짜 두 개에는 제한된 나중 날짜 정책을 적용합니다. [구조적 개선·개발 검증 결과](notebooks/docs/architecture/ocr-structural-integration-20260911.md)에 성과와 미달 목표를 구분했습니다.
+## 제출 저장소 구조
 
-후속 보강에서는 이 재확인까지 실패한 줄의 조건부 영문·숫자 보조 인식, 밝은 패널의 점 인쇄 줄 복구, 명시 누락/부분 기한의 빠른 종료, 원본 좌표에 근거한 프레임 간 제조일·기한 연결을 추가했습니다. [최신 검증과 남은 근거](notebooks/docs/architecture/ocr-recovery-status-20260911.md)를 참조하세요. 작은 개발 표본의 결과는 독립 95%·500장 성능 인증이 아닙니다.
+```text
+ITDA_OCR_CODE/
+├── predict.ipynb           # 채점용 메인 추론 노트북
+├── requirements.txt        # 버전을 고정한 실행 패키지
+├── README.md               # 설치·가중치 준비·실행 안내
+├── .gitignore              # 가중치·로컬 데이터·결과 추적 제외
+├── .gitattributes          # 셸 스크립트 LF 줄바꿈 등
+├── download_weights.sh     # 온라인 사전 가중치 다운로드
+├── weights/                # 다운로드한 모델과 모델 manifest
+├── notebooks/              # 개발 소스·테스트·실험 문서
+└── custom_data/             # 추가 수집 데이터·라벨·출처
+```
 
-후속 개선으로 미검출 시 유일한 기한 표제 주변을 한 번 확대하고, 명시 월·년 안내를 완전 날짜 오독보다 우선하도록 보강했습니다. 표제 확대에도 검출되지 않은 납작한 점 인쇄 줄은 최대 2곳의 비율 보정 화면으로 재확인하고, 명확한 날짜에 낮은 점수의 비날짜 문장이 합쳐져 생기는 불필요한 재시도도 줄였습니다. [최신 검증 결과와 남은 작업](notebooks/docs/architecture/ocr-dot-budget-20260911.md)을 참고하세요.
+채점용 추론 코드는 `predict.ipynb`에 포함되어 있습니다. `notebooks/project/`는 개발·테스트용 소스이며, 채점 노트북은 로컬 학습 폴더나 정답 파일을 읽지 않습니다. 가중치는 Git 추적에서 제외하고 다운로드 스크립트로 준비합니다. 과거 커밋 이력에는 이전에 커밋한 모델 파일이 남아 있습니다.
 
-회전 90/180/270도, EasyOCR, RapidOCR, YOLOv8, LayoutLM은 기본 실행 경로에 포함하지 않습니다. 공개 검증에서 회전은 정답을 추가하지 않고 연도 없는 날짜 오탐과 지연만 만들었고, EasyOCR는 어려운 표본 8건에서 추가 정답 0건·약 10–14초/장이었습니다. RapidOCR/ONNX도 이 모델 조합에서 Paddle static보다 빠르지 않았습니다. YOLOv8은 날짜 박스 라벨이, LayoutLM은 토큰·박스 분류 라벨과 별도 OCR가 필요해 현재 병목인 점자형 숫자 인식에 비해 비용이 큽니다.
+## 환경 설치 — 온라인 준비
 
-상세 근거와 실험표는 [파이프라인 설계 문서](notebooks/docs/architecture/pipeline-spec.md)에 있습니다.
-
-## 평가 목표와 로컬 검증
-
-- 공식 한도: 500장 / 2,400초 = 평균 4.8초/장
-- 내부 목표: 연·월·일 필드 정확도 95% 이상, 평균 3.2초/장(500장 1,600초), 오류로 인한 전체 중단 0건, 외부 비용 0원. 목표 초과만으로 중단하지 않고 2,400초를 강제 종료 기준으로 사용합니다. 394장은 평균 3.2초/장, 전체 환산 1,260.8초입니다.
-- 내부 정확도 기준: 승인 정답과 일치한 year/month/day 필드 수 / (3 × 대상 장수). `final_date` 완전일치율은 보조 지표입니다. 운영진의 공식 점수와 구분합니다.
-
-아래 표는 개선 규칙 반영 전의 과거 측정입니다. 공개 이미지 첫 352장 중 `manual` 341건만 평가하고 `needs_review` 11건은 제외했습니다. 새 날짜 정책의 검증 기록은 [2026-09-10 적용 검증](notebooks/docs/architecture/date-policy-validation-20260910.md)에 별도로 정리합니다.
-
-| 구성 | 완전일치 | 352장 시간 | 비고 |
-| --- | ---: | ---: | --- |
-| PP-OCRv5 mobile 기준선 | 261/341 (76.54%) | 574.2초 | 기본 + 부분 ROI |
-| PP-OCRv5 server 복구 | 281/341 (82.40%) | 1,200.5초 | 정확도 대비 CPU 비용 큼 |
-| PP-OCRv6 small 복구 초기안 | 287/341 (84.16%) | 827.3초 | 규칙 보강 전 |
-| 최종 후보 규칙 | 302/341 (88.56%) | 1,508.9초 | 회전 포함 보수적 전수 측정 |
-| 최종 구성 | 302/341 (88.56%) | 1,084.1초 | 회전 제거·타일 조건 축소, 단일 전수 측정 |
-
-최종 구성은 평균 3.08초/장, p50 1.90초, p95 10.24초였고 500장 선형 환산은 약 1,540초입니다. 단일 전수 실행에서 이미지 처리 예외는 0건이었습니다. 이는 Windows 개발 장비 측정치이며 공식 채점 시간이나 공식 정확도 점수가 아닙니다. 기기·운영체제·입력 난이도에 따라 달라질 수 있습니다.
-
-## 설치
-
-Python 3.10 환경을 사용합니다.
+새 폴더에 clone하고 제출한 커밋을 checkout한 뒤, 저장소 루트에서 실행합니다.
 
 ```bash
+git clone https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE.git
+cd ITDA_OCR_CODE
+# 특정 제출 버전을 검증할 때: git checkout <제출 커밋 해시>
 python3.10 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+python -m pip check
 ```
 
-Windows PowerShell에서는 활성화 명령만 다음과 같이 바꿉니다.
+패키지 버전의 기준은 [requirements.txt](requirements.txt)이며, 노트북 실행에 필요한 `nbconvert`와 `ipykernel`도 포함합니다. Ubuntu에는 Python 3.10의 venv 지원과 다운로드용 `curl` 또는 `wget`, SHA-256 유틸리티가 필요합니다. OpenCV가 요구하는 시스템 라이브러리는 `libgl1`, `libglib2.0-0`입니다. 재현용 [Dockerfile](notebooks/environment/grading/Dockerfile)에 시스템 패키지 구성을 명시했습니다.
 
-```powershell
-py -3.10 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
+## 가중치 다운로드 — 온라인 준비
 
-## 가중치 준비
-
-인터넷이 연결된 준비 환경에서 노트북을 실행하기 전에 한 번 수행합니다.
+인터넷이 연결된 상태에서 노트북 실행 전에 한 번 수행합니다.
 
 ```bash
 bash download_weights.sh
 ```
 
-한국어 인식기는 2026-09-15 사용자 지시로 채택한 재학습 모델입니다. 추론 파일 3개는 [고정 Release](https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/tag/adopted-recognizer-20260915)에서, 나머지 9개 파일은 PaddlePaddle의 공식 Hugging Face 저장소에서 고정 revision으로 준비합니다. 스크립트는 모든 파일의 SHA-256을 검증합니다. 채택 모델 다운로드 또는 검증 실패 시 중단하며 기존 공개 한국어 모델로 되돌리지 않습니다.
+스크립트에는 실행 권한이 등록되어 있어 `./download_weights.sh`로도 실행할 수 있습니다.
 
-```text
-weights/paddle/
-├── PP-OCRv5_mobile_det/
-│   ├── inference.json
-│   ├── inference.pdiparams
-│   └── inference.yml
-├── PP-OCRv6_small_det/
-│   ├── inference.json
-│   ├── inference.pdiparams
-│   └── inference.yml
-├── korean_PP-OCRv5_mobile_rec/
-│   ├── inference.json
-│   ├── inference.pdiparams
-│   └── inference.yml
-└── en_PP-OCRv5_mobile_rec/
-    ├── inference.json
-    ├── inference.pdiparams
-    └── inference.yml
-```
+| 모델 | 다운로드 출처 |
+| --- | --- |
+| `korean_PP-OCRv5_mobile_rec` | 재학습 후 채택한 모델의 [고정 Release](https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/tag/adopted-recognizer-20260915) |
+| `PP-OCRv5_mobile_det` | PaddlePaddle 공식 Hugging Face 저장소, 고정 revision |
+| `PP-OCRv6_small_det` | PaddlePaddle 공식 Hugging Face 저장소, 고정 revision |
+| `en_PP-OCRv5_mobile_rec` | PaddlePaddle 공식 Hugging Face 저장소, 고정 revision |
 
-추론 가중치는 Git 추적에서 제외하며 `download_weights.sh`로 준비합니다. 기존 커밋 이력에는 과거 모델 파일이 남아 있습니다. 채택 근거·모델 SHA·성적과 한계는 [모델 채택 기록](notebooks/docs/development/adopted_recognizer_20260915.md)과 [모델 manifest](weights/adopted_model.json)에 있습니다. 이번 채택은 세 회차 95%·무퇴행 기준 통과를 뜻하지 않습니다.
+각 모델은 `weights/paddle/<모델명>/` 아래 `inference.json`, `inference.pdiparams`, `inference.yml` 3개 파일로 구성됩니다. 총 12개 파일의 SHA-256을 스크립트에서 검증합니다. 이미 올바른 파일이 있으면 재사용하고, 다운로드 또는 검증에 실패하면 중단합니다. 채택한 한국어 모델을 다른 공개 모델로 대체하지 않습니다.
 
-다운로드 스크립트가 해시를 검증하고, 추론 코드는 로컬 파일의 존재를 확인합니다(추론 때 해시를 다시 검사하는 것은 아닙니다). 필수 기본 모델이 없으면 초기화 오류이며, 지연 복구 모델이 없으면 해당 복구의 오류를 기록하고 가능한 기존 경로를 유지합니다. 모델 경로를 모두 명시하고 Paddle의 모델 소스 확인도 비활성화하므로 `predict.ipynb` 실행 중에는 네트워크를 사용하지 않습니다.
+정확한 URL·revision·해시는 [download_weights.sh](download_weights.sh)와 [모델 manifest](weights/adopted_model.json)를 참조하세요. 추론 코드는 준비된 로컬 모델 경로를 명시하고 모델 소스 확인을 비활성화합니다.
 
-## 실행
+## 공식 추론 실행 — 오프라인
 
-운영진과 동일하게 환경변수로 입력 폴더와 출력 파일을 주입합니다. 첫 CONFIG 셀은 수정하지 않습니다.
+가중치 준비를 마친 뒤 네트워크를 차단하고, 가상환경이 활성화된 저장소 루트에서 실행합니다. 첫 CONFIG 셀의 환경변수 읽기 코드는 수정하지 않습니다.
 
 ```bash
 export ITDA_INPUT_DIR=./val_images
@@ -127,78 +84,115 @@ jupyter nbconvert --to notebook --execute predict.ipynb \
   --output /tmp/executed.ipynb
 ```
 
-PowerShell 예시:
+위 경로는 예시입니다. 운영진이 지정한 환경변수 값이 우선하며, `./val_images`와 `./submission.csv`는 환경변수가 없을 때의 기본값입니다. `/tmp/executed.ipynb`는 실행 기록 노트북으로, 채점 CSV의 저장 경로와는 별개입니다.
 
-```powershell
-$env:ITDA_INPUT_DIR = "C:\path\to\val_images"
-$env:ITDA_OUTPUT_PATH = "C:\path\to\submission.csv"
-jupyter nbconvert --to notebook --execute predict.ipynb `
-  --ExecutePreprocessor.timeout=2400 `
-  --output "$env:TEMP\executed.ipynb"
-```
+## 입력·출력 규격
 
-지원 확장자는 `.jpg`, `.jpeg`, `.png`이며 대소문자를 구분하지 않습니다. 파일 개수나 이름을 하드코딩하지 않습니다.
+### 입력
 
-## 출력 계약
+- `ITDA_INPUT_DIR`는 평가 이미지가 들어 있는 폴더입니다.
+- 폴더 바로 아래의 `.jpg`, `.jpeg`, `.png` 파일을 읽으며 확장자의 대소문자를 구분하지 않습니다. 하위 폴더는 탐색하지 않습니다.
+- 노트북은 입력 장수나 특정 파일명을 고정하지 않습니다. 운영진 평가의 정상 완료 결과는 입력 500장에 대응하는 500행입니다.
+- `image_id`는 확장자를 제거한 파일명 그대로이며, `000001` 같은 선행 0도 유지합니다.
 
-열 이름과 순서는 정확히 다음과 같습니다.
+### 출력
 
-```text
+`ITDA_OUTPUT_PATH`는 디렉터리가 아닌 **출력 파일의 전체 경로**입니다. 예를 들어 `/output/submission.csv`를 주입하면 해당 위치에 `submission.csv`를 생성하며, 없는 상위 폴더는 생성합니다. 출력 위치에는 쓰기 권한이 필요합니다.
+
+CSV는 UTF-8로 저장하며 인덱스 열 없이 다음 5개 열을 순서대로 사용합니다.
+
+```csv
 image_id,year,month,day,final_date
+000001,2026,05,29,2026-05-29
+000002,NONE,11,29,NONE-11-29
+000003,2026,05,NONE,2026-05-NONE
+000004,NONE,NONE,NONE,NONE
 ```
 
-- `image_id`: 확장자를 제거한 파일명 그대로
-- 유효 날짜: `2026,05,29,2026-05-29`
-- 연도는 없고 월/일 정보만 있음: NONE-MM-DD 형태로 출력
-- 연/월 정보는 있으나 일자 정보가 없음: YYYY-MM-NONE 형태로 출력
-- 유효한 날짜 정보가 전부 없음: `year,month,day`는 각각 `NONE`, `final_date`는 `NONE`
-- 부분 날짜의 개별 `year,month,day` 열도 누락 위치를 `NONE`으로 유지합니다. 날짜가 과거라는 이유로 거부하지 않으며 유효 연도 상한 2035와 달력 검증은 유지합니다.
-- 날짜 순서는 명시 안내·달력 유효성·검증된 로컬 제품 규칙을 우선하며, 숫자는 명확하지만 순서만 모호하면 일-월-년(DMY)으로 출력합니다. 기본값 사용은 내부 `fallback_dmy` 사유로 기록하고 추가 OCR 없이 종료할 수 있습니다. 제조일·불가능한 날짜·누락 숫자를 기본값으로 채우지는 않습니다.
-- 내부 목표는 전체 날짜 완전일치율 95% 이상이며, 500장 2,400초는 목표 시간이 아닌 타임아웃입니다. 목표 달성 여부는 독립 평가와 초기화 포함 실제 시간 측정으로 확인해야 합니다.
-- 한 이미지 처리 실패: `year,month,day`는 각각 `NONE`, `final_date`는 `NONE`으로 기록하고 다음 이미지 계속 처리. 실패 원인은 별도로 보존하며 정답으로 집계하지 않습니다.
-- 중복 stem 또는 빈 입력 폴더: 잘못된 제출 파일을 만들지 않고 즉시 오류
+- `year`: 4자리 문자열 또는 `NONE`.
+- `month`, `day`: 각각 2자리 문자열 또는 `NONE`.
+- `final_date`: 인식된 필드를 하이픈으로 연결합니다. 세 필드가 모두 미인식이면 `NONE`입니다.
+- 부분 날짜의 누락 필드를 `NONE`으로 유지하고 `final_date`에 결합하는 형식은 운영진과의 개별 질의응답을 반영한 규칙입니다.
+- 누락 숫자를 임의로 채우지 않습니다. 달력 유효성을 검증하며 코드의 유효 연도 상한은 **2099**입니다. 날짜가 과거라는 이유만으로 거부하지 않습니다.
 
-## 검증
+CSV를 검증할 때는 문자열로 읽어 ID의 선행 0과 월·일의 두 자리 형식을 보존하세요.
 
-2026-09-11부터 기본 실행은 CSV 옆의 `출력파일명.trace.jsonl`에 원본 좌표 변환, 관측/영역 ID, 미파싱·미인식 영역, 역할 어휘, 패스별 결정과 시간을 기록합니다. 날짜 선택 규칙은 그대로이며 영역 연결은 기하학적 가설로만 보존합니다. `PipelineConfig(collect_trace=False)`로 기록을 끌 수 있습니다. [오류 계측·영역 식별 결과](notebooks/docs/architecture/ocr-region-trace-20260911.md)에 형식·실제 개발 점검·남은 한계를 정리했습니다.
+## 완료 조건과 실패 시 동작
 
-2026-09-10 근거 연결 보완의 구현 범위, 회귀 검증 및 미달 목표는 [근거 연결 개선 보고서](notebooks/docs/architecture/date-evidence-repair-20260910.md)에 기록했습니다. 개발 중 확인한 사진/기록의 성적을 독립 평가 정확도로 취급하지 않습니다.
+- 전체 입력의 기본 OCR을 완료하면 최종 CSV를 생성하고 조건부 복구 결과를 반영합니다.
+- 기본 OCR 처리 실패가 있거나 전체 입력 처리를 완료하지 못하면 최종 CSV를 생성하지 않고 부분 결과와 실패 기록을 남깁니다. 처리 실패와 정상적인 날짜 미인식은 다릅니다.
+- 복구 단계 오류가 발생하면 이미 생성된 CSV가 남을 수 있으므로, 파일 존재만으로 정상 완료를 판정하지 않습니다.
+- 필수 기본 모델이 없으면 초기화 오류가 발생합니다. 지연 초기화하는 복구 모델이 없으면 해당 복구 오류를 기록합니다. 추론 중 모델을 다운로드하지 않습니다.
+- 빈 입력 폴더 또는 확장자 제거 후 중복된 ID는 오류로 처리합니다.
+- 같은 출력 경로의 CSV나 관련 기록 파일이 이미 존재하면 재실행을 거부합니다. 실행마다 새 출력 경로를 사용하세요.
 
-후속 문자 처리·부분 날짜·조기 종료 개선과 재번호 후 705건 비교는 [후속 구현 보고서](notebooks/docs/architecture/date-recognition-repair-20260910.md)를 참조하십시오. 95% 목표와 공식 환경 500장 속도 검증은 아직 완료되지 않았습니다.
+CSV 옆에 `.partial.csv`, `.progress.jsonl`, `.status.json`, `.trace.jsonl` 기록이 생성됩니다. 채점 제출값은 `ITDA_OUTPUT_PATH`의 CSV이며, 부가 기록은 완료 여부와 오류 확인용입니다.
 
-빠른 계약 테스트:
+## 오프라인 재현성 검증
+
+제출 커밋을 새로 clone한 환경에서 다음 순서로 확인합니다.
+
+1. Python 3.10 venv를 만들고 `requirements.txt`를 설치합니다.
+2. 온라인 상태에서 `download_weights.sh`를 실행하고 모든 해시 검증이 성공했는지 확인합니다.
+3. 네트워크를 차단합니다.
+4. 평가 입력 폴더와 새 출력 파일 경로를 환경변수로 주입합니다.
+5. 위 공식 `nbconvert` 명령으로 Run All을 실행합니다.
+6. CSV가 지정한 경로에 생성됐는지, 5열 순서·500행·중복 없는 입력 ID 일치·승인된 날짜 형식을 확인합니다.
+7. `.status.json`의 `output_complete`, `processed_images`, `failures`와 프로세스 종료 결과를 확인합니다. 500장 처리 완료, 오류 없음, 실행 한도 준수 및 메모리 초과 종료가 없음을 확인해야 합니다.
+
+Windows에서 Ubuntu 조건을 재현하는 방법은 [WSL/Docker 채점 환경 안내](notebooks/environment/grading/README.md)에 있습니다. Docker는 참가자의 로컬 검증 도구이며 운영진 실행의 필수 조건이 아닙니다. 컨테이너 검증 시 CPU·메모리를 제한하고 GPU를 전달하지 않으며 네트워크를 차단합니다. 운영진과 CPU 모델·커널까지 동일한 환경은 아니므로 처리시간이 같다고 보장하지 않습니다.
+
+개발 소스의 계약 테스트는 다음 명령으로 실행할 수 있습니다. 단위 테스트 통과는 실제 평가 이미지의 추론 성공이나 정확도를 보증하지 않습니다.
 
 ```bash
 python notebooks/project/run.py unittest discover -s notebooks/project/tests -v
 ```
 
-수동 라벨 CSV가 로컬에 있을 때 검증 구간 실행:
+## 모델 구성과 설계 요약
 
-```bash
-python notebooks/project/run.py scripts.evaluate_pipeline \
-  ./val_images ./labels/validation.csv ./artifacts/validation_submission.csv \
-  --limit 352
-```
+| 역할 | 모델 또는 방법 |
+| --- | --- |
+| 기본 텍스트 검출 | `PP-OCRv5_mobile_det` |
+| 조건부 복구 검출 | `PP-OCRv6_small_det` |
+| 한국어·영문·숫자 인식 | 재학습한 `korean_PP-OCRv5_mobile_rec` |
+| 읽지 못한 날짜 줄의 보조 인식 | `en_PP-OCRv5_mobile_rec`, 지연 초기화 |
+| 소비기한 선택 | 달력 검증, 기한·제조일 키워드, 좌표와 문자 인식 근거 |
 
-이 스크립트는 기본적으로 모든 입력 이미지를 실행하고 `라벨 상태 == manual`인 행만 점수에 사용합니다. 예시의 `--limit 352`는 명시적으로 범위를 줄이는 옵션입니다. OCR로 자동 생성한 미검수 값은 정답으로 취급하지 않습니다. 평가 대상 0건이나 중복 ID는 오류로 처리하고, 미매칭 라벨 및 실행 실패를 별도 집계합니다. 실행 실패는 정답이 `NONE`이어도 오답입니다. `--report-json 경로`로 평가 보고서를 저장할 수 있습니다.
+전체 이미지의 기본 OCR을 우선 수행한 뒤, 미인식 날짜나 충돌하는 문맥에 대해 영역 확대·대비 보정·날짜 줄 재인식·추가 검출 등 조건부 복구를 수행합니다. 제조일과 소비기한을 구별하고 관측된 문자와 위치 근거를 사용해 날짜를 선택합니다.
 
-과거 `NONE-NONE-NONE`은 의미 비교에서 `NONE`과 같게 처리하지만 새 제출 형식 준수로 인정하지 않습니다. `field_metrics`에는 연·월·일별 일치율과 값 존재/부재별 분모, 오독·미출력·추가 출력·평가 불가를 나눠 기록합니다. `submission_format`은 5열 순서와 날짜 필드 일관성을 별도로 검사하며, 형식 미준수/미확인이면 결합 합격을 표시하지 않습니다. `official_partial_score`는 배점 확인 전 `null`입니다. 부분 출력은 기존 `NONE-MM-DD`, `YYYY-MM-NONE`을 유지하고 미확정 형식을 새로 허용하지 않습니다. 상세 구현·확인은 [제출·평가 계약 정비](notebooks/docs/architecture/submission-contract-20260910.md)를 참조하십시오.
+날짜 순서는 명시된 형식과 문맥을 고려합니다. 기본 실행의 한국 식품 문맥 정책은 두 자리 날짜에 YMD를 우선 적용하고 시장·순서 충돌은 검토 상태로 처리합니다. 상세 규칙과 개발 근거는 [한국 식품 문맥 정책](notebooks/docs/architecture/korean-market-policy-20260911.md)과 [파이프라인 설계 문서](notebooks/docs/architecture/pipeline-spec.md)를 참조하세요.
 
-## 제출 전 체크리스트
+## 검증 기록
 
-최신 날짜 정책은 [한국 식품 문맥 정책](notebooks/docs/architecture/korean-market-policy-20260911.md)이다. 기본 실행은 한국 식품의 기한 문맥에서 두 자리 날짜를 YMD 우선 해석한다. 명시 순서는 우선하며, 수입/시장 충돌이나 미확정 순서는 REVIEW로 남긴다. REVIEW의 제출 날짜는 `NONE`, 상세 상태·근거·시각/코드는 trace에 기록한다. 이전 DMY 마지막 기본값과 다른 사용자 승인 정책이므로 정확도 변화와 보류율을 함께 확인해야 한다.
+2026-09-15 재현성 점검의 범위는 다음과 같습니다.
 
-- `predict.ipynb` 첫 CONFIG 셀과 두 환경변수 이름을 변경하지 않았는지 확인
-- `bash download_weights.sh`를 채점 노트북 실행 전에 수행
-- 네트워크를 끈 새 Python 3.10 환경에서 Run All 완주 확인
-- 입력 이미지 수와 CSV 행 수, 5개 열 순서, 중복 `image_id` 여부 확인
-- 실행 경로에 `input()`·`getpass()`·외부 API 호출이 없는지 확인
-- 저장소를 Public으로 두거나 운영진 계정 `b9511242000-blip`에 접근 권한 부여
-- 가중치·로컬 원본 이미지·실행 결과를 Git에 포함하지 않았는지 확인(추가 데이터 제출용 `custom_data/`의 이미지·라벨·출처 정보는 포함)
+| 점검 | 결과와 범위 |
+| --- | --- |
+| 깨끗한 Python 3.10 venv | Windows에서 패키지 설치·import·`pip check` 성공 |
+| Linux x86_64 / Python 3.10 패키지 | wheel 다운로드·의존성 해석 성공, Ubuntu 실행 검증과는 별개 |
+| 실제 OCR 표본 실행 | 커밋 `435bf6e71f1c9f5740634153bf6d762b7a6b8e0b`에서 2장·20장 Run All 및 행 수 일치 확인 |
+| 경로 주입 | 저장소 외부의 공백 포함 출력 경로에 CSV 생성 확인 |
+| 500개 입력 구조 테스트 | 모의 OCR로 전체 순회·500행 생성 확인 |
+| 단위 테스트 | 위 추론 버전에서 589개 통과 |
+| Release 가중치 준비 | 배포 변경 커밋 `05d84f77269cb938a9699f2d9d12519c05aa8994`의 스크립트로 빈 폴더에 12개 파일 다운로드·SHA-256 검증 성공 |
 
-## 참고 자료
+실제 OCR 표본은 실패 프록시・오프라인 플래그를 사용하는 Windows 환경에서 검증했습니다. OS 수준의 네트워크 차단이나 Ubuntu 4코어·8GB 실행을 검증한 결과는 아닙니다. 사용 모델의 해시는 [모델 manifest](weights/adopted_model.json)에 있습니다.
 
+Ubuntu 환경에서의 실제 500장 최종 평가 결과는 아직 이 문서에 기록되지 않았습니다. 환경 구축 후 검증한 제출 커밋, 모델 해시, 입력 수, 실행 환경, 전체 소요시간, 결과 및 오류 여부를 함께 기록합니다. 과거 352장 성능표와 소량 표본의 환산치는 현재 제출물의 최종 평가 성적으로 사용하지 않습니다. 이전 실험은 [파이프라인 설계 문서](notebooks/docs/architecture/pipeline-spec.md)와 [개발 검증 기록](notebooks/docs/architecture/date-policy-validation-20260910.md)을 참조하세요.
+
+## 추가 수집 데이터와 출처
+
+추가 수집 이미지 364장은 `custom_data/*.jpg`에, 날짜 정답은 [정답지](custom_data/labels/answer_003353_003716_manual.xlsx)의 `정답 날짜` 열에 있습니다(ID 3353 → `003353.jpg`). OCR 영역·문자열 주석과 출처 대응표는 `custom_data/metadata/`에 있습니다.
+
+출처·라이선스·라벨 안내는 [ATTRIBUTION.md](custom_data/ATTRIBUTION.md)를 참조하세요. 추가 데이터와 라벨은 수집·학습 증빙이며, 추론 노트북의 입력은 운영진이 주입하는 평가 이미지 폴더입니다.
+
+## 개발 기록 및 공식 참고 자료
+
+- [개발·학습 문서 안내](notebooks/README.md)
+- [원본 6회·4단계 개발 계획](notebooks/docs/protocol/grouped_6_rounds.md)
+- [모델 채택 기록](notebooks/docs/development/adopted_recognizer_20260915.md)
+- [ITDA 공식 제출 템플릿](https://github.com/b9511242000-blip/itda-ocr-template)
 - [ITDA 공식 참가자 안내서](https://orchid-drum-814.notion.site/c74214f064ee837d81a80118ec8bf80a?pvs=143)
 - [PaddleOCR 일반 OCR 파이프라인](https://www.paddleocr.ai/main/en/version3.x/pipeline_usage/OCR.html)
-- [PaddleOCR 텍스트 검출 모델](https://www.paddleocr.ai/main/en/version3.x/module_usage/text_detection.html)
-- [PaddleOCR 텍스트 인식 모델](https://www.paddleocr.ai/main/en/version3.x/module_usage/text_recognition.html)
+
+제출 시 저장소는 Public으로 공개하거나 운영진 계정 `b9511242000-blip`에 접근 권한을 부여해야 합니다. 제출 이메일의 저장소 URL·커밋 해시와 아키텍처 요약서 PDF는 운영진 안내에 따라 별도로 제출합니다.
