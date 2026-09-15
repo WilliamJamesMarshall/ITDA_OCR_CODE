@@ -1,0 +1,328 @@
+{
+  "schema": 1,
+  "status": "complete",
+  "completion_kind": "explicit_user_adoption",
+  "scope": "Final round-6 experiment and cumulative rounds 1-6 evaluation closed by user",
+  "completed_at_utc": "2026-09-15 13:52:09 UTC",
+  "user_instruction": "이 가중치를 채택하고 6회차 최종실험을 종료하도록 한다. 이 가중치를 GitHub Repository에 커밋-push해.",
+  "model_adopted": true,
+  "automatic_performance_gate_passed": false,
+  "user_accepts_reported_shortfall_and_regressions": true,
+  "additional_training_authorized": false,
+  "additional_test_authorized": false,
+  "release_tag": "adopted-recognizer-final-round6-20260915",
+  "checkpoint_sha256": "4f701656898a0a73fecaa5a6fdc9b14883b2cc811d6a57b2b3277a449f5991af",
+  "inference_pdiparams_sha256": "88518d3485b9d1c7fa570b8936584a2f2e01fc0ea796777b0b1f14e36f8da033",
+  "notebook_sha256": "f60d3022e5b49ca41f8dfbef7a9c921f9c2bb347527bd16c1ffbb16af249471e",
+  "evaluation": {
+    "images": 2610,
+    "field_correct": 6544,
+    "field_total": 7830,
+    "field_accuracy": 0.8357598978288634,
+    "historical_field_correct": 6518,
+    "gained_fields": 151,
+    "lost_fields": 125,
+    "exact": 2059,
+    "historical_exact": 2056,
+    "rounds": [
+      {
+        "round": 1,
+        "images": 216,
+        "field_correct": 593,
+        "field_total": 648,
+        "field_accuracy": 0.9151234567901234,
+        "historical_field_correct": 585,
+        "historical_field_accuracy": 0.9027777777777778,
+        "delta_pp": 1.2345679012345678,
+        "gained_fields": 15,
+        "lost_fields": 7,
+        "exact": 191,
+        "historical_exact": 188,
+        "per_field": {
+          "year": {
+            "correct": 197,
+            "old_correct": 194,
+            "gains": 5,
+            "losses": 2
+          },
+          "month": {
+            "correct": 201,
+            "old_correct": 200,
+            "gains": 3,
+            "losses": 2
+          },
+          "day": {
+            "correct": 195,
+            "old_correct": 191,
+            "gains": 7,
+            "losses": 3
+          }
+        },
+        "elapsed_seconds": 677.9051955000032,
+        "historical_elapsed_seconds": 635.9986766999937,
+        "time_target_met": true,
+        "peak_tree_private": 2623860736,
+        "peak_tree_rss": 1477021696,
+        "csv_sha256": "74566190325822fb1727681dd61c74dfedbd804f75e9ba15e67b7b5610e9d0f9",
+        "scope": "Historical mixed-code comparison, not isolated weight effect or independent holdout",
+        "model_adopted": false
+      },
+      {
+        "round": 2,
+        "images": 500,
+        "field_correct": 1302,
+        "field_total": 1500,
+        "field_accuracy": 0.868,
+        "historical_field_correct": 1287,
+        "historical_field_accuracy": 0.858,
+        "delta_pp": 1,
+        "gained_fields": 32,
+        "lost_fields": 17,
+        "exact": 413,
+        "historical_exact": 411,
+        "per_field": {
+          "year": {
+            "correct": 438,
+            "old_correct": 435,
+            "gains": 10,
+            "losses": 7
+          },
+          "month": {
+            "correct": 445,
+            "old_correct": 436,
+            "gains": 13,
+            "losses": 4
+          },
+          "day": {
+            "correct": 419,
+            "old_correct": 416,
+            "gains": 9,
+            "losses": 6
+          }
+        },
+        "elapsed_seconds": 1237.4483404000057,
+        "historical_elapsed_seconds": 1297.8032142999582,
+        "time_target_met": true,
+        "peak_tree_private": 2465423360,
+        "peak_tree_rss": 1430585344,
+        "csv_sha256": "ace4f00de129334efd997c526e40eef4cda9b705d2fc90bbdaaf393688ed1a32",
+        "scope": "Historical mixed-code comparison, not isolated weight effect or independent holdout",
+        "model_adopted": false
+      },
+      {
+        "round": 3,
+        "images": 500,
+        "field_correct": 1189,
+        "field_total": 1500,
+        "field_accuracy": 0.7926666666666666,
+        "historical_field_correct": 1205,
+        "historical_field_accuracy": 0.8033333333333333,
+        "delta_pp": -1.0666666666666667,
+        "gained_fields": 24,
+        "lost_fields": 40,
+        "exact": 363,
+        "historical_exact": 372,
+        "per_field": {
+          "year": {
+            "correct": 397,
+            "old_correct": 402,
+            "gains": 6,
+            "losses": 11
+          },
+          "month": {
+            "correct": 410,
+            "old_correct": 418,
+            "gains": 9,
+            "losses": 17
+          },
+          "day": {
+            "correct": 382,
+            "old_correct": 385,
+            "gains": 9,
+            "losses": 12
+          }
+        },
+        "elapsed_seconds": 1443.6183661000105,
+        "historical_elapsed_seconds": 1543.3003508999827,
+        "time_target_met": true,
+        "peak_tree_private": 2559021056,
+        "peak_tree_rss": 1472991232,
+        "csv_sha256": "2761c3f61054d40b4b290b49e87ca022d940c9373280c3e24bb348c958d9433b",
+        "scope": "Historical mixed-code comparison, not isolated weight effect or independent holdout",
+        "model_adopted": false
+      },
+      {
+        "round": 4,
+        "images": 394,
+        "field_correct": 994,
+        "field_total": 1182,
+        "field_accuracy": 0.8409475465313029,
+        "historical_field_correct": 973,
+        "historical_field_accuracy": 0.823181049069374,
+        "delta_pp": 1.7766497461928936,
+        "gained_fields": 29,
+        "lost_fields": 8,
+        "exact": 310,
+        "historical_exact": 305,
+        "per_field": {
+          "year": {
+            "correct": 338,
+            "old_correct": 333,
+            "gains": 6,
+            "losses": 1
+          },
+          "month": {
+            "correct": 336,
+            "old_correct": 326,
+            "gains": 13,
+            "losses": 3
+          },
+          "day": {
+            "correct": 320,
+            "old_correct": 314,
+            "gains": 10,
+            "losses": 4
+          }
+        },
+        "elapsed_seconds": 1185.0676007000147,
+        "historical_elapsed_seconds": 1205.5665426999913,
+        "time_target_met": true,
+        "peak_tree_private": 1996967936,
+        "peak_tree_rss": 1345732608,
+        "csv_sha256": "3d5b064db7c57722401c3ee67142ddfb1d6354b3b623daef57324b8737f2cd22",
+        "scope": "Historical mixed-code comparison, not isolated weight effect or independent holdout",
+        "model_adopted": false
+      },
+      {
+        "round": 5,
+        "images": 500,
+        "field_correct": 1261,
+        "field_total": 1500,
+        "field_accuracy": 0.8406666666666667,
+        "historical_field_correct": 1270,
+        "historical_field_accuracy": 0.8466666666666667,
+        "delta_pp": -0.6,
+        "gained_fields": 21,
+        "lost_fields": 30,
+        "exact": 403,
+        "historical_exact": 405,
+        "per_field": {
+          "year": {
+            "correct": 412,
+            "old_correct": 418,
+            "gains": 5,
+            "losses": 11
+          },
+          "month": {
+            "correct": 438,
+            "old_correct": 439,
+            "gains": 9,
+            "losses": 10
+          },
+          "day": {
+            "correct": 411,
+            "old_correct": 413,
+            "gains": 7,
+            "losses": 9
+          }
+        },
+        "elapsed_seconds": 1279.4319099999848,
+        "historical_elapsed_seconds": 1544.262517300027,
+        "time_target_met": true,
+        "peak_tree_private": 2156539904,
+        "peak_tree_rss": 1379934208,
+        "csv_sha256": "a136b3d9d1cd1f78204a95fcbd3ef2de240ee60029f6dcacca882b75cc852d0b",
+        "scope": "Historical mixed-code comparison, not isolated weight effect or independent holdout",
+        "model_adopted": false
+      },
+      {
+        "round": 6,
+        "images": 500,
+        "field_correct": 1205,
+        "field_total": 1500,
+        "field_accuracy": 0.8033333333333333,
+        "historical_field_correct": 1198,
+        "historical_field_accuracy": 0.7986666666666666,
+        "delta_pp": 0.46666666666666673,
+        "gained_fields": 30,
+        "lost_fields": 23,
+        "exact": 379,
+        "historical_exact": 375,
+        "per_field": {
+          "year": {
+            "correct": 411,
+            "old_correct": 410,
+            "gains": 9,
+            "losses": 8
+          },
+          "month": {
+            "correct": 408,
+            "old_correct": 405,
+            "gains": 12,
+            "losses": 9
+          },
+          "day": {
+            "correct": 386,
+            "old_correct": 383,
+            "gains": 9,
+            "losses": 6
+          }
+        },
+        "elapsed_seconds": 1439.4376924000098,
+        "historical_elapsed_seconds": 1444.6855510000023,
+        "time_target_met": true,
+        "peak_tree_private": 2126462976,
+        "peak_tree_rss": 1411649536,
+        "csv_sha256": "7a71447326acd8bd21abfdc0ebf644196b5784513680041ed584700627bb7bdb",
+        "scope": "Historical mixed-code comparison, not isolated weight effect or independent holdout",
+        "model_adopted": false
+      }
+    ],
+    "comparison": "Historical outputs only; inference code and CPU/concurrency settings differ",
+    "independent_holdout": false,
+    "execution_errors": 0,
+    "missing_outputs": 0
+  },
+  "internal_validation": {
+    "before_field_correct": 67,
+    "after_field_correct": 64,
+    "field_total": 75,
+    "validation_gate_passed": false
+  },
+  "execution": {
+    "groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        6
+      ]
+    ],
+    "within_group": "concurrent",
+    "cpu_sets": [
+      [
+        0,
+        1,
+        4,
+        5
+      ],
+      [
+        2,
+        3,
+        6,
+        7
+      ]
+    ],
+    "memory_limit_bytes_per_round": 8000000000,
+    "network_mode": "Python external socket guard with loopback allowed; native sockets and machine-wide offline not verified",
+    "official_ubuntu_environment_verified": false
+  },
+  "evidence_directory": "C:/ITDA_OCR_WORKSPACE/grouped-6-originals-v1/cumulative-1-6-epoch1-eval-20260915-pairs-v2",
+  "preservation": "Original training/evaluation records retain their pre-adoption values; this record supersedes pending adoption only."
+}

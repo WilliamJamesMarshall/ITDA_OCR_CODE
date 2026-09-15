@@ -60,13 +60,13 @@ fetch() {
 verify_adopted() {
     local filename="$1"
     local expected="$2"
-    fetch "korean_PP-OCRv5_mobile_rec" "adopted-recognizer-20260915" "$filename" "$expected" \
-        "https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/download/adopted-recognizer-20260915/${filename}"
+    fetch "korean_PP-OCRv5_mobile_rec" "adopted-recognizer-final-round6-20260915" "$filename" "$expected" \
+        "https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/download/adopted-recognizer-final-round6-20260915/${filename}"
 }
 
 # Prepare the exact adopted export; never substitute upstream weights.
 verify_adopted "inference.json" "0802d527934ec3ab851ce2ba51386d8b4f3a84ad4e2b953e96dce5ab70bc4f67"
-verify_adopted "inference.pdiparams" "4383ffa10c9fe76aeb931817ca67a0182b71ee300a91613ed70ddfd0f8c434e4"
+verify_adopted "inference.pdiparams" "88518d3485b9d1c7fa570b8936584a2f2e01fc0ea796777b0b1f14e36f8da033"
 verify_adopted "inference.yml" "60723ce943ecc524b5b32e07b8527a9b75f27c79c6fccf9c13e401304633b025"
 
 fetch "PP-OCRv5_mobile_det" "0d63e78e2b680928f6b1747d76a08db6e645efb7" "inference.json" \

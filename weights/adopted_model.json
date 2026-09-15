@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "adopted_at": "2026-09-14T16:11:51.554636+00:00",
-  "user_instruction": "재학습 모델로 채택해서 커밋- push해. 2회차와 3회차는 일단 종료하고, 4회차와 5회차로 넘어갈 거야",
+  "adopted_at": "2026-09-15 13:52:09 UTC",
+  "user_instruction": "이 가중치를 채택하고 6회차 최종실험을 종료하도록 한다. 이 가중치를 GitHub Repository에 커밋-push해.",
   "model": "korean_PP-OCRv5_mobile_rec",
   "inference_files": {
     "inference.json": "0802d527934ec3ab851ce2ba51386d8b4f3a84ad4e2b953e96dce5ab70bc4f67",
-    "inference.pdiparams": "4383ffa10c9fe76aeb931817ca67a0182b71ee300a91613ed70ddfd0f8c434e4",
+    "inference.pdiparams": "88518d3485b9d1c7fa570b8936584a2f2e01fc0ea796777b0b1f14e36f8da033",
     "inference.yml": "60723ce943ecc524b5b32e07b8527a9b75f27c79c6fccf9c13e401304633b025"
   },
   "full_bundle": {
@@ -13,7 +13,7 @@
     "en_PP-OCRv5_mobile_rec/inference.pdiparams": "3ec8a97ed6cefe8568d3e2ee90bb193299b566a7661aa4fd52d224b96b59f66b",
     "en_PP-OCRv5_mobile_rec/inference.yml": "27e91d0582f40168aa218303c76e184bc78fa7a5d105aad0cfbad8458b441067",
     "korean_PP-OCRv5_mobile_rec/inference.json": "0802d527934ec3ab851ce2ba51386d8b4f3a84ad4e2b953e96dce5ab70bc4f67",
-    "korean_PP-OCRv5_mobile_rec/inference.pdiparams": "4383ffa10c9fe76aeb931817ca67a0182b71ee300a91613ed70ddfd0f8c434e4",
+    "korean_PP-OCRv5_mobile_rec/inference.pdiparams": "88518d3485b9d1c7fa570b8936584a2f2e01fc0ea796777b0b1f14e36f8da033",
     "korean_PP-OCRv5_mobile_rec/inference.yml": "60723ce943ecc524b5b32e07b8527a9b75f27c79c6fccf9c13e401304633b025",
     "PP-OCRv5_mobile_det/inference.json": "05feef1acb00aa4cd7362b15f7f501fc4f99d7b1fa73c1c871e0c7b1504b0f5c",
     "PP-OCRv5_mobile_det/inference.pdiparams": "afa1820cb16c1fd0dad589d0f8b389139061c1ef6d68019685fd07be997dda5b",
@@ -22,51 +22,109 @@
     "PP-OCRv6_small_det/inference.pdiparams": "5043d4ccc8d63402ccea8feefcee4db57077431a873e78d2191836a178a492da",
     "PP-OCRv6_small_det/inference.yml": "193f435274bf9f0b5f71a929bbfbcf148282df7e633b34e7c373e8f44741b516"
   },
-  "checkpoint_sha256": "07f23a2059d05d9977969e1f4a8742974376a5e1e47e28f23af7f23f13c611d9",
-  "training_checkpoint_location": "C:\\ITDA_OCR_WORKSPACE\\grouped-6-originals-v1\\joint123-20260914-v1\\targeted-retrain-code-20260914-v1\\training-run\\joint123-attempt02\\epoch_001.pdparams",
+  "checkpoint_sha256": "4f701656898a0a73fecaa5a6fdc9b14883b2cc811d6a57b2b3277a449f5991af",
+  "training_checkpoint_location": "C:/ITDA_OCR_WORKSPACE/grouped-6-originals-v1/cumulative-1-6-offline-20260915-v1/training-run/epoch_001.pdparams",
   "training_checkpoint_committed": false,
   "training": {
     "epoch": 1,
-    "optimizer_steps": 46,
-    "optimizer_crops": 365,
+    "optimizer_steps": 549,
+    "optimizer_crops": 4390,
     "validation_crops": 25,
-    "lr": 5e-06
+    "lr": 0.000005,
+    "validation_gate_passed": false
   },
   "evaluation": {
     "rounds": {
       "1": {
-        "field_correct": 585,
+        "field_correct": 593,
         "field_total": 648,
-        "protected_field_losses": 29,
+        "historical_field_correct": 585,
+        "historical_gains": 15,
+        "historical_losses": 7,
+        "elapsed_seconds": 677.9051955000032,
+        "time_target_met": true,
         "all_targets_met": false
       },
       "2": {
-        "field_correct": 1287,
+        "field_correct": 1302,
         "field_total": 1500,
-        "protected_field_losses": 25,
+        "historical_field_correct": 1287,
+        "historical_gains": 32,
+        "historical_losses": 17,
+        "elapsed_seconds": 1237.4483404000057,
+        "time_target_met": true,
         "all_targets_met": false
       },
       "3": {
+        "field_correct": 1189,
+        "field_total": 1500,
+        "historical_field_correct": 1205,
+        "historical_gains": 24,
+        "historical_losses": 40,
+        "elapsed_seconds": 1443.6183661000105,
+        "time_target_met": true,
+        "all_targets_met": false
+      },
+      "4": {
+        "field_correct": 994,
+        "field_total": 1182,
+        "historical_field_correct": 973,
+        "historical_gains": 29,
+        "historical_losses": 8,
+        "elapsed_seconds": 1185.0676007000147,
+        "time_target_met": true,
+        "all_targets_met": false
+      },
+      "5": {
+        "field_correct": 1261,
+        "field_total": 1500,
+        "historical_field_correct": 1270,
+        "historical_gains": 21,
+        "historical_losses": 30,
+        "elapsed_seconds": 1279.4319099999848,
+        "time_target_met": true,
+        "all_targets_met": false
+      },
+      "6": {
         "field_correct": 1205,
         "field_total": 1500,
-        "protected_field_losses": 15,
+        "historical_field_correct": 1198,
+        "historical_gains": 30,
+        "historical_losses": 23,
+        "elapsed_seconds": 1439.4376924000098,
+        "time_target_met": true,
         "all_targets_met": false
       }
     },
-    "field_correct": 3077,
-    "field_total": 3648,
-    "same_code_gains": 132,
-    "same_code_losses": 59,
+    "field_correct": 6544,
+    "field_total": 7830,
+    "historical_field_correct": 6518,
+    "historical_gains": 151,
+    "historical_losses": 125,
     "performance_targets_met": false,
-    "scope": "cumulative development, not independent final score"
+    "same_code_comparison": false,
+    "scope": "Historical mixed-code comparison; cumulative development, not independent final score"
   },
   "adoption_approval": {
-    "path": "C:\\ITDA_OCR_WORKSPACE\\grouped-6-originals-v1\\model-adoption-20260915-v1\\approval.json",
-    "sha256": "882f31a4dd2185fa2a2cbad460699103960c7a33c7edca8811479eb9424994db"
+    "path": "notebooks/docs/development/final_round6_adoption_20260915.json",
+    "sha256": "330e2f78a9cc4a9353fd0009691bba71c9d6c726c54e84beb989a96987a07192"
   },
   "closure": {
-    "path": "C:\\ITDA_OCR_WORKSPACE\\grouped-6-originals-v1\\groups\\group_02_03\\completion.json",
-    "sha256": "bb16e999206394575403a8a9659ba2f305c2174b7c9827219f085347cda909e2"
+    "path": "notebooks/docs/development/final_round6_adoption_20260915.json",
+    "sha256": "330e2f78a9cc4a9353fd0009691bba71c9d6c726c54e84beb989a96987a07192",
+    "status": "complete",
+    "completion_kind": "explicit_user_adoption",
+    "round": 6
   },
-  "scope": "User-selected inference deployment; no automatic future training/test authorization"
+  "scope": "User-adopted final round-6 inference deployment. Experiment closed; no automatic future training/test authorization.",
+  "previous_adoption": {
+    "manifest_at_commit": "a3106c8e4949831f60ea3cca1abfbdf56c9cdaeb",
+    "inference_pdiparams_sha256": "4383ffa10c9fe76aeb931817ca67a0182b71ee300a91613ed70ddfd0f8c434e4",
+    "release_tag": "adopted-recognizer-20260915"
+  },
+  "distribution": {
+    "kind": "github-release-assets",
+    "tag": "adopted-recognizer-final-round6-20260915",
+    "url": "https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/tag/adopted-recognizer-final-round6-20260915"
+  }
 }

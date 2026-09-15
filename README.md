@@ -62,7 +62,7 @@ bash download_weights.sh
 
 | 모델 | 다운로드 출처 |
 | --- | --- |
-| `korean_PP-OCRv5_mobile_rec` | 재학습 후 채택한 모델의 [고정 Release](https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/tag/adopted-recognizer-20260915) |
+| `korean_PP-OCRv5_mobile_rec` | 6회차 최종실험 후 채택한 모델의 [고정 Release](https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/tag/adopted-recognizer-final-round6-20260915) |
 | `PP-OCRv5_mobile_det` | PaddlePaddle 공식 Hugging Face 저장소, 고정 revision |
 | `PP-OCRv6_small_det` | PaddlePaddle 공식 Hugging Face 저장소, 고정 revision |
 | `en_PP-OCRv5_mobile_rec` | PaddlePaddle 공식 Hugging Face 저장소, 고정 revision |
