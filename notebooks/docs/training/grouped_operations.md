@@ -14,7 +14,49 @@
 
 ## 현재 개발 후보와 보존된 결과
 
-2026-09-15 최신 사용자 결정: [재학습 인식기 채택·2단계 종료](../development/adopted_recognizer_20260915.md).
+2026-09-15 최신 사용자 결정: **기존 채택 모델 유지**, 두 누적 epoch1 후보는 미채택으로 보존한다.
+[유지 결정·Git 전달·후속 학습 설계](retained_model_and_learning_design_20260915.md)를 확인한다.
+가중 전수 평가는 완료되어 5205/6330(82.2275%), 기존 저장 출력 대비 획득 111·손실 226필드다.
+기본 bundle 12파일 SHA는 기존 채택 manifest와 일치한다. 코드·검사·보고서는 저장소 main의 미커밋 변경으로 준비하며,
+후보 weights 교체·실제 commit/push·새 학습·새 전수 테스트·3단계 종료·6회 진행은 하지 않는다.
+아래 실행/보류 기록은 당시 이력이며 최신 결정과 구분한다.
+
+2026-09-15 가중 학습 종료 후 사용자가 1~5회 전수 테스트를 별도 승인했다.
+[가중 epoch1 평가 시작 기록](cumulative_weighted_originals_20260915/epoch1_evaluation_start.md)의
+`cumulative-1-5-original-weighted-epoch1-eval-20260915-v1`을 사용한다.
+내부 67/75 → 66/75 미통과 이력을 유지한 가중 epoch1 자체의 평가이며, 순서는 1회 단독 → 2·3회 병행 → 4·5회 병행이다.
+최종 완료는 실행 폴더 `status.json=completed_reports_verified`와 `final-report-audit.json`으로 확인한다.
+이 지시는 모델 채택·공용 weights 변경·새 학습·6회·commit/push 승인이 아니다.
+
+2026-09-15 원본 수 비례 가중치 재학습: 사용자가 계획 확인 후 “시작해.”라고 승인했다.
+[실제 시작 기록](cumulative_weighted_originals_20260915/start_report.md)의
+`cumulative-1-5-original-weighted-20260915-v3`에서 CPU 0~3·4스레드·1 epoch를 실행한다.
+회차 계수는 216:500:500:394:500이며, 승인 optimizer 원본 2,041장/crop 3,316개를 유지한다.
+v1/v2는 optimizer 전 준비 실패로 보존했다. [로더 보완](cumulative_weighted_originals_20260915/loader_findings.md)도 확인한다.
+이번 전체 이미지 테스트는 보류이며 직전 epoch1 평가 승인을 새 후보에 재사용하지 않는다.
+완료 여부는 해당 `training-run/runtime.json`, `supervisor-result.json`, `postprocess-status.json`과
+생성된 `training-summary.json`으로 확인한다. 내부 검증은 모델 채택·단계 종료 근거가 아니다.
+
+2026-09-15 최신 후속 지시로 아래 누적 학습의 **epoch 1 자체**에 대한 1~5회 전체 이미지 테스트 보류를 해제했다.
+[평가 시작 기록](cumulative_1_5_20260915/epoch1_evaluation_start.md)의 `cumulative-1-5-epoch1-eval-20260915-v1`을 확인한다.
+1회 단독 → 2·3회 병행 → 4·5회 병행이며, 내부 검증 미통과 이력을 유지한 별도 개발 평가다. 모델 채택·공용 반영 승인이 아니다.
+평가는 5회 모두 정상 종료했다. [종합 결과와 회차별 보고서](cumulative_1_5_20260915/epoch1_evaluation/summary.md):
+5,290/6,330필드(83.5703%), 같은 최신 정답의 기존 채택 모델 출력 대비 획득 121·손실 151·순감소 30필드다.
+실패·누락·강제 종료 0, 모든 회차 시간 목표 충족, 모든 회차 정확도 95% 미달이다. 모델 채택과 3단계 종료는 하지 않았다.
+
+2026-09-15 후속 사용자 지시: 4·5회 최초 결과 검토 후 **1~5회 누적 학습까지만 수행하고 전체 이미지 테스트는 별도 지시까지 보류**한다.
+이번 실행은 `cumulative-1-5-20260915-v2`이며 [실행 범위·설정](cumulative_1_5_execution_plan_20260915.md)과
+[실제 시작·입력 감사 기록](cumulative_1_5_20260915/start_report.md)을 함께 읽는다.
+실제 학습은 1 epoch·415 steps로 정상 종료했지만 내부 필드 67/75 → 65/75로 비퇴행 검증에 실패했다.
+[학습 종료 보고서](cumulative_1_5_20260915/training_report.md)에 후보 보존·미export·테스트 보류와 메모리 계측 한계를 기록했다.
+실제 optimizer 진행·종료는 해당 경로의 `training-run/runtime.json`, `supervisor-result.json` 및 검증 결과로 확인한다.
+기존 회차 state의 검토 대기 표시는 이 별도 누적 학습의 미실행 증거가 아니다. 내부 crop 검증·후보 저장은 모델 채택이나 3단계 종료가 아니다.
+현재 정답지는 사용자 정정(881~1161 및 1117)을 반영한 XLSX SHA `765db2f4781ec1975893e66b7c3c755f8a68246c68fc05d302597d36900a4d2d`다.
+4회 저장 출력 재채점은 위 실행 경로의 `saved-output-rescore/labels.latest.csv` 및 `round_04.score.json`에 별도 보존한다.
+과거 `scorer_only/labels.csv`나 아래 역사적 정답·상태를 최신 버전으로 자동 선택하지 않는다.
+공용 weights 변경·Git commit/push·1~5회 테스트·6회 진행은 이번 실행 범위에 없다.
+
+2026-09-15 앞선 사용자 결정(보존): [재학습 인식기 채택·2단계 종료](../development/adopted_recognizer_20260915.md).
 2·3회를 성능 기준 통과가 아닌 `explicit_user_adoption`으로 종료하고 4·5회 준비로 전환한다.
 `status`는 실제 완료 근거 검증 후 3단계로 표시하며 미달·퇴행 판정을 보존한다.
 4·5회 최초 테스트·환경 검증은 별도이며 이번 모델 채택이 그 실행 승인은 아니다.
@@ -61,7 +103,7 @@ legacy_training_summary 및 기존 1회 학습/검증 보고도 읽어 후보 �
 한 번만 실행하며 이미 생성된 작업 공간을 덮어쓰지 않는다. 이관 후 `import-round1`이나 과거 1회 종료 승계를 다시 실행하지 않는다.
 `migration.json`은 이관한 파일 해시와 출처를 기록한다. 2·3회 사용 이력을 학습 완료로 바꾸지 않는다.
 `verify`는 전체 원본·주석 SHA와 회차 목록을 확인한다. 입력 목록의 image_id는 과거 결과 연결용 별칭이며
-image_path는 원본 폴더 경로다. 승인 정답은 새 작업 공간의 `scorer_only/labels.csv`를 사용한다.
+image_path는 원본 폴더 경로다. 이관 당시 승인 정답은 `scorer_only/labels.csv`이며, 이후 정정 버전은 위 최신 기록을 확인한다.
 기존 8회 도구와 과거 고정 사본은 역사적 이력용이며 새 실행은 현재 저장소의 도구를 사용한다.
 회차 1의 새 정식 테스트를 불필요하게 다시 실행하지 않는다.
 다른 기기에서 controller 의존성은 `notebooks/environment/requirements-grouped-control.txt`로 추론 환경에 설치한다.

@@ -19,6 +19,7 @@ POSITIVE_CONTEXT = re.compile(
 )
 NEGATIVE_CONTEXT = re.compile(
     r"제조(?:일자|일)?|생산(?:일자|일)?|포장(?:일자|일)?|부터|"
+    r"製造(?:年月日|日)?(?=\s*(?:[:：]?\s*\d|$))|"
     r"MFG|MFD|(?<![A-Z])PROD(?:UCTION)?(?![A-Z])|PACK(?:ED)?\s*ON|(?<![A-Z])PD(?=\s*[:.]?\s*\d)",
     re.IGNORECASE,
 )
@@ -26,7 +27,7 @@ UNTIL_CONTEXT = re.compile(
     r"까지|EXP(?:IRY|IRES|DATE)?|USE\s*BY|BEST\s*(?:BEFORE|BY)", re.IGNORECASE
 )
 FROM_CONTEXT = re.compile(
-    r"부터|제조(?:일자|일)?|생산(?:일자|일)?|MFG|MFD|(?<![A-Z])PROD(?:UCTION)?(?![A-Z])", re.IGNORECASE
+    r"부터|제조(?:일자|일)?|생산(?:일자|일)?|製造(?:年月日|日)?(?=\s*(?:[:：]?\s*\d|$))|MFG|MFD|(?<![A-Z])PROD(?:UCTION)?(?![A-Z])", re.IGNORECASE
 )
 
 MONTHS = {
@@ -1094,12 +1095,12 @@ def _printed_pair_roles(originals: Sequence[OCRLine], parsed: Sequence[list[Pars
                 continue
             labels = []
             for label in originals:
-                if ((label.source, label.variant) != (first.source, first.variant) or label.score < .85
+                if ((label.source, label.variant) != (first.source, first.variant) or label.score < .7
                         or math.hypot(*_box_gap(block, label)) > 9 * scale):
                     continue
-                if re.fullmatch(r"부터|제조(?:일자|일)?|생산(?:일자|일)?|MFG|MFD", label.text, re.I):
+                if re.fullmatch(r"부터|제조(?:일자|일)?|생산(?:일자|일)?|製造(?:年月日|日)?|MFG|MFD", label.text, re.I):
                     labels.append(("start", label))
-                elif re.fullmatch(r"까지|EXP(?:IRY|IRES|DATE)?|USE\s*BY|BEST\s*(?:BEFORE|BY)", label.text, re.I):
+                elif re.fullmatch(r"까지|賞味期限|EXP(?:IRY|IRES|DATE)?|USE\s*BY|BEST\s*(?:BEFORE|BY)", label.text, re.I):
                     labels.append(("end", label))
             if len(labels) != 2 or {kind for kind, _ in labels} != {"start", "end"}:
                 continue
@@ -1107,6 +1108,20 @@ def _printed_pair_roles(originals: Sequence[OCRLine], parsed: Sequence[list[Pars
             labels.sort(key=lambda item: item[1].center[1])
             row_step = rows[1][1].center[1] - rows[0][1].center[1]
             label_step = labels[1][1].center[1] - labels[0][1].center[1]
+            if min(label.score for _, label in labels) < .85:
+                # A weaker literal label needs an exclusive, high-confidence
+                # two-row block with matching column spacing. Do not lower the
+                # generic nearest-label threshold or infer a missing heading.
+                if (max(label.score for _, label in labels) < .95
+                        or any(row.score < .95 or not row.geometry_valid for _, row in rows)
+                        or any(not label.geometry_valid for _, label in labels)
+                        or abs(labels[0][1].center[0] - labels[1][1].center[0]) > .5 * scale
+                        or abs(rows[0][1].box[0] - rows[1][1].box[0]) > .5 * scale
+                        or abs(row_step - label_step) > .25 * scale
+                        or any(_box_gap(row, label)[0] > 2 * scale
+                               or abs(row.center[1] - label.center[1]) > scale
+                               for (_, row), (_, label) in zip(rows, labels))):
+                    continue
             if not .35 * row_step <= label_step <= 3 * row_step:
                 continue
             if any(abs(row.center[1] - label.center[1]) > 2 * scale
@@ -1991,6 +2006,9 @@ def selection_fields(selection):
 
 def field_evidence(selection):
     """Preserve individually supported fields without selecting an arbitrary date order."""
+    # A terminal role rejection also retracts previously materialized fragments.
+    if selection.reason in {'negative-context', 'expiry-not-printed'}:
+        return fields_from_date(None)
     decision = submission_decision(selection)
     if decision.output_date:
         return fields_from_date(decision.output_date)
