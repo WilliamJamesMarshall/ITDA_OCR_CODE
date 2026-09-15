@@ -834,6 +834,12 @@ def _same_region(first: OCRLine, other: OCRLine) -> bool:
     return overlap or clipped
 
 
+def _auxiliary_date_row(text: str) -> bool:
+    """A labelled lot/clock row must not borrow a separate expiry heading."""
+    return (bool(re.match(r'^\s*(?:LOT\b|L\s*[-:])', text, re.I))
+            and bool(_CLOCK.search(text)) and _inline_role(text) is None)
+
+
 def _link_roles(lines: Sequence[OCRLine]) -> list[OCRLine]:
     """Retain grounded roles even when a date has not parsed; never rewrite text."""
     normalized = [replace(line, text=_normalise_text(line.text)) for line in lines]
@@ -880,7 +886,7 @@ def _link_roles(lines: Sequence[OCRLine]) -> list[OCRLine]:
             roles[targets[0]] = 'end'
             references.add(targets[0])
     for i, line in enumerate(normalized):
-        if i in roles or not (parsed[i] or _date_fragment(line.text)):
+        if i in roles or _auxiliary_date_row(line.text) or not (parsed[i] or _date_fragment(line.text)):
             continue
         proposals = set()
         for j, label in enumerate(normalized):
@@ -908,6 +914,15 @@ def _link_roles(lines: Sequence[OCRLine]) -> list[OCRLine]:
                            and hint.width <= 1.25*anchor.width
                            and abs(anchor.center[0]-hint.center[0]) <= .3*anchor.width
                            and bool(parsed[i] or list(_partial_dates(line.text))))
+            left_aligned_heading = (
+                anchor.geometry_valid and hint.geometry_valid
+                and re.fullmatch(r'(?:EXP(?:IRY|IRES|DATE)?|MFG|MFD|PROD|USE\s*BY|BEST\s*BEFORE|'
+                                 r'소비\s*기한|유통\s*기한|제조(?:일자|일)?)\s*[:.]?', hint.text, re.I)
+                and hint.width <= .6*anchor.width
+                and abs(anchor.box[0]-hint.box[0]) <= .5*hint.height
+                and 0 <= anchor.box[1]-hint.box[3] <= 1.5*scale
+                and bool(parsed[i]))
+            same_column = same_column or left_aligned_heading
             if not (same_row or same_column):
                 continue
             def rival_distance(other):
@@ -921,6 +936,7 @@ def _link_roles(lines: Sequence[OCRLine]) -> list[OCRLine]:
                 return (0 if inline else 1, math.hypot(ox, oy))
             rivals = [other for k, other in enumerate(normalized) if k != i and
                       (parsed[k] or _date_fragment(other.text)) and
+                      not _auxiliary_date_row(other.text) and
                       (other.source, other.variant) == (line.source, line.variant) and
                       not (_same_region(line, other) or _same_region(other, line)) and
                       (same_frame or other.original_box) and
@@ -931,6 +947,9 @@ def _link_roles(lines: Sequence[OCRLine]) -> list[OCRLine]:
             roles[i] = proposals.pop()
     result = []
     for i, line in enumerate(normalized):
+        if _auxiliary_date_row(line.text):
+            result.append(replace(line, role=None, role_basis=None))
+            continue
         inherited = set()
         for j, other in enumerate(normalized):
             if j not in roles or other.score < .7 or (line.source, line.variant) == (other.source, other.variant):

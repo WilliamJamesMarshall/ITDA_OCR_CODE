@@ -45,6 +45,14 @@ def actions_for(selection, lines):
     return ['context-roi', 'geometric', 'secondary', 'stroke', 'thin-dot']
 
 
+def remaining_actions(selection, lines, pending, attempted):
+    """Route newly resolved digits to context work without repeating a stage."""
+    decision = submission_decision(selection, base_partial=selection.is_partial)
+    if selection.digits_confident and decision.recovery_reason in {'role', 'order'}:
+        return [action for action in ('context-roi', 'secondary') if action not in attempted]
+    return [action for action in pending if action not in attempted]
+
+
 def run_stage(action, image, lines, backend, guard, config, trace, commit):
     # Lazy imports avoid the pipeline/budget module cycle.
     from .pipeline import _append_pass, _clahe, _label_crop_bounds, _date_fragment_lines, _fragment_bounds

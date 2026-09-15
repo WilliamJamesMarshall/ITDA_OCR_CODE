@@ -14,7 +14,7 @@ from .pipeline import (PipelineConfig, PaddleOCRBackend, discover_images, _load_
                        _append_pass, _write_submission, _percentile)
 from .line_recovery import recovery_targets, recover_lines
 from .date_region_recovery import recover_geometric_rows
-from .selective_recovery import needs_recovery, actions_for, run_stage
+from .selective_recovery import needs_recovery, actions_for, remaining_actions, run_stage
 from .recovery_policy import RecoveryPolicy, binding, features
 
 
@@ -70,6 +70,17 @@ def output_selection(selection, *, base_partial=False, previous=None):
             c.explicit_negative and not c.explicit_positive and c.ocr_score >= .65
             and all(old[k] == 'NONE' or old[k] == submission_fields(c.iso)[k] for k in names)
             for c in selection.candidates)
+        # Shared fields alone do not link two physical date tokens. When a new
+        # explicit expiry is elsewhere, retain only its own supported fields.
+        new_expiry = [c for c in selection.candidates if c.explicit_positive
+                      and not c.explicit_negative and c.ocr_score >= .85 and not c.repaired]
+        old_support = [c for c in previous.candidates if c.iso == previous.final_date]
+        if (new_expiry and old_support and any(fields[k] != 'NONE' for k in names)
+                and all(c.box[2] > c.box[0] and c.box[3] > c.box[1] for c in [*new_expiry, *old_support])):
+            disjoint = all(min(a.box[2],b.box[2]) <= max(a.box[0],b.box[0])
+                           or min(a.box[3],b.box[3]) <= max(a.box[1],b.box[1])
+                           for a in new_expiry for b in old_support)
+            retracted = retracted or disjoint
         if compatible and anchored and not retracted:
             combined = {k: fields[k] if fields[k] != 'NONE' else old[k] for k in names}
             try:
@@ -211,6 +222,7 @@ def run_budget_pipeline(input_dir, output_path, *, config=None, backend=None, ma
         item = policy.pop(queue) if policy else queue.pop(0)
         index, path, lines, selection = (item[k] for k in ('index', 'path', 'lines', 'selection'))
         action = item['actions'].pop(0)
+        item.setdefault('attempted_actions', set()).add(action)
         state_before = features(selection, lines, item['retained_output'].final_date)
         learned = policy.estimate(state_before, action) if policy else None
         remaining = recovery_image_seconds - item['recovery_seconds']
@@ -297,12 +309,15 @@ def run_budget_pipeline(input_dir, output_path, *, config=None, backend=None, ma
         costs.setdefault(cost_key, []).append(clock()-action_started)
         item['recovery_seconds'] += clock()-action_started
         costs[cost_key] = costs[cost_key][-20:]
+        item['actions'] = remaining_actions(item['selection'], item['lines'],
+                                            item['actions'], item['attempted_actions'])
+        verified_selection = submission_decision(item['selection'], base_partial=item['base_partial'])
         if (action == 'secondary' and recovery_targets(item['lines'])
+                and not (item['selection'].digits_confident and verified_selection.recovery_reason in {'role', 'order'})
                 and needs_recovery(item['selection'], item['lines'])):
             # Newly detected date rows did not exist when the queue was built.
             # Recheck their original pixels; do not relax the pair confidence gate.
             item['actions'].insert(0, 'date-lines')
-        verified_selection = submission_decision(item['selection'], base_partial=item['base_partial'])
         checked = any(d.get('decision_basis') in {'stable-aligned-date-digits','stable-role-recovery'}
                       for d in decisions)
         if (action == 'date-lines' and checked and verified_selection.status == 'SELECTED'
