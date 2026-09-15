@@ -21,6 +21,7 @@ fetch() {
     local revision="$2"
     local filename="$3"
     local expected="$4"
+    local url="${5:-${BASE_URL}/${model}/resolve/${revision}/${filename}}"
     local directory="${WEIGHTS_DIR}/${model}"
     local destination="${directory}/${filename}"
     local temporary="${destination}.download"
@@ -37,10 +38,10 @@ fetch() {
 
     if command -v curl >/dev/null 2>&1; then
         curl --fail --location --retry 3 --connect-timeout 20 \
-            --output "$temporary" "${BASE_URL}/${model}/resolve/${revision}/${filename}"
+            --output "$temporary" "$url"
     elif command -v wget >/dev/null 2>&1; then
         wget --tries=3 --timeout=20 --output-document="$temporary" \
-            "${BASE_URL}/${model}/resolve/${revision}/${filename}"
+            "$url"
     else
         echo "curl or wget is required to download model weights." >&2
         return 1
@@ -59,16 +60,11 @@ fetch() {
 verify_adopted() {
     local filename="$1"
     local expected="$2"
-    local destination="${WEIGHTS_DIR}/korean_PP-OCRv5_mobile_rec/${filename}"
-    if [[ ! -f "$destination" ]] || [[ "$(hash_file "$destination")" != "$expected" ]]; then
-        echo "Missing or mismatched adopted model: ${destination}" >&2
-        echo "Restore the committed model files from this branch; upstream fallback is disabled." >&2
-        return 1
-    fi
-    echo "Verified adopted korean_PP-OCRv5_mobile_rec/${filename}"
+    fetch "korean_PP-OCRv5_mobile_rec" "adopted-recognizer-20260915" "$filename" "$expected" \
+        "https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/download/adopted-recognizer-20260915/${filename}"
 }
 
-# Validate the user-adopted export before any download. Never replace it with upstream weights.
+# Prepare the exact adopted export; never substitute upstream weights.
 verify_adopted "inference.json" "0802d527934ec3ab851ce2ba51386d8b4f3a84ad4e2b953e96dce5ab70bc4f67"
 verify_adopted "inference.pdiparams" "4383ffa10c9fe76aeb931817ca67a0182b71ee300a91613ed70ddfd0f8c434e4"
 verify_adopted "inference.yml" "60723ce943ecc524b5b32e07b8527a9b75f27c79c6fccf9c13e401304633b025"

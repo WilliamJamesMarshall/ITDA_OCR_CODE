@@ -88,7 +88,7 @@ python -m pip install -r requirements.txt
 bash download_weights.sh
 ```
 
-한국어 인식기는 2026-09-15 사용자 지시로 채택한 재학습 모델이며, 추론 파일 3개가 이 브랜치에 포함됩니다. 스크립트는 이 파일들의 SHA-256을 먼저 검증하고, 나머지 9개 파일만 PaddlePaddle의 공식 Hugging Face 저장소에서 고정 revision으로 준비합니다. 채택 모델이 없거나 해시가 다르면 중단하며 기존 공개 한국어 모델로 되돌리지 않습니다.
+한국어 인식기는 2026-09-15 사용자 지시로 채택한 재학습 모델입니다. 추론 파일 3개는 [고정 Release](https://github.com/WilliamJamesMarshall/ITDA_OCR_CODE/releases/tag/adopted-recognizer-20260915)에서, 나머지 9개 파일은 PaddlePaddle의 공식 Hugging Face 저장소에서 고정 revision으로 준비합니다. 스크립트는 모든 파일의 SHA-256을 검증합니다. 채택 모델 다운로드 또는 검증 실패 시 중단하며 기존 공개 한국어 모델로 되돌리지 않습니다.
 
 ```text
 weights/paddle/
@@ -110,7 +110,7 @@ weights/paddle/
     └── inference.yml
 ```
 
-채택한 한국어 추론 모델 3개만 `.gitignore`의 명시적 예외로 커밋합니다. 다른 가중치·학습 체크포인트·원본·정답은 계속 제외합니다. 채택 근거·모델 SHA·성적과 한계는 [모델 채택 기록](notebooks/docs/development/adopted_recognizer_20260915.md)과 [모델 manifest](weights/adopted_model.json)에 있습니다. 이번 채택은 세 회차 95%·무퇴행 기준 통과를 뜻하지 않습니다.
+추론 가중치는 Git 추적에서 제외하며 `download_weights.sh`로 준비합니다. 기존 커밋 이력에는 과거 모델 파일이 남아 있습니다. 채택 근거·모델 SHA·성적과 한계는 [모델 채택 기록](notebooks/docs/development/adopted_recognizer_20260915.md)과 [모델 manifest](weights/adopted_model.json)에 있습니다. 이번 채택은 세 회차 95%·무퇴행 기준 통과를 뜻하지 않습니다.
 
 다운로드 스크립트가 해시를 검증하고, 추론 코드는 로컬 파일의 존재를 확인합니다(추론 때 해시를 다시 검사하는 것은 아닙니다). 필수 기본 모델이 없으면 초기화 오류이며, 지연 복구 모델이 없으면 해당 복구의 오류를 기록하고 가능한 기존 경로를 유지합니다. 모델 경로를 모두 명시하고 Paddle의 모델 소스 확인도 비활성화하므로 `predict.ipynb` 실행 중에는 네트워크를 사용하지 않습니다.
 
